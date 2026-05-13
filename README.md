@@ -1,57 +1,93 @@
-<header>
+# Portfolio — Your Name
 
-<!--
-  <<< Author notes: Course header >>>
-  Include a 1280×640 image, course title in sentence case, and a concise description in emphasis.
-  In your repository settings: enable template repository, add your 1280×640 social image, auto delete head branches.
-  Add your open source license, GitHub uses MIT license.
--->
+A cinematic, multi-page portfolio site for software development, photography, and videography.
 
-# GitHub Pages
+## Stack
 
-_Create a site or blog from your GitHub repositories with GitHub Pages._
+- **React 18** with React Router v6
+- **Tailwind CSS** v3
+- **Vite** v5
+- **Fonts**: Cormorant Garamond (display) + DM Sans (body) via Google Fonts
 
-</header>
+## Getting Started
 
-<!--
-  <<< Author notes: Finish >>>
-  Review what we learned, ask for feedback, provide next steps.
--->
+```bash
+# Install dependencies
+npm install
 
-## Finish
+# Start dev server
+npm run dev
 
-_Congratulations friend, you've completed this course!_
+# Build for production
+npm run build
 
-<img src=https://octodex.github.com/images/constructocat2.jpg alt=celebrate width=300 align=right>
+# Preview production build
+npm run preview
+```
 
-Your blog is now live and has been deployed!
+## Customization Checklist
 
-Here's a recap of all the tasks you've accomplished in your repository:
+### Global
+- [ ] Replace `"Your Name"` in `Home.jsx` with your actual name
+- [ ] Replace `"[Your City]"` in `Home.jsx` with your location
+- [ ] Update stats (years, projects, photos) in `Home.jsx`
+- [ ] Update `your@email.com` in `Contact.jsx`
+- [ ] Update social handles and links in `Contact.jsx`
 
-- You enabled GitHub Pages.
-- You selected a theme using the config file.
-- You learned about proper directory format and file naming conventions in Jekyll.
-- You created your first blog post with Jekyll!
+### Developer Page (`src/pages/Developer.jsx`)
+- [ ] Replace placeholder projects with your real projects
+- [ ] Update links from `#` to actual project URLs
+- [ ] Adjust tech stack in the skills grid
 
-### What's next?
+### Photography Page (`src/pages/Photography.jsx`)
+- [ ] Replace gradient placeholders with your actual `<img>` tags
+- [ ] Add your real photo titles, locations, and categories
 
-- Keep working on your GitHub Pages site... we love seeing what you come up with!
-- We'd love to hear what you thought of this course [in our discussion board](https://github.com/orgs/skills/discussions/categories/github-pages).
-- [Take another GitHub Skills course](https://github.com/skills).
-- [Read the GitHub Getting Started docs](https://docs.github.com/en/get-started).
-- To find projects to contribute to, check out [GitHub Explore](https://github.com/explore).
+### Videography Page (`src/pages/Videography.jsx`)
+- [ ] Replace gradient thumbnails with real video thumbnails or embeds
+- [ ] Update showreel link/embed
+- [ ] Update gear list with your actual equipment
 
-<footer>
+### Contact
+- [ ] Wire up form to a handler: [Formspree](https://formspree.io), [EmailJS](https://emailjs.com), or your own API
 
-<!--
-  <<< Author notes: Footer >>>
-  Add a link to get support, GitHub status page, code of conduct, license link.
--->
+## File Structure
 
----
+```
+src/
+├── App.jsx                 # Router + layout shell
+├── main.jsx                # Entry point
+├── index.css               # Global styles + font imports
+├── components/
+│   ├── Navbar.jsx          # Sticky nav with mobile menu
+│   ├── CustomCursor.jsx    # Smooth cursor (desktop only)
+│   └── PageTransition.jsx  # Fade/slide between routes
+└── pages/
+    ├── Home.jsx            # Hero + about + section cards
+    ├── Developer.jsx       # Skills grid + project list
+    ├── Photography.jsx     # Masonry gallery + lightbox
+    ├── Videography.jsx     # Video cards + gear list
+    └── Contact.jsx         # Contact form + socials
+```
 
-Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/github-pages) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
+## Design System
 
-&copy; 2023 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+| Token | Value |
+|---|---|
+| Primary accent | `#E8D5B7` (warm cream) |
+| Background | `#080808` |
+| Display font | Cormorant Garamond |
+| Body font | DM Sans |
 
-</footer>
+## Adding Real Photos
+
+In `Photography.jsx`, replace the gradient `<div>` inside `PhotoCard` with:
+```jsx
+<img
+  src="/photos/your-image.jpg"
+  alt={photo.title}
+  className="w-full h-full object-cover"
+/>
+```
+
+Place images in `public/photos/` and they'll be served by Vite automatically.
