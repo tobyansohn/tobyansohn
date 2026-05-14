@@ -92,8 +92,8 @@ export default function Photography() {
 
   const filtered = active === "All" ? photos : photos.filter(p => p.category === active);
 
-  const muted = dark ? "text-white/30" : "text-black/30";
-  const body = dark ? "text-white/45" : "text-black/45";
+  const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
+  const body = dark ? "text-white/45" : "text-[#3a3a3a]";
 
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-7xl mx-auto">
@@ -102,7 +102,7 @@ export default function Photography() {
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Photography</span>
           <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>
             The world through<br />
-            <span className={dark ? "text-white/30" : "text-black/25"}>my lens.</span>
+            <span className={dark ? "text-white/30" : "text-[#7a6a5a]"}>my lens.</span>
           </h1>
           <p className={`max-w-lg text-[15px] leading-relaxed ${body}`}>
             Every image is an observation — a moment suspended in time. I shoot landscapes, architecture, and portraits with a love for natural light and quiet compositions.
@@ -120,7 +120,7 @@ export default function Photography() {
               active === cat
                 ? dark ? "bg-white text-[#080808]" : "bg-[#1a1a1a] text-white"
                 : dark ? "border border-white/15 text-white/40 hover:text-white/70 hover:border-white/30"
-                       : "border border-black/15 text-black/40 hover:text-black/70 hover:border-black/30"
+                       : "border border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30"
             }`}
           >
             {cat}
