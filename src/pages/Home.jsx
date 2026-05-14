@@ -22,14 +22,14 @@ function Card({ to, label, sub, accent, dark }) {
       className={`group relative overflow-hidden rounded-2xl border transition-all duration-500 p-8 flex flex-col justify-between min-h-[200px] ${
         dark
           ? "border-white/8 bg-white/[0.03] hover:bg-white/[0.06]"
-          : "border-black/8 bg-black/[0.03] hover:bg-black/[0.06]"
+          : "border-[#b0a090] bg-[#ede8e0] hover:bg-[#e8e2da]"
       }`}
     >
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{ background: `radial-gradient(circle at 30% 50%, ${accent}22 0%, transparent 70%)` }}
       />
-      <span className={`text-[11px] tracking-[0.3em] uppercase ${dark ? "text-white/30" : "text-black/30"}`}>{sub}</span>
+      <span className={`text-[11px] tracking-[0.3em] uppercase ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>{sub}</span>
       <div>
         <h3 className={`font-display text-2xl mb-3 transition-colors duration-300 ${dark ? "text-white/90 group-hover:text-white" : "text-black/80 group-hover:text-black"}`}>{label}</h3>
         <span className={`inline-flex items-center gap-2 text-[12px] tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/40 group-hover:text-white/70" : "text-black/35 group-hover:text-black/60"}`}>
@@ -60,9 +60,9 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const muted = dark ? "text-white/45" : "text-black/45";
-  const superMuted = dark ? "text-white/30" : "text-black/30";
-  const accent = dark ? "text-[#E8D5B7]" : "text-[#8B6F47]";
+  const muted = dark ? "text-white/45" : "text-[#3a3a3a]";
+  const superMuted = dark ? "text-white/30" : "text-[#5a4a3a]";
+  const accent = dark ? "text-[#E8D5B7]" : "text-[#6B4F2A]";
   const accentBg = dark ? "bg-white" : "bg-[#1a1a1a]";
   const accentText = dark ? "text-[#080808]" : "text-white";
   const accentHover = dark ? "hover:bg-[#E8D5B7]" : "hover:bg-[#3a3a3a]";
@@ -81,7 +81,7 @@ export default function Home() {
         <div className="relative max-w-6xl mx-auto w-full">
           <div className={`flex items-center gap-3 mb-10 transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "100ms" }}>
             <div className="w-6 h-px bg-[#E8D5B7]/60" />
-            <span className={`text-[11px] tracking-[0.35em] uppercase ${dark ? "text-[#E8D5B7]/60" : "text-[#8B6F47]/70"}`}>Available for Work</span>
+            <span className={`text-[11px] tracking-[0.35em] uppercase ${dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/70"}`}>Available for Work</span>
           </div>
 
           <div className="overflow-hidden mb-4">
@@ -150,7 +150,7 @@ export default function Home() {
               { num: "1K+", label: "Photos Taken" },
               { num: "∞", label: "Coffee Consumed" },
             ].map(({ num, label }) => (
-              <div key={label} className={`p-8 rounded-2xl border ${dark ? "border-white/8 bg-white/[0.02]" : "border-black/8 bg-black/[0.02]"}`}>
+              <div key={label} className={`p-8 rounded-2xl border ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
                 <p className={`font-display text-5xl mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{num}</p>
                 <p className={`text-[12px] tracking-[0.2em] uppercase ${superMuted}`}>{label}</p>
               </div>

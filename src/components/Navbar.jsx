@@ -44,12 +44,12 @@ export default function Navbar() {
   const navBg = scrolled
     ? dark
       ? "bg-[#080808]/90 backdrop-blur-xl border-b border-white/5"
-      : "bg-[#F5F2ED]/90 backdrop-blur-xl border-b border-black/8"
+      : "bg-[#F5F2ED]/90 backdrop-blur-xl border-b border-[#b0a090]"
     : "bg-transparent";
 
-  const linkActive = dark ? "text-[#E8D5B7]" : "text-[#8B6F47]";
-  const linkInactive = dark ? "text-white/50 hover:text-white/80" : "text-black/40 hover:text-black/70";
-  const dotColor = dark ? "bg-[#E8D5B7]" : "bg-[#8B6F47]";
+  const linkActive = dark ? "text-[#E8D5B7]" : "text-[#6B4F2A]";
+  const linkInactive = dark ? "text-white/50 hover:text-white/80" : "text-[#4a4a4a] hover:text-black/70";
+  const dotColor = dark ? "bg-[#E8D5B7]" : "bg-[#6B4F2A]";
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${navBg}`}>
@@ -95,7 +95,7 @@ export default function Navbar() {
             className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
               dark
                 ? "border-white/15 text-white/50 hover:text-white hover:border-white/40"
-                : "border-black/15 text-black/40 hover:text-black/70 hover:border-black/30"
+                : "border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30"
             }`}
           >
             {dark ? <SunIcon /> : <MoonIcon />}
@@ -119,7 +119,7 @@ export default function Navbar() {
             onClick={toggle}
             aria-label="Toggle theme"
             className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
-              dark ? "border-white/15 text-white/50" : "border-black/15 text-black/40"
+              dark ? "border-white/15 text-white/50" : "border-black/15 text-[#4a4a4a]"
             }`}
           >
             {dark ? <SunIcon /> : <MoonIcon />}
@@ -137,7 +137,7 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden transition-all duration-500 overflow-hidden ${menuOpen ? "max-h-80 border-b" : "max-h-0"} ${dark ? "border-white/5" : "border-black/8"}`}>
+      <div className={`md:hidden transition-all duration-500 overflow-hidden ${menuOpen ? "max-h-80 border-b" : "max-h-0"} ${dark ? "border-white/5" : "border-[#b0a090]"}`}>
         <ul className={`px-6 py-4 backdrop-blur-xl flex flex-col gap-1 ${dark ? "bg-[#0d0d0d]/95" : "bg-[#F0EDE8]/95"}`}>
           {links.map(({ to, label }) => (
             <li key={to}>

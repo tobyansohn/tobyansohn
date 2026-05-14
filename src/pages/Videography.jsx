@@ -52,11 +52,11 @@ function VideoCard({ project, index, dark }) {
           {project.duration}
         </div>
       </div>
-      <h3 className={`font-display text-xl mb-2 transition-colors duration-300 ${dark ? (hovered ? "text-[#E8D5B7]" : "text-white") : (hovered ? "text-[#8B6F47]" : "text-[#1a1a1a]")}`}>{project.title}</h3>
-      <p className={`text-[13px] leading-relaxed mb-4 ${dark ? "text-white/40" : "text-black/40"}`}>{project.description}</p>
+      <h3 className={`font-display text-xl mb-2 transition-colors duration-300 ${dark ? (hovered ? "text-[#E8D5B7]" : "text-white") : (hovered ? "text-[#6B4F2A]" : "text-[#1a1a1a]")}`}>{project.title}</h3>
+      <p className={`text-[13px] leading-relaxed mb-4 ${dark ? "text-white/40" : "text-[#4a4a4a]"}`}>{project.description}</p>
       <div className="flex flex-wrap gap-2">
         {project.tags.map(tag => (
-          <span key={tag} className={`px-2 py-1 rounded border text-[10px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/30" : "border-black/10 text-black/30"}`}>{tag}</span>
+          <span key={tag} className={`px-2 py-1 rounded border text-[10px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/30" : "border-black/10 text-[#5a4a3a]"}`}>{tag}</span>
         ))}
       </div>
     </div>
@@ -68,10 +68,10 @@ export default function Videography() {
   const [headerRef, headerInView] = useInView();
   const [gearRef, gearInView] = useInView();
 
-  const muted = dark ? "text-white/30" : "text-black/30";
-  const body = dark ? "text-white/45" : "text-black/45";
+  const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
+  const body = dark ? "text-white/45" : "text-[#3a3a3a]";
   const heading = dark ? "text-white" : "text-[#1a1a1a]";
-  const headingFaded = dark ? "text-white/30" : "text-black/25";
+  const headingFaded = dark ? "text-white/30" : "text-[#7a6a5a]";
 
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-6xl mx-auto">
@@ -88,7 +88,7 @@ export default function Videography() {
       </div>
 
       {/* Showreel CTA */}
-      <div className={`mb-20 relative overflow-hidden rounded-3xl h-64 md:h-80 border flex items-center justify-center cursor-pointer group ${dark ? "bg-gradient-to-r from-slate-900 via-zinc-900 to-stone-900 border-white/8" : "bg-gradient-to-r from-stone-200 via-zinc-200 to-slate-200 border-black/8"}`}>
+      <div className={`mb-20 relative overflow-hidden rounded-3xl h-64 md:h-80 border flex items-center justify-center cursor-pointer group ${dark ? "bg-gradient-to-r from-slate-900 via-zinc-900 to-stone-900 border-white/8" : "bg-gradient-to-r from-stone-200 via-zinc-200 to-slate-200 border-[#b0a090]"}`}>
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(232,213,183,0.08)_0%,transparent_70%)]" />
         <div className="text-center">
           <div className={`w-20 h-20 rounded-full border flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-all duration-400 ${dark ? "bg-white/8 border-white/15 group-hover:bg-white/12" : "bg-black/8 border-black/15 group-hover:bg-black/12"}`}>
@@ -111,7 +111,7 @@ export default function Videography() {
         <p className={`text-[11px] tracking-[0.35em] uppercase mb-8 ${muted}`}>My Gear</p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {gear.map(({ name, type }, i) => (
-            <div key={name} className={`p-5 rounded-xl border transition-all duration-700 ${dark ? "border-white/8 bg-white/[0.02]" : "border-black/8 bg-black/[0.02]"} ${gearInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: `${i * 70}ms` }}>
+            <div key={name} className={`p-5 rounded-xl border transition-all duration-700 ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"} ${gearInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: `${i * 70}ms` }}>
               <p className={`text-[10px] tracking-[0.25em] uppercase mb-2 ${muted}`}>{type}</p>
               <p className={`text-[14px] ${dark ? "text-white/70" : "text-black/65"}`}>{name}</p>
             </div>

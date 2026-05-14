@@ -29,14 +29,14 @@ export default function Contact() {
   const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
   const handleSubmit = (e) => { e.preventDefault(); console.log("Form submitted:", form); setSubmitted(true); };
 
-  const muted = dark ? "text-white/30" : "text-black/30";
-  const body = dark ? "text-white/45" : "text-black/45";
+  const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
+  const body = dark ? "text-white/45" : "text-[#3a3a3a]";
   const heading = dark ? "text-white" : "text-[#1a1a1a]";
-  const headingFaded = dark ? "text-white/30" : "text-black/25";
+  const headingFaded = dark ? "text-white/30" : "text-[#7a6a5a]";
   const inputClass = `w-full border rounded-xl px-5 py-4 text-[14px] focus:outline-none transition-all duration-300 ${
     dark
       ? "bg-white/[0.03] border-white/10 text-white placeholder-white/25 focus:border-[#E8D5B7]/40 focus:bg-white/[0.05]"
-      : "bg-black/[0.03] border-black/10 text-[#1a1a1a] placeholder-black/25 focus:border-[#8B6F47]/40 focus:bg-black/[0.04]"
+      : "bg-[#ede8e0] border-[#b0a090] text-[#1a1a1a] placeholder-black/25 focus:border-[#6B4F2A]/40 focus:bg-[#e8e2da]"
   }`;
 
   return (
@@ -89,7 +89,7 @@ export default function Contact() {
                       onClick={() => setForm(f => ({ ...f, type: opt.value }))}
                       className={`flex-1 py-3 rounded-xl text-[12px] tracking-[0.1em] uppercase transition-all duration-300 ${
                         form.type === opt.value
-                          ? dark ? "bg-white/10 border border-[#E8D5B7]/40 text-[#E8D5B7]" : "bg-black/8 border border-[#8B6F47]/40 text-[#8B6F47]"
+                          ? dark ? "bg-white/10 border border-[#E8D5B7]/40 text-[#E8D5B7]" : "bg-[#ede8e0] border border-[#6B4F2A]/40 text-[#6B4F2A]"
                           : dark ? "border border-white/10 text-white/35 hover:text-white/60" : "border border-black/10 text-black/35 hover:text-black/60"
                       }`}
                     >
@@ -120,7 +120,7 @@ export default function Contact() {
         <div className="md:col-span-2 flex flex-col gap-10">
           <div className={`transition-all duration-700 delay-200 ${formInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <p className={`text-[11px] tracking-[0.35em] uppercase mb-6 ${muted}`}>Direct</p>
-            <a href="mailto:your@email.com" className={`text-[15px] transition-colors duration-300 block mb-2 ${dark ? "text-white/70 hover:text-[#E8D5B7]" : "text-black/60 hover:text-[#8B6F47]"}`}>
+            <a href="mailto:your@email.com" className={`text-[15px] transition-colors duration-300 block mb-2 ${dark ? "text-white/70 hover:text-[#E8D5B7]" : "text-black/60 hover:text-[#6B4F2A]"}`}>
               your@email.com
             </a>
             <p className={`text-[13px] ${muted}`}>Response within 24 hours</p>
@@ -133,7 +133,7 @@ export default function Contact() {
                 <li key={label}>
                   <a href={href} className="flex items-center justify-between group" target="_blank" rel="noopener noreferrer">
                     <span className={`text-[13px] tracking-[0.1em] uppercase ${muted}`}>{label}</span>
-                    <span className={`text-[13px] flex items-center gap-2 transition-colors duration-300 ${dark ? "text-white/55 group-hover:text-[#E8D5B7]" : "text-black/50 group-hover:text-[#8B6F47]"}`}>
+                    <span className={`text-[13px] flex items-center gap-2 transition-colors duration-300 ${dark ? "text-white/55 group-hover:text-[#E8D5B7]" : "text-black/50 group-hover:text-[#6B4F2A]"}`}>
                       {handle}
                       <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-px group-hover:-translate-y-px transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
@@ -145,7 +145,7 @@ export default function Contact() {
             </ul>
           </div>
 
-          <div className={`mt-auto pt-8 border-t transition-all duration-700 delay-400 ${formInView ? "opacity-100" : "opacity-0"} ${dark ? "border-white/8" : "border-black/8"}`}>
+          <div className={`mt-auto pt-8 border-t transition-all duration-700 delay-400 ${formInView ? "opacity-100" : "opacity-0"} ${dark ? "border-white/8" : "border-[#b0a090]"}`}>
             <p className={`text-[12px] leading-relaxed ${muted}`}>
               Currently available for freelance projects and full-time opportunities.
             </p>
