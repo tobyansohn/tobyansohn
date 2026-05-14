@@ -13,10 +13,10 @@ function useInView(threshold = 0.1) {
 }
 
 const socials = [
-  { label: "GitHub", handle: "@yourusername", href: "#" },
-  { label: "LinkedIn", handle: "Your Name", href: "#" },
-  { label: "Instagram", handle: "@yourusername", href: "#" },
-  { label: "Twitter / X", handle: "@yourusername", href: "#" },
+  { label: "GitHub", handle: "@tobyansohn", href: "https://github.com/tobyansohn" },
+  { label: "LinkedIn", handle: "Tobyan Sohn", href: "https://linkedin.com/in/tobyansohn" },
+  { label: "Instagram", handle: "@tobyansohn", href: "https://instagram.com/tobyansohn" },
+  { label: "Youtube", handle: "@1tobyan", href: "https://www.youtube.com/@1tobyan" },
 ];
 
 export default function Contact() {
@@ -120,8 +120,8 @@ export default function Contact() {
         <div className="md:col-span-2 flex flex-col gap-10">
           <div className={`transition-all duration-700 delay-200 ${formInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
             <p className={`text-[11px] tracking-[0.35em] uppercase mb-6 ${muted}`}>Direct</p>
-            <a href="mailto:your@email.com" className={`text-[15px] transition-colors duration-300 block mb-2 ${dark ? "text-white/70 hover:text-[#E8D5B7]" : "text-black/60 hover:text-[#6B4F2A]"}`}>
-              your@email.com
+            <a href="mailto:tobyansohn@gmail.com" className={`text-[15px] transition-colors duration-300 block mb-2 ${dark ? "text-white/70 hover:text-[#E8D5B7]" : "text-black/60 hover:text-[#6B4F2A]"}`}>
+              tobyansohn@gmail.com
             </a>
             <p className={`text-[13px] ${muted}`}>Response within 24 hours</p>
           </div>

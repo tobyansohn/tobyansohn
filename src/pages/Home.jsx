@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 
-const roles = ["Software Developer", "Photographer", "Videographer", "Creator"];
+const roles = ["Software Developer", "Photographer", "Videographer", "Disciple"];
 
 function useInView(threshold = 0.15) {
   const ref = useRef(null);
@@ -81,16 +81,16 @@ export default function Home() {
         <div className="relative max-w-6xl mx-auto w-full">
           <div className={`flex items-center gap-3 mb-10 transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "100ms" }}>
             <div className="w-6 h-px bg-[#E8D5B7]/60" />
-            <span className={`text-[11px] tracking-[0.35em] uppercase ${dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/70"}`}>Available for Work</span>
+            <span className={`text-[11px] tracking-[0.35em] uppercase ${dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/70"}`}>Welcome!</span>
           </div>
 
           <div className="overflow-hidden mb-4">
             <h1 className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-all duration-1000 ${dark ? "text-white" : "text-[#1a1a1a]"} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "200ms" }}>
-              Your Name
+              Hi, I'm Toby.
             </h1>
           </div>
 
-          <div className="overflow-hidden mb-12">
+          <div className="overflow-hidden mb-12 min-h-[10rem]">
             <p className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "350ms" }}>
               <span className="bg-gradient-to-r from-[#E8D5B7] to-[#C4A882] bg-clip-text text-transparent transition-opacity duration-400" style={{ opacity: fade ? 1 : 0 }}>
                 {roles[roleIndex]}
@@ -100,7 +100,7 @@ export default function Home() {
 
           <div className={`flex flex-col md:flex-row md:items-end gap-8 transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "550ms" }}>
             <p className={`max-w-md text-[15px] leading-relaxed font-body ${muted}`}>
-              Crafting elegant software and capturing moments that tell stories. Based in [Your City] — blending code and creativity.
+              Hi, I'm Toby! A 24 yo creative and software developer based in Austin, TX. Currently, I work at Visa full time, and primarily shoot photos and videos for my church, Lifeway ATX.
             </p>
             <div className="flex gap-4 md:ml-auto">
               <Link to="/developer" className={`px-6 py-3 rounded-full text-[13px] tracking-[0.1em] uppercase font-medium transition-colors duration-300 ${accentBg} ${accentText} ${accentHover}`}>
@@ -124,15 +124,15 @@ export default function Home() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 md:gap-24 items-center">
           <div>
             <div className={`transition-all duration-700 ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-              <span className={`text-[11px] tracking-[0.35em] uppercase mb-6 block ${superMuted}`}>About</span>
+              <span className={`text-[11px] tracking-[0.35em] uppercase mb-6 block ${superMuted}`}>About Me</span>
               <h2 className={`font-display text-4xl md:text-5xl leading-tight mb-8 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>
-                Two passions,<br />one vision.
+                Where has the<br />time gone?
               </h2>
               <p className={`leading-relaxed text-[15px] mb-6 ${muted}`}>
-                I'm a full-stack software developer with a deep love for the visual arts. My work sits at the intersection of technology and creativity — building seamless digital experiences by day and capturing the world through a lens by night.
+                Over the past few years of my life, my faith has led me on a journey of capturing what God shows me. Most of my inspiration comes from the idea of capturing the experiences and moments where God has worked or is working already.
               </p>
               <p className={`leading-relaxed text-[15px] mb-10 ${muted}`}>
-                Whether I'm architecting a scalable API or composing a cinematic shot, I bring the same obsessive attention to detail and desire to create something that truly resonates.
+                A verse that comes to mind: "Let this be recorded for a generation to come, so that a people yet to be created may praise the Lord:" -Psalm 102:18 ESV.
               </p>
               <Link to="/contact" className={`inline-flex items-center gap-3 text-[13px] tracking-[0.15em] uppercase hover:gap-5 transition-all duration-300 ${accent}`}>
                 Let's work together
@@ -146,8 +146,8 @@ export default function Home() {
           <div className={`grid grid-cols-2 gap-6 transition-all duration-700 ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "200ms" }}>
             {[
               { num: "3+", label: "Years Coding" },
-              { num: "50+", label: "Projects Built" },
-              { num: "1K+", label: "Photos Taken" },
+              { num: "#?", label: "Photos Taken"},
+              { num: "~3", label: "Videos Made" },
               { num: "∞", label: "Coffee Consumed" },
             ].map(({ num, label }) => (
               <div key={label} className={`p-8 rounded-2xl border ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
