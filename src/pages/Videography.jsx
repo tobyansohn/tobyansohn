@@ -13,10 +13,10 @@ function useInView(threshold = 0.1) {
 }
 
 const projects = [
-  { title: "Brand Film – Acme Co.", description: "A 3-minute brand documentary capturing the company's founding story and vision for the future.", tags: ["Brand", "Documentary", "4K"], duration: "3:24", gradient: "from-amber-900 via-orange-900 to-red-950" },
-  { title: "Event Highlight – TechConf '24", description: "Fast-paced highlight reel from a two-day developer conference with 800+ attendees.", tags: ["Event", "Fast-cut", "Drone"], duration: "2:10", gradient: "from-indigo-900 via-blue-950 to-slate-900" },
-  { title: "Music Video – Artist Name", description: "Cinematic music video with narrative arc, shot over two days in multiple locations.", tags: ["Music Video", "Narrative", "Color Grade"], duration: "4:07", gradient: "from-rose-900 via-pink-950 to-slate-950" },
-  { title: "Product Launch – XYZ Device", description: "Sleek product reveal video combining macro photography, motion graphics, and voiceover.", tags: ["Product", "Motion Graphics", "Studio"], duration: "1:45", gradient: "from-slate-800 via-zinc-800 to-slate-900" },
+  { id: "EZSCrRH-s98", title: "The Beginning", tags: ["Personal", "Intro"] },
+  { id: "kMMSE32bWWI", title: "CRWR 2026: REDEFINED", tags: ["Event", "Highlight"] },
+  { id: "9TvsSfOUyfQ", title: "What did I even do this month?", tags: ["Monthly", "Vlog"] },
+  { id: "JjLO0TkWRPM", title: "Did a lot, filmed a little.", tags: ["Vlog", "Personal"] },
 ];
 
 const gear = [
@@ -31,35 +31,41 @@ const gear = [
 function VideoCard({ project, index, dark }) {
   const [ref, inView] = useInView();
   const [hovered, setHovered] = useState(false);
+  const thumb = `https://i.ytimg.com/vi/${project.id}/hqdefault.jpg`;
+  const url = `https://youtu.be/${project.id}`;
 
   return (
-    <div
+    <a
       ref={ref}
-      className={`group cursor-pointer transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`group block transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
       style={{ transitionDelay: `${index * 100}ms` }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className={`relative overflow-hidden rounded-2xl mb-5 h-52 bg-gradient-to-br ${project.gradient}`}>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className={`w-14 h-14 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all duration-400 ${hovered ? "scale-110 bg-white/20" : ""}`}>
+      <div className="relative overflow-hidden rounded-2xl mb-5 h-52 bg-stone-800">
+        <img
+          src={thumb}
+          alt={project.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-400 flex items-center justify-center">
+          <div className={`w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-300 ${hovered ? "scale-110 bg-white/25" : ""}`}>
             <svg className="w-5 h-5 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>
-        <div className="absolute bottom-3 right-3 px-2 py-1 rounded bg-black/50 text-white/80 text-[11px] font-mono backdrop-blur-sm">
-          {project.duration}
-        </div>
       </div>
-      <h3 className={`font-display text-xl mb-2 transition-colors duration-300 ${dark ? (hovered ? "text-[#E8D5B7]" : "text-white") : (hovered ? "text-[#6B4F2A]" : "text-[#1a1a1a]")}`}>{project.title}</h3>
-      <p className={`text-[13px] leading-relaxed mb-4 ${dark ? "text-white/40" : "text-[#4a4a4a]"}`}>{project.description}</p>
+      <h3 className={`font-display text-xl mb-3 transition-colors duration-300 ${dark ? (hovered ? "text-[#E8D5B7]" : "text-white") : (hovered ? "text-[#6B4F2A]" : "text-[#1a1a1a]")}`}>{project.title}</h3>
       <div className="flex flex-wrap gap-2">
         {project.tags.map(tag => (
           <span key={tag} className={`px-2 py-1 rounded border text-[10px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/30" : "border-black/10 text-[#5a4a3a]"}`}>{tag}</span>
         ))}
       </div>
-    </div>
+    </a>
   );
 }
 
@@ -82,13 +88,18 @@ export default function Videography() {
             Motion that<br /><span className={headingFaded}>moves you.</span>
           </h1>
           <p className={`max-w-lg text-[15px] leading-relaxed ${body}`}>
-            From brand films to music videos — I tell stories through motion, color, and sound. Every frame is intentional; every cut serves the narrative.
+            I tell stories through motion, color, and sound. Every frame is intentional; every cut serves the narrative.
           </p>
         </div>
       </div>
 
-      {/* Showreel CTA */}
-      <div className={`mb-20 relative overflow-hidden rounded-3xl h-64 md:h-80 border flex items-center justify-center cursor-pointer group ${dark ? "bg-gradient-to-r from-slate-900 via-zinc-900 to-stone-900 border-white/8" : "bg-gradient-to-r from-stone-200 via-zinc-200 to-slate-200 border-[#b0a090]"}`}>
+      {/* Channel CTA */}
+      <a
+        href="https://www.youtube.com/@1tobyan"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`mb-20 relative overflow-hidden rounded-3xl h-64 md:h-80 border flex items-center justify-center cursor-pointer group ${dark ? "bg-gradient-to-r from-slate-900 via-zinc-900 to-stone-900 border-white/8" : "bg-gradient-to-r from-stone-200 via-zinc-200 to-slate-200 border-[#b0a090]"}`}
+      >
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_50%_50%,rgba(232,213,183,0.08)_0%,transparent_70%)]" />
         <div className="text-center">
           <div className={`w-20 h-20 rounded-full border flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-all duration-400 ${dark ? "bg-white/8 border-white/15 group-hover:bg-white/12" : "bg-black/8 border-black/15 group-hover:bg-black/12"}`}>
@@ -96,10 +107,10 @@ export default function Videography() {
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
-          <p className={`font-display text-2xl mb-2 ${heading}`}>Watch My Showreel</p>
-          <p className={`text-[13px] tracking-[0.1em] ${muted}`}>2024 · 3 min</p>
+          <p className={`font-display text-2xl mb-2 ${heading}`}>Watch on YouTube</p>
+          <p className={`text-[13px] tracking-[0.1em] ${muted}`}>@1tobyan</p>
         </div>
-      </div>
+      </a>
 
       <p className={`text-[11px] tracking-[0.35em] uppercase mb-10 ${muted}`}>Recent Projects</p>
       <div className="grid md:grid-cols-2 gap-10 mb-24">
