@@ -2,6 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 
+import hpPhoto1 from '../Photos/Grad Pics/Beomhak Lee/DSC04405.jpg';
+import hpPhoto2 from '../Photos/Grad Pics/Emily Han/TSS08105.jpg';
+import hpPhoto3 from '../Photos/Portrait/Alex & Daniel Lim/TSS03912.jpg';
+import hpPhoto4 from '../Photos/For Fun/The Porch/_TSS9742.jpg';
+import hpPhoto5 from '../Photos/Grad Pics/Hannah Kim/_TSS7498.jpg';
+import hpPhoto6 from '../Photos/For Fun/Home/DSCF1665.jpg';
+
+const previewPhotos = [hpPhoto1, hpPhoto2, hpPhoto3, hpPhoto4, hpPhoto5, hpPhoto6];
+
+const videos = [
+  { id: "EZSCrRH-s98", title: "The Beginning" },
+  { id: "kMMSE32bWWI", title: "CRWR 2026: REDEFINED" },
+  { id: "9TvsSfOUyfQ", title: "What did I even do this month?" },
+  { id: "JjLO0TkWRPM", title: "Did a lot, filmed a little." },
+];
+
 const roles = ["Software Developer", "Photographer", "Videographer", "Disciple"];
 
 function useInView(threshold = 0.15) {
@@ -146,14 +162,71 @@ export default function Home() {
           <div className={`grid grid-cols-2 gap-6 transition-all duration-700 ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "200ms" }}>
             {[
               { num: "3+", label: "Years Coding" },
-              { num: "#?", label: "Photos Taken"},
-              { num: "~3", label: "Videos Made" },
+              { num: "43+", label: "Photos Shot" },
+              { num: "4", label: "Videos Made" },
               { num: "∞", label: "Coffee Consumed" },
             ].map(({ num, label }) => (
               <div key={label} className={`p-8 rounded-2xl border ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
                 <p className={`font-display text-5xl mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{num}</p>
                 <p className={`text-[12px] tracking-[0.2em] uppercase ${superMuted}`}>{label}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Photo strip */}
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-6 md:px-16 mb-8 flex items-center justify-between">
+          <span className={`text-[11px] tracking-[0.35em] uppercase ${superMuted}`}>Photography</span>
+          <Link to="/photography" className={`inline-flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${accent}`}>
+            View all
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+        <div className="flex gap-3 overflow-x-auto px-6 md:px-16 pb-2 no-scrollbar">
+          {previewPhotos.map((src, i) => (
+            <Link key={i} to="/photography" className="flex-shrink-0 h-64 overflow-hidden rounded-xl">
+              <img src={src} alt="" className="h-full w-auto object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Video grid */}
+      <section className="px-6 md:px-16 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <span className={`text-[11px] tracking-[0.35em] uppercase ${superMuted}`}>Videography</span>
+            <a href="https://www.youtube.com/@1tobyan" target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${accent}`}>
+              View channel
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {videos.map((v) => (
+              <a key={v.id} href={`https://youtu.be/${v.id}`} target="_blank" rel="noopener noreferrer" className="group block">
+                <div className="relative overflow-hidden rounded-xl mb-3 aspect-video bg-stone-800">
+                  <img
+                    src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`}
+                    alt={v.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-4 h-4 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <p className={`text-[13px] leading-tight transition-colors duration-300 ${dark ? "text-white/70 group-hover:text-white" : "text-[#3a3a3a] group-hover:text-[#6B4F2A]"}`}>{v.title}</p>
+              </a>
             ))}
           </div>
         </div>
