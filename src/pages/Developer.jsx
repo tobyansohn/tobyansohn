@@ -264,57 +264,102 @@ function PokemonTracker({ dark }) {
 
   const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
   const border = dark ? "border-white/8" : "border-[#b0a090]";
-  const cardBg = dark ? "bg-white/[0.02]" : "bg-[#ede8e0]";
 
   return (
     <div className="mt-24">
-      <div className="flex items-end justify-between mb-4">
-        <p className={`text-[11px] tracking-[0.35em] uppercase ${muted}`}>
-          Pokémon Card Tracker — {hasTrending ? "Top Movers" : "Top by Value"}
-        </p>
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <p className={`text-[11px] tracking-[0.35em] uppercase ${muted}`}>Pokémon Card Tracker</p>
+          <p className={`text-[11px] tracking-[0.15em] uppercase mt-1 ${hasTrending ? "text-emerald-400/70" : dark ? "text-white/20" : "text-[#9a8a7a]"}`}>
+            {hasTrending ? "↑ Top Movers" : "Top by Value"}
+          </p>
+        </div>
         {lastUpdated && (
-          <p className={`text-[10px] tracking-[0.1em] ${muted}`}>
-            Updated {new Date(lastUpdated).toLocaleDateString()}
+          <p className={`text-[10px] tracking-[0.1em] self-start mt-0.5 ${muted}`}>
+            Updated on {new Date(lastUpdated).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
           </p>
         )}
       </div>
+
       <p className={`max-w-lg text-[14px] leading-relaxed mb-8 ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
         Tracks Special Illustration Rare and Illustration Rare cards every 12 hours via the Pokémon TCG API, storing snapshots in Redis to surface which cards are climbing fastest in market value.
       </p>
 
       {loading ? (
         <div className={`rounded-2xl border ${border} p-12 flex items-center justify-center`}>
-          <p className={`text-[12px] tracking-[0.2em] uppercase ${muted}`}>Loading...</p>
+          <div className="flex flex-col items-center gap-3">
+            <div className={`w-6 h-6 rounded-full border-2 border-t-transparent animate-spin ${dark ? "border-white/20" : "border-black/20"}`} />
+            <p className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>Fetching cards...</p>
+          </div>
         </div>
       ) : cards.length === 0 ? (
         <div className={`rounded-2xl border ${border} p-12 flex items-center justify-center`}>
           <p className={`text-[12px] tracking-[0.2em] uppercase ${muted}`}>No data yet — check back soon.</p>
         </div>
       ) : (
-        <div className={`rounded-2xl border ${border} overflow-hidden`}>
+        <div className={`rounded-2xl border ${border} overflow-hidden ${dark ? "bg-white/[0.015]" : "bg-[#faf8f5]"}`}>
+          {/* Column headers */}
+          <div className={`grid grid-cols-[2rem_3rem_1fr_5rem_4.5rem] items-center gap-3 px-4 py-2 border-b ${border}`}>
+            <span className={`text-[9px] tracking-[0.2em] uppercase ${muted}`}>#</span>
+            <span />
+            <span className={`text-[9px] tracking-[0.2em] uppercase ${muted}`}>Card</span>
+            <span className={`text-[9px] tracking-[0.2em] uppercase text-right ${muted}`}>Price</span>
+            <span className={`text-[9px] tracking-[0.2em] uppercase text-right ${muted}`}>Change</span>
+          </div>
+
           {cards.map((card, i) => (
             <div
               key={card.id}
               onClick={() => setSelected(card)}
-              className={`flex items-center gap-3 px-4 py-2 border-b last:border-b-0 transition-colors duration-200 cursor-pointer ${border} ${dark ? "hover:bg-white/[0.03]" : "hover:bg-[#e8e2da]"}`}
+              className={`grid grid-cols-[2rem_3rem_1fr_5rem_4.5rem] items-center gap-3 px-4 py-3 border-b last:border-b-0 transition-all duration-200 cursor-pointer group ${border} ${dark ? "hover:bg-white/[0.04]" : "hover:bg-[#f0ece6]"}`}
             >
-              <span className={`text-[10px] w-4 text-right shrink-0 ${muted}`}>{i + 1}</span>
-              <img src={card.image} alt={card.name} className="w-6 h-8 object-contain rounded shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className={`text-[12px] truncate ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>{card.name}</p>
-                <p className={`text-[9px] tracking-[0.06em] truncate ${muted}`}>{card.set}</p>
+              {/* Rank */}
+              <span className={`text-[11px] tabular-nums text-right font-medium ${i < 3 ? (dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/60") : muted}`}>
+                {i + 1}
+              </span>
+
+              {/* Card art */}
+              <div className="relative">
+                <img
+                  src={card.image}
+                  alt={card.name}
+                  className="w-9 h-12 object-contain rounded-md drop-shadow-sm group-hover:scale-110 transition-transform duration-300"
+                />
               </div>
-              <div className="flex items-center gap-3 shrink-0">
-                <p className={`text-[12px] font-medium ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>
+
+              {/* Name + set */}
+              <div className="min-w-0">
+                <p className={`text-[13px] font-medium truncate leading-tight ${dark ? "text-white/85 group-hover:text-white" : "text-[#1a1a1a]"} transition-colors duration-200`}>
+                  {card.name}
+                </p>
+                <p className={`text-[10px] tracking-[0.06em] truncate mt-0.5 ${muted}`}>{card.set}</p>
+              </div>
+
+              {/* Price */}
+              <div className="text-right">
+                <p className={`text-[13px] font-medium tabular-nums ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>
                   ${card.market.toFixed(2)}
                 </p>
-                {card.change !== null && (
-                  <p className={`text-[10px] font-medium flex items-center gap-0.5 w-14 justify-end ${card.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                    <svg className="w-2 h-2" fill="currentColor" viewBox="0 0 24 24">
+                {card.prevMarket && (
+                  <p className={`text-[10px] tabular-nums ${muted}`}>${card.prevMarket.toFixed(2)}</p>
+                )}
+              </div>
+
+              {/* Change badge */}
+              <div className="flex justify-end">
+                {card.change !== null ? (
+                  <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium tabular-nums ${
+                    card.change >= 0
+                      ? "bg-emerald-400/10 text-emerald-400"
+                      : "bg-red-400/10 text-red-400"
+                  }`}>
+                    <svg className="w-2.5 h-2.5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                       <path d={card.change >= 0 ? "M12 4l8 16H4z" : "M12 20L4 4h16z"} />
                     </svg>
                     {Math.abs(card.change).toFixed(1)}%
-                  </p>
+                  </span>
+                ) : (
+                  <span className={`text-[11px] ${muted}`}>—</span>
                 )}
               </div>
             </div>
@@ -352,7 +397,7 @@ export default function Developer() {
       <div className="mt-24">
         <p className={`text-[11px] tracking-[0.35em] uppercase mb-4 ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>Travel Tracker — 2026</p>
         <p className={`max-w-lg text-[14px] leading-relaxed mb-8 ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
-          A personal map tracking every place I've visited and called home. Warm pins mark travel destinations — click any to browse photos from that trip. The blue pin marks Austin, TX, my home base.
+          A personal map tracking every place I've visited. Warm pins mark travel destinations — click any to browse photos from that trip. The blue pin marks Austin, TX, my home.
         </p>
         <TravelMap dark={dark} />
       </div>

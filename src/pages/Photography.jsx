@@ -120,15 +120,24 @@ export default function Photography() {
     return shuffled.slice(0, 15);
   }, [allSeed]);
 
+  const randomCategoryAll = useMemo(() => {
+    if (activeCategory === 'All' || activeSub !== 'All') return null;
+    const inCat = photos.filter(p => p.category === activeCategory);
+    const shuffled = [...inCat].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 15);
+  }, [activeCategory, activeSub]);
+
   const subCategories = activeCategory === 'All'
     ? []
     : ['All', ...new Set(photos.filter(p => p.category === activeCategory).map(p => p.subCategory))];
 
   const filtered = activeCategory === 'All'
     ? randomAll
+    : activeSub === 'All'
+    ? randomCategoryAll
     : photos.filter(p => {
         if (p.category !== activeCategory) return false;
-        if (activeSub !== 'All' && p.subCategory !== activeSub) return false;
+        if (p.subCategory !== activeSub) return false;
         return true;
       });
 
