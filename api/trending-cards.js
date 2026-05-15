@@ -32,6 +32,8 @@ async function fetchCardPrices() {
         name: card.name,
         set: card.set?.name || "",
         image: card.images?.small || "",
+        imageLarge: card.images?.large || "",
+        rarity: card.rarity || "",
         market,
       };
     })

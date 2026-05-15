@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
@@ -174,11 +175,80 @@ function ProjectCard({ project, index, dark }) {
   );
 }
 
+function CardModal({ card, onClose, dark }) {
+  useEffect(() => {
+    const handler = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", handler); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  return createPortal(
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 backdrop-blur-sm" onClick={onClose}>
+      <div className={`relative rounded-2xl border p-6 flex flex-col sm:flex-row gap-6 max-w-md w-full ${dark ? "bg-[#111] border-white/10" : "bg-[#F0EDE8] border-[#b0a090]"}`} onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${dark ? "text-white/40 hover:text-white hover:bg-white/10" : "text-black/30 hover:text-black hover:bg-black/10"}`}>
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <img
+          src={card.imageLarge || card.image}
+          alt={card.name}
+          className="w-36 h-auto object-contain rounded-xl mx-auto sm:mx-0 shrink-0"
+        />
+
+        <div className="flex flex-col justify-center gap-3">
+          <div>
+            <p className={`font-display text-xl leading-tight ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{card.name}</p>
+            <p className={`text-[11px] tracking-[0.1em] uppercase mt-1 ${dark ? "text-white/35" : "text-[#5a4a3a]"}`}>{card.set}</p>
+            {card.rarity && <p className={`text-[10px] tracking-[0.08em] mt-0.5 ${dark ? "text-white/25" : "text-[#9a8a7a]"}`}>{card.rarity}</p>}
+          </div>
+
+          <div className={`h-px ${dark ? "bg-white/8" : "bg-black/8"}`} />
+
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className={`text-[10px] tracking-[0.2em] uppercase mb-1 ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>Market Price</p>
+              <p className={`font-display text-2xl ${dark ? "text-white" : "text-[#1a1a1a]"}`}>${card.market.toFixed(2)}</p>
+              {card.prevMarket && (
+                <p className={`text-[11px] ${dark ? "text-white/30" : "text-[#9a8a7a]"}`}>prev. ${card.prevMarket.toFixed(2)}</p>
+              )}
+            </div>
+            {card.change !== null && (
+              <div className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-[13px] font-medium ${card.change >= 0 ? "bg-emerald-400/10 text-emerald-400" : "bg-red-400/10 text-red-400"}`}>
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                  <path d={card.change >= 0 ? "M12 4l8 16H4z" : "M12 20L4 4h16z"} />
+                </svg>
+                {Math.abs(card.change).toFixed(1)}%
+              </div>
+            )}
+          </div>
+
+          <a
+            href={`https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(card.name)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`text-[11px] tracking-[0.1em] uppercase flex items-center gap-1.5 transition-colors ${dark ? "text-white/30 hover:text-[#E8D5B7]" : "text-[#5a4a3a] hover:text-[#6B4F2A]"}`}
+          >
+            View on TCGPlayer
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 function PokemonTracker({ dark }) {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasTrending, setHasTrending] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     fetch("/api/trending-cards")
@@ -225,25 +295,25 @@ function PokemonTracker({ dark }) {
           {cards.map((card, i) => (
             <div
               key={card.id}
-              className={`flex items-center gap-4 px-5 py-3 border-b last:border-b-0 transition-colors duration-200 ${border} ${dark ? "hover:bg-white/[0.03]" : "hover:bg-[#e8e2da]"}`}
+              onClick={() => setSelected(card)}
+              className={`flex items-center gap-3 px-4 py-2 border-b last:border-b-0 transition-colors duration-200 cursor-pointer ${border} ${dark ? "hover:bg-white/[0.03]" : "hover:bg-[#e8e2da]"}`}
             >
-              <span className={`text-[11px] w-5 text-right shrink-0 ${muted}`}>{i + 1}</span>
-              <img
-                src={card.image}
-                alt={card.name}
-                className="w-8 h-11 object-contain rounded shrink-0"
-              />
+              <span className={`text-[10px] w-4 text-right shrink-0 ${muted}`}>{i + 1}</span>
+              <img src={card.image} alt={card.name} className="w-6 h-8 object-contain rounded shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className={`text-[13px] truncate ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>{card.name}</p>
-                <p className={`text-[10px] tracking-[0.08em] truncate ${muted}`}>{card.set}</p>
+                <p className={`text-[12px] truncate ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>{card.name}</p>
+                <p className={`text-[9px] tracking-[0.06em] truncate ${muted}`}>{card.set}</p>
               </div>
-              <div className="text-right shrink-0">
-                <p className={`text-[13px] font-medium ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>
+              <div className="flex items-center gap-3 shrink-0">
+                <p className={`text-[12px] font-medium ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>
                   ${card.market.toFixed(2)}
                 </p>
                 {card.change !== null && (
-                  <p className={`text-[10px] font-medium ${card.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                    {card.change >= 0 ? "+" : ""}{card.change.toFixed(1)}%
+                  <p className={`text-[10px] font-medium flex items-center gap-0.5 w-14 justify-end ${card.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                    <svg className="w-2 h-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d={card.change >= 0 ? "M12 4l8 16H4z" : "M12 20L4 4h16z"} />
+                    </svg>
+                    {Math.abs(card.change).toFixed(1)}%
                   </p>
                 )}
               </div>
@@ -251,6 +321,8 @@ function PokemonTracker({ dark }) {
           ))}
         </div>
       )}
+
+      {selected && <CardModal card={selected} onClose={() => setSelected(null)} dark={dark} />}
     </div>
   );
 }
