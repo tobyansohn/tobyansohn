@@ -174,6 +174,87 @@ function ProjectCard({ project, index, dark }) {
   );
 }
 
+function PokemonTracker({ dark }) {
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [hasTrending, setHasTrending] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/trending-cards")
+      .then((r) => r.json())
+      .then((data) => {
+        setCards(data.cards || []);
+        setHasTrending(data.hasTrending || false);
+        setLastUpdated(data.lastUpdated);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
+  const border = dark ? "border-white/8" : "border-[#b0a090]";
+  const cardBg = dark ? "bg-white/[0.02]" : "bg-[#ede8e0]";
+
+  return (
+    <div className="mt-24">
+      <div className="flex items-end justify-between mb-4">
+        <p className={`text-[11px] tracking-[0.35em] uppercase ${muted}`}>
+          Pokémon Card Tracker — {hasTrending ? "Top Movers" : "Top by Value"}
+        </p>
+        {lastUpdated && (
+          <p className={`text-[10px] tracking-[0.1em] ${muted}`}>
+            Updated {new Date(lastUpdated).toLocaleDateString()}
+          </p>
+        )}
+      </div>
+      <p className={`max-w-lg text-[14px] leading-relaxed mb-8 ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
+        Tracks Special Illustration Rare and Illustration Rare cards every 12 hours via the Pokémon TCG API, storing snapshots in Redis to surface which cards are climbing fastest in market value.
+      </p>
+
+      {loading ? (
+        <div className={`rounded-2xl border ${border} p-12 flex items-center justify-center`}>
+          <p className={`text-[12px] tracking-[0.2em] uppercase ${muted}`}>Loading...</p>
+        </div>
+      ) : cards.length === 0 ? (
+        <div className={`rounded-2xl border ${border} p-12 flex items-center justify-center`}>
+          <p className={`text-[12px] tracking-[0.2em] uppercase ${muted}`}>No data yet — check back soon.</p>
+        </div>
+      ) : (
+        <div className={`rounded-2xl border ${border} overflow-hidden`}>
+          {cards.map((card, i) => (
+            <div
+              key={card.id}
+              className={`flex items-center gap-4 px-5 py-3 border-b last:border-b-0 transition-colors duration-200 ${border} ${dark ? "hover:bg-white/[0.03]" : "hover:bg-[#e8e2da]"}`}
+            >
+              <span className={`text-[11px] w-5 text-right shrink-0 ${muted}`}>{i + 1}</span>
+              <img
+                src={card.image}
+                alt={card.name}
+                className="w-8 h-11 object-contain rounded shrink-0"
+              />
+              <div className="flex-1 min-w-0">
+                <p className={`text-[13px] truncate ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>{card.name}</p>
+                <p className={`text-[10px] tracking-[0.08em] truncate ${muted}`}>{card.set}</p>
+              </div>
+              <div className="text-right shrink-0">
+                <p className={`text-[13px] font-medium ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>
+                  ${card.market.toFixed(2)}
+                </p>
+                {card.change !== null && (
+                  <p className={`text-[10px] font-medium ${card.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                    {card.change >= 0 ? "+" : ""}{card.change.toFixed(1)}%
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Developer() {
   const { dark } = useTheme();
   const [headerRef, headerInView] = useInView();
@@ -203,6 +284,8 @@ export default function Developer() {
         </p>
         <TravelMap dark={dark} />
       </div>
+
+      <PokemonTracker dark={dark} />
     </main>
   );
 }
