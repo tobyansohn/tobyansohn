@@ -88,11 +88,22 @@ export default function Home() {
     <main>
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-16 pt-20 overflow-hidden">
-        <div className={`absolute inset-0 opacity-[0.03] ${dark ? "" : "invert"}`}
+        {/* Hero background photo */}
+        <div className="absolute inset-0">
+          <img
+            src="/DSC04511.jpg"
+            alt=""
+            className="w-full h-full object-cover object-center"
+          />
+          <div className={`absolute inset-0 ${dark
+            ? "bg-gradient-to-r from-[#080808] from-[45%] via-[#080808]/80 to-[#080808]/40"
+            : "bg-gradient-to-r from-[#F5F2ED] from-[45%] via-[#F5F2ED]/80 to-[#F5F2ED]/40"
+          }`} />
+          <div className={`absolute inset-0 ${dark ? "bg-[#080808]/30" : "bg-[#F5F2ED]/20"}`} />
+        </div>
+        <div className={`absolute inset-0 opacity-[0.02] ${dark ? "" : "invert"}`}
           style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)`, backgroundSize: "80px 80px" }}
         />
-        <div className={`absolute top-1/4 left-1/3 w-96 h-96 rounded-full blur-[120px] pointer-events-none ${dark ? "bg-[#E8D5B7]/5" : "bg-[#C4A882]/10"}`} />
-        <div className={`absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-[100px] pointer-events-none ${dark ? "bg-[#8B9DC3]/5" : "bg-[#8B9DC3]/8"}`} />
 
         <div className="relative max-w-6xl mx-auto w-full">
           <div className={`flex items-center gap-3 mb-10 transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "100ms" }}>
