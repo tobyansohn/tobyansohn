@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
+import L from "leaflet";
 import { useTheme } from "../context/ThemeContext.jsx";
 
 function useInView(threshold = 0.1) {
@@ -27,13 +29,7 @@ const folderName = (path) => path.split('/').slice(-2)[0];
 function buildPhotos(glob, category, getSub) {
   return Object.entries(glob).map(([path, mod], i) => {
     const subCategory = typeof getSub === 'function' ? getSub(path) : getSub;
-    return {
-      id: `${category}-${subCategory}-${i}`,
-      src: mod.default,
-      title: subCategory,
-      category,
-      subCategory,
-    };
+    return { id: `${category}-${subCategory}-${i}`, src: mod.default, title: subCategory, category, subCategory };
   });
 }
 
@@ -48,6 +44,75 @@ const photos = [
 ];
 
 const topCategories = ['All', 'For Fun', 'Grad Pics', 'People', 'Travels'];
+
+// ── Travel map data ────────────────────────────────────────────────────────────
+
+const travelCoords = {
+  'Cabo, Mexico': { lat: 22.8905, lng: -109.9167 },
+  'New York':     { lat: 40.7128, lng: -74.0060  },
+};
+
+function makePinIcon(active) {
+  return L.divIcon({
+    className: "",
+    html: `<div style="
+      width: 12px; height: 12px;
+      background: ${active ? "#E8D5B7" : "rgba(232,213,183,0.45)"};
+      border: 2px solid ${active ? "#E8D5B7" : "rgba(232,213,183,0.6)"};
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px ${active ? "rgba(232,213,183,0.25)" : "transparent"};
+      transition: all 0.2s;
+    "></div>`,
+    iconSize: [12, 12],
+    iconAnchor: [6, 6],
+  });
+}
+
+function TravelMap({ activeSub, onPinClick, dark }) {
+  const travelLocations = useMemo(() =>
+    Object.entries(travelCoords).filter(([name]) =>
+      photos.some(p => p.category === 'Travels' && p.subCategory === name)
+    ), []);
+
+  const center = [20, -30];
+
+  return (
+    <div className={`mb-8 rounded-2xl overflow-hidden border ${dark ? "border-white/8" : "border-[#b0a090]"}`} style={{ height: 320 }}>
+      <MapContainer
+        center={center}
+        zoom={2}
+        scrollWheelZoom={false}
+        style={{ height: "100%", width: "100%", background: dark ? "#0d0d0d" : "#ede8e0" }}
+        zoomControl={false}
+        attributionControl={false}
+      >
+        <TileLayer
+          url={dark
+            ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          }
+        />
+        {travelLocations.map(([name, coords]) => (
+          <Marker
+            key={name}
+            position={[coords.lat, coords.lng]}
+            icon={makePinIcon(activeSub === name)}
+            eventHandlers={{ click: () => onPinClick(name) }}
+          >
+            <Tooltip
+              permanent={false}
+              direction="top"
+              offset={[0, -8]}
+              className="travel-tooltip"
+            >
+              {name}
+            </Tooltip>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+}
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
 
@@ -156,8 +221,7 @@ export default function Photography() {
           </h1>
           <p className={`max-w-lg text-[15px] leading-relaxed ${body}`}>
             I love the opportunity to capture everywhere I go, whether it's at home or on the go.
-            <br />
-            <br />
+            <br /><br />
             I normally shoot on Sony (a7V) and a Fujifilm xt30.
           </p>
         </div>
@@ -193,6 +257,15 @@ export default function Photography() {
 
       {/* Spacer when no sub-pills */}
       {subCategories.length === 0 && <div className="mb-10" />}
+
+      {/* Travel map */}
+      {activeCategory === 'Travels' && (
+        <TravelMap
+          activeSub={activeSub}
+          onPinClick={(name) => setActiveSub(name)}
+          dark={dark}
+        />
+      )}
 
       {/* Masonry grid */}
       <div className="columns-2 md:columns-3 gap-3">
