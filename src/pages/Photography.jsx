@@ -22,6 +22,10 @@ const forFunPorchGlob = import.meta.glob(
   '../Photos/For Fun/The Porch/*.{jpg,JPG,jpeg,JPEG,png,PNG}',
   { eager: true }
 );
+const forFunLifewayGlob = import.meta.glob(
+  '../Photos/For Fun/LifewayATX/*.{jpg,JPG,jpeg,JPEG,png,PNG}',
+  { eager: true }
+);
 const gradPicsGlob = import.meta.glob(
   '../Photos/Grad Pics/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}',
   { eager: true }
@@ -55,6 +59,12 @@ const galleries = [
     label: 'The Porch',
     description: 'Sessions at The Porch.',
     photos: buildPhotos(forFunPorchGlob, () => 'The Porch'),
+  },
+  {
+    id: 'lifeway-atx',
+    label: 'Lifeway ATX',
+    description: 'Shooting for my church, Lifeway ATX.',
+    photos: buildPhotos(forFunLifewayGlob, () => 'Lifeway ATX'),
   },
   {
     id: 'grad-pics',
@@ -177,6 +187,15 @@ function GalleryDetail({ gallery, onBack, dark }) {
   const [lightbox, setLightbox] = useState(null);
   const [ref, inView] = useInView();
 
+  useEffect(() => {
+    window.history.pushState({ galleryId: gallery.id }, '');
+    const handlePop = () => onBack();
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, []);
+
+  const handleBack = () => window.history.back();
+
   const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
   const body = dark ? "text-white/50" : "text-[#3a3a3a]";
   const heading = dark ? "text-white" : "text-[#1a1a1a]";
@@ -184,7 +203,7 @@ function GalleryDetail({ gallery, onBack, dark }) {
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-7xl mx-auto">
       <button
-        onClick={onBack}
+        onClick={handleBack}
         className={`flex items-center gap-2 mb-12 text-[12px] tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/35 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}
       >
         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
