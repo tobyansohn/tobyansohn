@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import { useTheme } from "../context/ThemeContext.jsx";
@@ -23,20 +23,32 @@ const videos = [
 const roles = ["Software Developer", "Photographer", "Videographer", "Disciple"];
 
 const travelSpots = [
-  { name: "Cabo, Mexico",  lat: 22.8905,  lng: -109.9167 },
-  { name: "New York",      lat: 40.7128,  lng: -74.0060  },
+  { name: "Cabo, Mexico", lat: 22.8905, lng: -109.9167 },
+  { name: "New York",     lat: 40.7128, lng: -74.0060  },
 ];
 
-function makePinIcon() {
+const homePin = { name: "Austin, TX — Home", lat: 30.2672, lng: -97.7431 };
+
+function makeTravelIcon() {
   return L.divIcon({
     className: "",
-    html: `<div style="width:10px;height:10px;background:#E8D5B7;border:2px solid #E8D5B7;border-radius:50%;box-shadow:0 0 0 4px rgba(232,213,183,0.2);"></div>`,
+    html: `<div style="width:10px;height:10px;background:#E8D5B7;border:2px solid #E8D5B7;border-radius:50%;box-shadow:0 0 0 4px rgba(232,213,183,0.2);cursor:pointer;"></div>`,
+    iconSize: [10, 10],
+    iconAnchor: [5, 5],
+  });
+}
+
+function makeHomeIcon() {
+  return L.divIcon({
+    className: "",
+    html: `<div style="width:10px;height:10px;background:#8B9DC3;border:2px solid #8B9DC3;border-radius:50%;box-shadow:0 0 0 4px rgba(139,157,195,0.2);"></div>`,
     iconSize: [10, 10],
     iconAnchor: [5, 5],
   });
 }
 
 function TravelMap({ dark }) {
+  const navigate = useNavigate();
   return (
     <div className={`rounded-2xl overflow-hidden border ${dark ? "border-white/8" : "border-[#b0a090]"}`} style={{ height: 300 }}>
       <MapContainer
@@ -52,10 +64,18 @@ function TravelMap({ dark }) {
           : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         } />
         {travelSpots.map(spot => (
-          <Marker key={spot.name} position={[spot.lat, spot.lng]} icon={makePinIcon()}>
+          <Marker
+            key={spot.name}
+            position={[spot.lat, spot.lng]}
+            icon={makeTravelIcon()}
+            eventHandlers={{ click: () => navigate(`/photography?category=Travels&sub=${encodeURIComponent(spot.name)}`) }}
+          >
             <Tooltip direction="top" offset={[0, -8]} className="travel-tooltip">{spot.name}</Tooltip>
           </Marker>
         ))}
+        <Marker position={[homePin.lat, homePin.lng]} icon={makeHomeIcon()}>
+          <Tooltip direction="top" offset={[0, -8]} className="travel-tooltip">{homePin.name}</Tooltip>
+        </Marker>
       </MapContainer>
     </div>
   );

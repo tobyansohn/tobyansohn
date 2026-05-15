@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 
 function useInView(threshold = 0.1) {
@@ -101,8 +102,9 @@ function Lightbox({ photo, onClose }) {
 
 export default function Photography() {
   const { dark } = useTheme();
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [activeSub, setActiveSub] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'All');
+  const [activeSub, setActiveSub] = useState(searchParams.get('sub') || 'All');
   const [allSeed, setAllSeed] = useState(0);
   const [lightbox, setLightbox] = useState(null);
   const [headerRef, headerInView] = useInView();
@@ -133,11 +135,13 @@ export default function Photography() {
     ? "border border-white/15 text-white/40 hover:text-white/70 hover:border-white/30"
     : "border border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30";
 
-  const subPillBase = "px-3 py-1.5 rounded-full text-[11px] tracking-[0.1em] uppercase transition-all duration-300";
-  const subPillActive = dark ? "bg-white/15 text-white border border-white/30" : "bg-[#1a1a1a]/10 text-[#1a1a1a] border border-[#1a1a1a]/30";
+  const subPillBase = "px-3 py-1 rounded-md text-[11px] tracking-[0.08em] transition-all duration-300";
+  const subPillActive = dark
+    ? "bg-[#E8D5B7]/15 text-[#E8D5B7] border border-[#E8D5B7]/30"
+    : "bg-[#6B4F2A]/10 text-[#6B4F2A] border border-[#6B4F2A]/30";
   const subPillInactive = dark
-    ? "border border-white/10 text-white/30 hover:text-white/60 hover:border-white/25"
-    : "border border-black/10 text-[#5a4a3a] hover:text-[#1a1a1a] hover:border-black/25";
+    ? "border border-white/10 text-white/35 hover:text-white/65 hover:border-white/25 hover:bg-white/5"
+    : "border border-black/10 text-[#5a4a3a] hover:text-[#1a1a1a] hover:border-black/20 hover:bg-black/5";
 
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-7xl mx-auto">
@@ -170,22 +174,26 @@ export default function Photography() {
       </div>
 
       {/* Sub-category pills */}
-      {subCategories.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-10 pl-1">
-          {subCategories.map(sub => (
-            <button
-              key={sub}
-              onClick={() => setActiveSub(sub)}
-              className={`${subPillBase} ${activeSub === sub ? subPillActive : subPillInactive}`}
-            >
-              {sub}
-            </button>
-          ))}
+      {subCategories.length > 0 ? (
+        <div className={`mb-10 pl-4 border-l-2 ${dark ? "border-white/10" : "border-black/10"}`}>
+          <p className={`text-[10px] tracking-[0.25em] uppercase mb-2.5 ${dark ? "text-white/25" : "text-[#9a8a7a]"}`}>
+            {activeCategory}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {subCategories.map(sub => (
+              <button
+                key={sub}
+                onClick={() => setActiveSub(sub)}
+                className={`${subPillBase} ${activeSub === sub ? subPillActive : subPillInactive}`}
+              >
+                {sub}
+              </button>
+            ))}
+          </div>
         </div>
+      ) : (
+        <div className="mb-10" />
       )}
-
-      {/* Spacer when no sub-pills */}
-      {subCategories.length === 0 && <div className="mb-10" />}
 
       {/* Masonry grid */}
       <div className="columns-2 md:columns-3 gap-3">
