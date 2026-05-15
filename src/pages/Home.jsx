@@ -173,7 +173,7 @@ export default function Home() {
           <div className={`grid grid-cols-2 gap-6 transition-all duration-700 ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "200ms" }}>
             {[
               { num: "3+", label: "Years Coding" },
-              { num: "43+", label: "Photos Shot" },
+              { num: `${allPhotoSrcs.length}+`, label: "Photos Shot" },
               { num: "4", label: "Videos Made" },
               { num: "∞", label: "Coffee Consumed" },
             ].map(({ num, label }) => (
