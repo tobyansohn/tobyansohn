@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 
@@ -84,7 +85,7 @@ function Lightbox({ photo, onClose }) {
     };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-black/92 z-50 flex items-center justify-center p-6 backdrop-blur-sm" onClick={onClose}>
       <div className="relative max-w-4xl w-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
         <img src={photo.src} alt={photo.title} className="max-w-full max-h-[85vh] rounded-2xl object-contain" />
@@ -98,7 +99,8 @@ function Lightbox({ photo, onClose }) {
           </svg>
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
