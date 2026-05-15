@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Developer from "./pages/Developer.jsx";
@@ -40,6 +41,7 @@ export default function App() {
       <Router>
         <CustomCursor />
         <ThemedApp />
+        <SpeedInsights />
       </Router>
     </ThemeProvider>
   );
