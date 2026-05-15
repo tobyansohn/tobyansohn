@@ -106,7 +106,7 @@ export default function Home() {
             </h1>
           </div>
 
-          <div className="overflow-hidden mb-12 min-h-[10rem]">
+          <div className="overflow-hidden mb-12 min-h-[5rem] md:min-h-[10rem]">
             <p className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "350ms" }}>
               <span className="bg-gradient-to-r from-[#E8D5B7] to-[#C4A882] bg-clip-text text-transparent transition-opacity duration-400" style={{ opacity: fade ? 1 : 0 }}>
                 {roles[roleIndex]}

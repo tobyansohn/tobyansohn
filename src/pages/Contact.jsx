@@ -68,7 +68,7 @@ export default function Contact() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>Name</label>
                   <input name="name" type="text" required placeholder="Your name" value={form.name} onChange={handleChange} className={inputClass} />
@@ -81,13 +81,13 @@ export default function Contact() {
 
               <div className="flex flex-col gap-1.5">
                 <label className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>I'm interested in</label>
-                <div className="flex gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   {[{ value: "dev", label: "Development" }, { value: "photo", label: "Photography" }, { value: "video", label: "Videography" }, { value: "both", label: "Multiple" }].map(opt => (
                     <button
                       key={opt.value}
                       type="button"
                       onClick={() => setForm(f => ({ ...f, type: opt.value }))}
-                      className={`flex-1 py-3 rounded-xl text-[12px] tracking-[0.1em] uppercase transition-all duration-300 ${
+                      className={`py-3 rounded-xl text-[12px] tracking-[0.1em] uppercase transition-all duration-300 ${
                         form.type === opt.value
                           ? dark ? "bg-white/10 border border-[#E8D5B7]/40 text-[#E8D5B7]" : "bg-[#ede8e0] border border-[#6B4F2A]/40 text-[#6B4F2A]"
                           : dark ? "border border-white/10 text-white/35 hover:text-white/60" : "border border-black/10 text-black/35 hover:text-black/60"
