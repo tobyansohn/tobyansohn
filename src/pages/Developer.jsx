@@ -340,7 +340,7 @@ export default function Developer() {
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>Software Development</span>
           <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>
             Building things<br />
-            <span className={dark ? "text-white/30" : "text-[#7a6a5a]"}>that matter.</span>
+            <span className={dark ? "text-white/30" : "text-[#7a6a5a]"}>for fun.</span>
           </h1>
           <p className={`max-w-lg text-[15px] leading-relaxed ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
             I build things with a little help from my AI friends. Half the time I'm not sure who wrote what — and honestly, that's the fun part.
