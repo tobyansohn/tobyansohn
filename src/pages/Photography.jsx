@@ -14,42 +14,45 @@ function useInView(threshold = 0.1) {
 
 // ── Photo imports ──────────────────────────────────────────────────────────────
 
-const forFunHomeGlob    = import.meta.glob('../Photos/For Fun/Home/*.{jpg,JPG,jpeg,JPEG,png,PNG}',       { eager: true });
-const forFunPorchGlob   = import.meta.glob('../Photos/For Fun/The Porch/*.{jpg,JPG,jpeg,JPEG,png,PNG}',  { eager: true });
-const forFunLifewayGlob = import.meta.glob('../Photos/For Fun/LifewayATX/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true });
-const forFunYejinGlob   = import.meta.glob('../Photos/For Fun/Yejinfloral/*.{jpg,JPG,jpeg,JPEG,png,PNG}',{ eager: true });
-const gradPicsGlob      = import.meta.glob('../Photos/Grad Pics/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}',        { eager: true });
-const peopleGlob        = import.meta.glob('../Photos/People/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}',           { eager: true });
-const travelsGlob       = import.meta.glob('../Photos/Travels/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}',          { eager: true });
+const forFunHomeGlob    = import.meta.glob('../Photos/For Fun/Home/*.{jpg,JPG,jpeg,JPEG,png,PNG}',        { eager: true });
+const forFunPorchGlob   = import.meta.glob('../Photos/For Fun/The Porch/*.{jpg,JPG,jpeg,JPEG,png,PNG}',   { eager: true });
+const forFunLifewayGlob = import.meta.glob('../Photos/For Fun/LifewayATX/*.{jpg,JPG,jpeg,JPEG,png,PNG}',  { eager: true });
+const forFunYejinGlob   = import.meta.glob('../Photos/For Fun/Yejinfloral/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true });
+const gradPicsGlob      = import.meta.glob('../Photos/Grad Pics/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}',         { eager: true });
+const peopleGlob        = import.meta.glob('../Photos/People/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}',            { eager: true });
+const travelsGlob       = import.meta.glob('../Photos/Travels/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}',           { eager: true });
 
-const sessionName = (path) => path.split('/').slice(-2)[0];
+const folderName = (path) => path.split('/').slice(-2)[0];
 
-function buildPhotos(glob, category, getTitle) {
-  return Object.entries(glob).map(([path, mod], i) => ({
-    id: `${category}-${i}`,
-    src: mod.default,
-    title: getTitle(path),
-    category,
-  }));
+function buildPhotos(glob, category, getSub) {
+  return Object.entries(glob).map(([path, mod], i) => {
+    const subCategory = typeof getSub === 'function' ? getSub(path) : getSub;
+    return {
+      id: `${category}-${subCategory}-${i}`,
+      src: mod.default,
+      title: subCategory,
+      category,
+      subCategory,
+    };
+  });
 }
 
 const photos = [
-  ...buildPhotos(forFunHomeGlob,    'For Fun',   () => 'Home'),
-  ...buildPhotos(forFunPorchGlob,   'For Fun',   () => 'The Porch'),
-  ...buildPhotos(forFunLifewayGlob, 'For Fun',   () => 'Lifeway ATX'),
-  ...buildPhotos(forFunYejinGlob,   'For Fun',   () => 'Yejinfloral'),
-  ...buildPhotos(gradPicsGlob,      'Grad Pics', sessionName),
-  ...buildPhotos(peopleGlob,        'People',    sessionName),
-  ...buildPhotos(travelsGlob,       'Travels',   sessionName),
+  ...buildPhotos(forFunHomeGlob,    'For Fun',   'Home'),
+  ...buildPhotos(forFunPorchGlob,   'For Fun',   'The Porch'),
+  ...buildPhotos(forFunLifewayGlob, 'For Fun',   'Lifeway ATX'),
+  ...buildPhotos(forFunYejinGlob,   'For Fun',   'Yejinfloral'),
+  ...buildPhotos(gradPicsGlob,      'Grad Pics', folderName),
+  ...buildPhotos(peopleGlob,        'People',    folderName),
+  ...buildPhotos(travelsGlob,       'Travels',   folderName),
 ];
 
-const categories = ['All', 'For Fun', 'Grad Pics', 'People', 'Travels'];
+const topCategories = ['All', 'For Fun', 'Grad Pics', 'People', 'Travels'];
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
 
 function PhotoCard({ photo, index, onClick }) {
   const [ref, inView] = useInView();
-
   return (
     <div
       ref={ref}
@@ -85,11 +88,7 @@ function Lightbox({ photo, onClose }) {
   return (
     <div className="fixed inset-0 bg-black/92 z-50 flex items-center justify-center p-6 backdrop-blur-sm" onClick={onClose}>
       <div className="relative max-w-4xl w-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
-        <img
-          src={photo.src}
-          alt={photo.title}
-          className="max-w-full max-h-[85vh] rounded-2xl object-contain"
-        />
+        <img src={photo.src} alt={photo.title} className="max-w-full max-h-[85vh] rounded-2xl object-contain" />
         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent rounded-b-2xl pointer-events-none">
           <p className="font-display text-2xl text-white">{photo.title}</p>
           <p className="text-white/50 text-sm mt-1">{photo.category}</p>
@@ -108,14 +107,35 @@ function Lightbox({ photo, onClose }) {
 
 export default function Photography() {
   const { dark } = useTheme();
-  const [active, setActive] = useState("All");
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeSub, setActiveSub] = useState('All');
   const [lightbox, setLightbox] = useState(null);
   const [headerRef, headerInView] = useInView();
 
-  const filtered = active === "All" ? photos : photos.filter(p => p.category === active);
+  const subCategories = activeCategory === 'All'
+    ? []
+    : ['All', ...new Set(photos.filter(p => p.category === activeCategory).map(p => p.subCategory))];
+
+  const filtered = photos.filter(p => {
+    if (activeCategory !== 'All' && p.category !== activeCategory) return false;
+    if (activeSub !== 'All' && p.subCategory !== activeSub) return false;
+    return true;
+  });
 
   const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
   const body  = dark ? "text-white/45" : "text-[#3a3a3a]";
+
+  const pillBase = "px-4 py-2 rounded-full text-[12px] tracking-[0.1em] uppercase transition-all duration-300";
+  const pillActive = dark ? "bg-white text-[#080808]" : "bg-[#1a1a1a] text-white";
+  const pillInactive = dark
+    ? "border border-white/15 text-white/40 hover:text-white/70 hover:border-white/30"
+    : "border border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30";
+
+  const subPillBase = "px-3 py-1.5 rounded-full text-[11px] tracking-[0.1em] uppercase transition-all duration-300";
+  const subPillActive = dark ? "bg-white/15 text-white border border-white/30" : "bg-[#1a1a1a]/10 text-[#1a1a1a] border border-[#1a1a1a]/30";
+  const subPillInactive = dark
+    ? "border border-white/10 text-white/30 hover:text-white/60 hover:border-white/25"
+    : "border border-black/10 text-[#5a4a3a] hover:text-[#1a1a1a] hover:border-black/25";
 
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-7xl mx-auto">
@@ -132,23 +152,36 @@ export default function Photography() {
         </div>
       </div>
 
-      {/* Filter pills */}
-      <div className="flex flex-wrap gap-2 mb-10">
-        {categories.map(cat => (
+      {/* Top-level pills */}
+      <div className="flex flex-wrap gap-2 mb-3">
+        {topCategories.map(cat => (
           <button
             key={cat}
-            onClick={() => setActive(cat)}
-            className={`px-4 py-2 rounded-full text-[12px] tracking-[0.1em] uppercase transition-all duration-300 ${
-              active === cat
-                ? dark ? "bg-white text-[#080808]" : "bg-[#1a1a1a] text-white"
-                : dark ? "border border-white/15 text-white/40 hover:text-white/70 hover:border-white/30"
-                       : "border border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30"
-            }`}
+            onClick={() => { setActiveCategory(cat); setActiveSub('All'); }}
+            className={`${pillBase} ${activeCategory === cat ? pillActive : pillInactive}`}
           >
             {cat}
           </button>
         ))}
       </div>
+
+      {/* Sub-category pills */}
+      {subCategories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-10 pl-1">
+          {subCategories.map(sub => (
+            <button
+              key={sub}
+              onClick={() => setActiveSub(sub)}
+              className={`${subPillBase} ${activeSub === sub ? subPillActive : subPillInactive}`}
+            >
+              {sub}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Spacer when no sub-pills */}
+      {subCategories.length === 0 && <div className="mb-10" />}
 
       {/* Masonry grid */}
       <div className="columns-2 md:columns-3 gap-3">
