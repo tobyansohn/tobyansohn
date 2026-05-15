@@ -64,7 +64,7 @@ export default function Home() {
 
   const previewPhotos = useMemo(() => {
     const shuffled = [...allPhotoSrcs].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 6);
+    return shuffled.slice(0, 10);
   }, []);
 
   useEffect(() => {
