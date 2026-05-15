@@ -1,5 +1,79 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
+import L from "leaflet";
 import { useTheme } from "../context/ThemeContext.jsx";
+
+function WaterCanvas({ dark }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    let animId;
+    const ripples = [];
+    let lastX = 0, lastY = 0;
+
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const spawnRipple = (x, y) => {
+      // spawn 3 concentric rings with staggered delays, like real water
+      [0, 120, 260].forEach((delay, i) => {
+        setTimeout(() => {
+          ripples.push({
+            x, y,
+            r: 1,
+            maxR: 28 + i * 14 + Math.random() * 8,
+            speed: 0.55 - i * 0.06,
+            peak: 0.12 - i * 0.025,
+          });
+        }, delay);
+      });
+    };
+
+    const onMove = (e) => {
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      if (Math.sqrt(dx * dx + dy * dy) < 18) return;
+      lastX = e.clientX; lastY = e.clientY;
+      spawnRipple(e.clientX, e.clientY);
+    };
+
+    const color = dark ? "232,213,183" : "100,80,55";
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const rip = ripples[i];
+        rip.r += rip.speed;
+        const progress = rip.r / rip.maxR;
+        // bell-curve opacity — fades in then out for natural look
+        const opacity = rip.peak * Math.sin(progress * Math.PI);
+        if (progress >= 1) { ripples.splice(i, 1); continue; }
+        ctx.beginPath();
+        ctx.ellipse(rip.x, rip.y, rip.r, rip.r * 0.35, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${color},${opacity})`;
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+      }
+      animId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener("mousemove", onMove);
+    animate();
+    return () => {
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(animId);
+    };
+  }, [dark]);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }} />;
+}
 
 function useInView(threshold = 0.12) {
   const ref = useRef(null);
@@ -12,18 +86,66 @@ function useInView(threshold = 0.12) {
   return [ref, inView];
 }
 
-const projects = [
-  { title: "Project Alpha", description: "A full-stack SaaS platform with real-time collaboration, built with React, Node.js, and PostgreSQL.", tags: ["React", "Node.js", "PostgreSQL", "WebSocket"], year: "2024", link: "#" },
-  { title: "Project Beta", description: "Mobile-first e-commerce application featuring AI-powered product recommendations and seamless checkout.", tags: ["React Native", "GraphQL", "Stripe", "AWS"], year: "2024", link: "#" },
-  { title: "Project Gamma", description: "Developer tooling CLI that automates boilerplate generation and CI/CD pipeline configuration.", tags: ["TypeScript", "Node.js", "Docker", "GitHub Actions"], year: "2023", link: "#" },
-  { title: "Project Delta", description: "Open-source data visualization library with 30+ customizable chart types and accessibility support.", tags: ["D3.js", "React", "TypeScript", "Storybook"], year: "2023", link: "#" },
+const travelSpots = [
+  { name: "Cabo, Mexico", lat: 22.8905, lng: -109.9167 },
+  { name: "New York",     lat: 40.7128, lng: -74.0060  },
 ];
 
-const skills = [
-  { category: "Frontend", items: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Vite"] },
-  { category: "Backend", items: ["Node.js", "Express", "PostgreSQL", "MongoDB", "REST / GraphQL"] },
-  { category: "Tools", items: ["Git", "Docker", "AWS", "Vercel", "Figma"] },
-];
+const homePin = { name: "Austin, TX — Home", lat: 30.2672, lng: -97.7431 };
+
+function makeTravelIcon() {
+  return L.divIcon({
+    className: "",
+    html: `<div style="width:10px;height:10px;background:#E8D5B7;border:2px solid #E8D5B7;border-radius:50%;box-shadow:0 0 0 4px rgba(232,213,183,0.2);cursor:pointer;"></div>`,
+    iconSize: [10, 10], iconAnchor: [5, 5],
+  });
+}
+
+function makeHomeIcon() {
+  return L.divIcon({
+    className: "",
+    html: `<div style="width:10px;height:10px;background:#8B9DC3;border:2px solid #8B9DC3;border-radius:50%;box-shadow:0 0 0 4px rgba(139,157,195,0.2);"></div>`,
+    iconSize: [10, 10], iconAnchor: [5, 5],
+  });
+}
+
+function TravelMap({ dark }) {
+  const navigate = useNavigate();
+  return (
+    <div className={`rounded-2xl overflow-hidden border ${dark ? "border-white/8" : "border-[#b0a090]"}`} style={{ height: 320 }}>
+      <MapContainer
+        center={[25, -50]}
+        zoom={2}
+        scrollWheelZoom={false}
+        style={{ height: "100%", width: "100%", background: dark ? "#0d0d0d" : "#ede8e0" }}
+        zoomControl={false}
+        attributionControl={false}
+      >
+        <TileLayer url={dark
+          ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        } />
+        {travelSpots.map(spot => (
+          <Marker
+            key={spot.name}
+            position={[spot.lat, spot.lng]}
+            icon={makeTravelIcon()}
+            eventHandlers={{ click: () => navigate(`/photography?category=Travels&sub=${encodeURIComponent(spot.name)}`) }}
+          >
+            <Tooltip direction="top" offset={[0, -8]} className="travel-tooltip">{spot.name}</Tooltip>
+          </Marker>
+        ))}
+        <Marker position={[homePin.lat, homePin.lng]} icon={makeHomeIcon()}>
+          <Tooltip direction="top" offset={[0, -8]} className="travel-tooltip">{homePin.name}</Tooltip>
+        </Marker>
+      </MapContainer>
+    </div>
+  );
+}
+
+const projects = [];
+
+const skills = [];
 
 function ProjectCard({ project, index, dark }) {
   const [ref, inView] = useInView();
@@ -58,7 +180,8 @@ export default function Developer() {
   const [skillsRef, skillsInView] = useInView();
 
   return (
-    <main className="pt-28 pb-32 px-6 md:px-16 max-w-6xl mx-auto">
+    <main className="relative pt-28 pb-32 px-6 md:px-16 max-w-6xl mx-auto" style={{ zIndex: 2 }}>
+      <WaterCanvas dark={dark} />
       <div ref={headerRef} className="mb-24">
         <div className={`transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>Software Development</span>
@@ -67,33 +190,18 @@ export default function Developer() {
             <span className={dark ? "text-white/30" : "text-[#7a6a5a]"}>that matter.</span>
           </h1>
           <p className={`max-w-lg text-[15px] leading-relaxed ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
-            I write clean, scalable code and obsess over user experience. From REST APIs to interactive UIs — full-stack, front-to-back.
+            I build things with a little help from my AI friends. Half the time I'm not sure who wrote what — and honestly, that's the fun part.
           </p>
         </div>
       </div>
 
-      <div ref={skillsRef} className="mb-24 grid md:grid-cols-3 gap-6">
-        {skills.map(({ category, items }, i) => (
-          <div key={category} className={`p-8 rounded-2xl border transition-all duration-700 ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"} ${skillsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`} style={{ transitionDelay: `${i * 100}ms` }}>
-            <p className={`text-[11px] tracking-[0.3em] uppercase mb-5 ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>{category}</p>
-            <ul className="space-y-2">
-              {items.map(item => (
-                <li key={item} className={`flex items-center gap-3 text-[14px] ${dark ? "text-white/60" : "text-black/55"}`}>
-                  <span className="w-1 h-1 rounded-full bg-[#E8D5B7]/50 shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <span className={`text-[11px] tracking-[0.35em] uppercase ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>Selected Projects</span>
-          <span className={`text-[11px] tracking-[0.2em] uppercase ${dark ? "text-white/20" : "text-black/20"}`}>{projects.length} total</span>
-        </div>
-        {projects.map((project, i) => <ProjectCard key={project.title} project={project} index={i} dark={dark} />)}
+      {/* Travel Tracker */}
+      <div className="mt-24">
+        <p className={`text-[11px] tracking-[0.35em] uppercase mb-4 ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>Travel Tracker — 2026</p>
+        <p className={`max-w-lg text-[14px] leading-relaxed mb-8 ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
+          A personal map tracking every place I've visited and called home. Warm pins mark travel destinations — click any to browse photos from that trip. The blue pin marks Austin, TX, my home base.
+        </p>
+        <TravelMap dark={dark} />
       </div>
     </main>
   );
