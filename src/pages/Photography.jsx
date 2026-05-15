@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useTheme } from "../context/ThemeContext.jsx";
 
 function useInView(threshold = 0.1) {
@@ -109,18 +109,26 @@ export default function Photography() {
   const { dark } = useTheme();
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeSub, setActiveSub] = useState('All');
+  const [allSeed, setAllSeed] = useState(0);
   const [lightbox, setLightbox] = useState(null);
   const [headerRef, headerInView] = useInView();
+
+  const randomAll = useMemo(() => {
+    const shuffled = [...photos].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 15);
+  }, [allSeed]);
 
   const subCategories = activeCategory === 'All'
     ? []
     : ['All', ...new Set(photos.filter(p => p.category === activeCategory).map(p => p.subCategory))];
 
-  const filtered = photos.filter(p => {
-    if (activeCategory !== 'All' && p.category !== activeCategory) return false;
-    if (activeSub !== 'All' && p.subCategory !== activeSub) return false;
-    return true;
-  });
+  const filtered = activeCategory === 'All'
+    ? randomAll
+    : photos.filter(p => {
+        if (p.category !== activeCategory) return false;
+        if (activeSub !== 'All' && p.subCategory !== activeSub) return false;
+        return true;
+      });
 
   const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
   const body  = dark ? "text-white/45" : "text-[#3a3a3a]";
@@ -157,7 +165,7 @@ export default function Photography() {
         {topCategories.map(cat => (
           <button
             key={cat}
-            onClick={() => { setActiveCategory(cat); setActiveSub('All'); }}
+            onClick={() => { setActiveCategory(cat); setActiveSub('All'); if (cat === 'All') setAllSeed(s => s + 1); }}
             className={`${pillBase} ${activeCategory === cat ? pillActive : pillInactive}`}
           >
             {cat}
