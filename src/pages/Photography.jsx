@@ -133,19 +133,17 @@ export default function Photography() {
   const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
   const body  = dark ? "text-white/45" : "text-[#3a3a3a]";
 
-  const pillBase = "px-4 py-2 rounded-full text-[12px] tracking-[0.1em] uppercase font-medium transition-all duration-300";
+  const pillBase = "px-4 py-2 rounded-full text-[12px] tracking-[0.1em] uppercase transition-all duration-300";
   const pillActive = dark ? "bg-white text-[#080808]" : "bg-[#1a1a1a] text-white";
   const pillInactive = dark
     ? "border border-white/15 text-white/40 hover:text-white/70 hover:border-white/30"
     : "border border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30";
 
-  const subPillBase = "px-3 py-1 rounded-md text-[11px] tracking-[0.08em] transition-all duration-300";
-  const subPillActive = dark
-    ? "bg-[#E8D5B7]/15 text-[#E8D5B7] border border-[#E8D5B7]/30"
-    : "bg-[#6B4F2A]/10 text-[#6B4F2A] border border-[#6B4F2A]/30";
+  const subPillBase = "px-3 py-1.5 rounded-full text-[11px] tracking-[0.1em] uppercase transition-all duration-300";
+  const subPillActive = dark ? "bg-white/15 text-white border border-white/30" : "bg-[#1a1a1a]/10 text-[#1a1a1a] border border-[#1a1a1a]/30";
   const subPillInactive = dark
-    ? "border border-white/10 text-white/35 hover:text-white/65 hover:border-white/25 hover:bg-white/5"
-    : "border border-black/10 text-[#5a4a3a] hover:text-[#1a1a1a] hover:border-black/20 hover:bg-black/5";
+    ? "border border-white/10 text-white/30 hover:text-white/60 hover:border-white/25"
+    : "border border-black/10 text-[#5a4a3a] hover:text-[#1a1a1a] hover:border-black/25";
 
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-7xl mx-auto">
@@ -165,8 +163,8 @@ export default function Photography() {
         </div>
       </div>
 
-      {/* Top-level category pills */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      {/* Top-level pills */}
+      <div className="flex flex-wrap gap-2 mb-3">
         {topCategories.map(cat => (
           <button
             key={cat}
@@ -178,27 +176,23 @@ export default function Photography() {
         ))}
       </div>
 
-      {/* Sub-category row — visually distinct from top-level */}
-      {subCategories.length > 0 ? (
-        <div className={`mb-10 pl-4 border-l-2 ${dark ? "border-white/10" : "border-black/10"}`}>
-          <p className={`text-[10px] tracking-[0.25em] uppercase mb-2.5 ${dark ? "text-white/25" : "text-[#9a8a7a]"}`}>
-            {activeCategory}
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {subCategories.map(sub => (
-              <button
-                key={sub}
-                onClick={() => setActiveSub(sub)}
-                className={`${subPillBase} ${activeSub === sub ? subPillActive : subPillInactive}`}
-              >
-                {sub}
-              </button>
-            ))}
-          </div>
+      {/* Sub-category pills */}
+      {subCategories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-10 pl-1">
+          {subCategories.map(sub => (
+            <button
+              key={sub}
+              onClick={() => setActiveSub(sub)}
+              className={`${subPillBase} ${activeSub === sub ? subPillActive : subPillInactive}`}
+            >
+              {sub}
+            </button>
+          ))}
         </div>
-      ) : (
-        <div className="mb-10" />
       )}
+
+      {/* Spacer when no sub-pills */}
+      {subCategories.length === 0 && <div className="mb-10" />}
 
       {/* Masonry grid */}
       <div className="columns-2 md:columns-3 gap-3">
