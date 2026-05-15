@@ -15,7 +15,7 @@ function useInView(threshold = 0.1) {
 const socials = [
   { label: "GitHub", handle: "@tobyansohn", href: "https://github.com/tobyansohn" },
   { label: "LinkedIn", handle: "Tobyan Sohn", href: "https://linkedin.com/in/tobyansohn" },
-  { label: "Instagram", handle: "@tobyansohn", href: "https://instagram.com/tobyansohn" },
+  { label: "Instagram", handle: "@tobsfotos", href: "https://instagram.com/tobsfotos" },
   { label: "Youtube", handle: "@1tobyan", href: "https://www.youtube.com/@1tobyan" },
 ];
 
