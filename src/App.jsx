@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Developer from "./pages/Developer.jsx";
@@ -40,6 +41,7 @@ export default function App() {
       <Router>
         <CustomCursor />
         <ThemedApp />
+        <Analytics />
       </Router>
     </ThemeProvider>
   );
