@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
+import L from "leaflet";
 import { useTheme } from "../context/ThemeContext.jsx";
 
 import hpPhoto1 from '../Photos/Grad Pics/Beomhak Lee/DSC04405.jpg';
@@ -19,6 +21,45 @@ const videos = [
 ];
 
 const roles = ["Software Developer", "Photographer", "Videographer", "Disciple"];
+
+const travelSpots = [
+  { name: "Cabo, Mexico",  lat: 22.8905,  lng: -109.9167 },
+  { name: "New York",      lat: 40.7128,  lng: -74.0060  },
+];
+
+function makePinIcon() {
+  return L.divIcon({
+    className: "",
+    html: `<div style="width:10px;height:10px;background:#E8D5B7;border:2px solid #E8D5B7;border-radius:50%;box-shadow:0 0 0 4px rgba(232,213,183,0.2);"></div>`,
+    iconSize: [10, 10],
+    iconAnchor: [5, 5],
+  });
+}
+
+function TravelMap({ dark }) {
+  return (
+    <div className={`rounded-2xl overflow-hidden border ${dark ? "border-white/8" : "border-[#b0a090]"}`} style={{ height: 300 }}>
+      <MapContainer
+        center={[25, -50]}
+        zoom={2}
+        scrollWheelZoom={false}
+        style={{ height: "100%", width: "100%", background: dark ? "#0d0d0d" : "#ede8e0" }}
+        zoomControl={false}
+        attributionControl={false}
+      >
+        <TileLayer url={dark
+          ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        } />
+        {travelSpots.map(spot => (
+          <Marker key={spot.name} position={[spot.lat, spot.lng]} icon={makePinIcon()}>
+            <Tooltip direction="top" offset={[0, -8]} className="travel-tooltip">{spot.name}</Tooltip>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+}
 
 function useInView(threshold = 0.15) {
   const ref = useRef(null);
@@ -203,6 +244,22 @@ export default function Home() {
               <img src={src} alt="" className="h-full w-auto object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* Travel map */}
+      <section className="px-6 md:px-16 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <span className={`text-[11px] tracking-[0.35em] uppercase ${superMuted}`}>Travels</span>
+            <Link to="/photography" className={`inline-flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${accent}`}>
+              View photos
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+          <TravelMap dark={dark} />
         </div>
       </section>
 
