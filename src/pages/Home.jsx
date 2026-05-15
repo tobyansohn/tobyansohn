@@ -4,7 +4,7 @@ import { useTheme } from "../context/ThemeContext.jsx";
 
 import hpPhoto1 from '../Photos/Grad Pics/Beomhak Lee/DSC04405.jpg';
 import hpPhoto2 from '../Photos/Grad Pics/Emily Han/TSS08105.jpg';
-import hpPhoto3 from '../Photos/Portrait/Alex & Daniel Lim/TSS03912.jpg';
+import hpPhoto3 from '../Photos/People/Alex & Daniel Lim/TSS03912.jpg';
 import hpPhoto4 from '../Photos/For Fun/The Porch/_TSS9742.jpg';
 import hpPhoto5 from '../Photos/Grad Pics/Hannah Kim/_TSS7498.jpg';
 import hpPhoto6 from '../Photos/For Fun/Home/DSCF1665.jpg';
