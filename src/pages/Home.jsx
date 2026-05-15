@@ -2,14 +2,8 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 
-import hpPhoto1 from '../Photos/Grad Pics/Beomhak Lee/DSC04405.jpg';
-import hpPhoto2 from '../Photos/Grad Pics/Emily Han/TSS08105.jpg';
-import hpPhoto3 from '../Photos/People/Alex & Daniel Lim/TSS03912.jpg';
-import hpPhoto4 from '../Photos/For Fun/The Porch/_TSS9742.jpg';
-import hpPhoto5 from '../Photos/Grad Pics/Hannah Kim/_TSS7498.jpg';
-import hpPhoto6 from '../Photos/For Fun/Home/DSCF1665.jpg';
-
-const previewPhotos = [hpPhoto1, hpPhoto2, hpPhoto3, hpPhoto4, hpPhoto5, hpPhoto6];
+const allPhotosGlob = import.meta.glob('../Photos/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true });
+const allPhotoSrcs = Object.values(allPhotosGlob).map(m => m.default);
 
 const videos = [
   { id: "EZSCrRH-s98", title: "The Beginning" },
@@ -67,6 +61,11 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [bioRef, bioInView] = useInView();
   const [cardsRef, cardsInView] = useInView();
+
+  const previewPhotos = useMemo(() => {
+    const shuffled = [...allPhotoSrcs].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 6);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
