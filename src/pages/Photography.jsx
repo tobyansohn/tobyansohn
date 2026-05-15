@@ -155,7 +155,10 @@ export default function Photography() {
             <span className={dark ? "text-white/30" : "text-[#7a6a5a]"}>my lens.</span>
           </h1>
           <p className={`max-w-lg text-[15px] leading-relaxed ${body}`}>
-            Every image is an observation — a moment suspended in time. I shoot portraits, events, and travels with a love for natural light and quiet compositions.
+            I love the opportunity to capture everywhere I go, whether it's at home or on the go.
+            <br />
+            <br />
+            I normally shoot on Sony (a7V) and a Fujifilm xt30.
           </p>
         </div>
       </div>

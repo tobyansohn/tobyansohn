@@ -20,12 +20,12 @@ const projects = [
 ];
 
 const gear = [
-  { name: "Sony A7 IV", type: "Camera" },
-  { name: "DJI Mavic 3 Pro", type: "Drone" },
+  { name: "Sony A7 V", type: "Camera" },
+  { name: "DJI Osmo Pocket 3", type: "Camera" },
   { name: "Sigma 24-70 f/2.8", type: "Lens" },
-  { name: "DaVinci Resolve", type: "Color Grade" },
+  { name: "Sony 70-200 f/2.8", type: "Lens" },
   { name: "Adobe Premiere Pro", type: "Editing" },
-  { name: "Rode Wireless GO II", type: "Audio" },
+  { name: "DJI mini", type: "Audio" },
 ];
 
 function VideoCard({ project, index, dark }) {
@@ -85,10 +85,10 @@ export default function Videography() {
         <div className={`transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Videography</span>
           <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${heading}`}>
-            Motion that<br /><span className={headingFaded}>moves you.</span>
+            Documenting<br /><span className={headingFaded}>Life.</span>
           </h1>
           <p className={`max-w-lg text-[15px] leading-relaxed ${body}`}>
-            I tell stories through motion, color, and sound. Every frame is intentional; every cut serves the narrative.
+            The main goal of my videography is to capture and document things happening in my life.
           </p>
         </div>
       </div>
