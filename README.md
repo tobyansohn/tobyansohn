@@ -1,93 +1,48 @@
-# Portfolio — Your Name
+# tobyansohn.com
 
-A cinematic, multi-page portfolio site for software development, photography, and videography.
+Personal portfolio site for Toby Ansohn — software developer, photographer, and videographer based in Austin, TX.
+
+Live at [tobyansohn.com](https://tobyansohn.com)
 
 ## Stack
 
-- **React 18** with React Router v6
+- **React 18** + React Router v6
 - **Tailwind CSS** v3
 - **Vite** v5
-- **Fonts**: Cormorant Garamond (display) + DM Sans (body) via Google Fonts
+- **Vercel** (hosting + serverless functions)
+- **Upstash Redis** (price snapshot storage)
+- **Fonts**: Cormorant Garamond (display) + DM Sans (body)
 
-## Getting Started
+## Pages
+
+| Page | Description |
+|---|---|
+| Home | Hero, about, randomized photo strip, video grid |
+| Developer | Water ripple canvas, travel map, Pokémon card tracker |
+| Photography | Masonry gallery with lightbox, category/subcategory filters |
+| Videography | YouTube video grid |
+| Contact | Email + social links |
+
+## Features
+
+- **Pokémon TCG tracker** — `/api/trending-cards` serverless function fetches Special Illustration Rare and Illustration Rare cards every 12 hours, stores two price snapshots in Redis, and surfaces the top movers by % change
+- **Travel map** — interactive Leaflet map with clickable pins linking to photo subcategories
+- **Water ripple cursor** — canvas-based effect on the Developer page (desktop only)
+- **Lightbox** — portal-rendered so it stays centered regardless of scroll position
+- **Dark/light mode** — theme persisted via context
+- **Photo auto-count** — `import.meta.glob` counts all photos in the library at build time
+
+## Dev
 
 ```bash
-# Install dependencies
 npm install
-
-# Start dev server
 npm run dev
-
-# Build for production
 npm run build
-
-# Preview production build
-npm run preview
 ```
 
-## Customization Checklist
-
-### Global
-- [ ] Replace `"Your Name"` in `Home.jsx` with your actual name
-- [ ] Replace `"[Your City]"` in `Home.jsx` with your location
-- [ ] Update stats (years, projects, photos) in `Home.jsx`
-- [ ] Update `your@email.com` in `Contact.jsx`
-- [ ] Update social handles and links in `Contact.jsx`
-
-### Developer Page (`src/pages/Developer.jsx`)
-- [ ] Replace placeholder projects with your real projects
-- [ ] Update links from `#` to actual project URLs
-- [ ] Adjust tech stack in the skills grid
-
-### Photography Page (`src/pages/Photography.jsx`)
-- [ ] Replace gradient placeholders with your actual `<img>` tags
-- [ ] Add your real photo titles, locations, and categories
-
-### Videography Page (`src/pages/Videography.jsx`)
-- [ ] Replace gradient thumbnails with real video thumbnails or embeds
-- [ ] Update showreel link/embed
-- [ ] Update gear list with your actual equipment
-
-### Contact
-- [ ] Wire up form to a handler: [Formspree](https://formspree.io), [EmailJS](https://emailjs.com), or your own API
-
-## File Structure
+## Environment Variables (Vercel)
 
 ```
-src/
-├── App.jsx                 # Router + layout shell
-├── main.jsx                # Entry point
-├── index.css               # Global styles + font imports
-├── components/
-│   ├── Navbar.jsx          # Sticky nav with mobile menu
-│   ├── CustomCursor.jsx    # Smooth cursor (desktop only)
-│   └── PageTransition.jsx  # Fade/slide between routes
-└── pages/
-    ├── Home.jsx            # Hero + about + section cards
-    ├── Developer.jsx       # Skills grid + project list
-    ├── Photography.jsx     # Masonry gallery + lightbox
-    ├── Videography.jsx     # Video cards + gear list
-    └── Contact.jsx         # Contact form + socials
+UPSTASH_REDIS_REST_URL
+UPSTASH_REDIS_REST_TOKEN
 ```
-
-## Design System
-
-| Token | Value |
-|---|---|
-| Primary accent | `#E8D5B7` (warm cream) |
-| Background | `#080808` |
-| Display font | Cormorant Garamond |
-| Body font | DM Sans |
-
-## Adding Real Photos
-
-In `Photography.jsx`, replace the gradient `<div>` inside `PhotoCard` with:
-```jsx
-<img
-  src="/photos/your-image.jpg"
-  alt={photo.title}
-  className="w-full h-full object-cover"
-/>
-```
-
-Place images in `public/photos/` and they'll be served by Vite automatically.
