@@ -94,19 +94,23 @@ const travelSpots = [
 
 const homePin = { name: "Austin, TX — Home", lat: 30.2672, lng: -97.7431 };
 
-function makeTravelIcon() {
+function makeTravelIcon(dark) {
+  const color = dark ? "#E8D5B7" : "#6B4F2A";
+  const glow = dark ? "rgba(232,213,183,0.25)" : "rgba(107,79,42,0.2)";
   return L.divIcon({
     className: "",
-    html: `<div style="width:10px;height:10px;background:#E8D5B7;border:2px solid #E8D5B7;border-radius:50%;box-shadow:0 0 0 4px rgba(232,213,183,0.2);cursor:pointer;"></div>`,
-    iconSize: [10, 10], iconAnchor: [5, 5],
+    html: `<div style="width:12px;height:12px;background:${color};border:2px solid ${color};border-radius:50%;box-shadow:0 0 0 4px ${glow};cursor:pointer;"></div>`,
+    iconSize: [12, 12], iconAnchor: [6, 6],
   });
 }
 
-function makeHomeIcon() {
+function makeHomeIcon(dark) {
+  const color = dark ? "#8B9DC3" : "#3A5FA0";
+  const glow = dark ? "rgba(139,157,195,0.2)" : "rgba(58,95,160,0.2)";
   return L.divIcon({
     className: "",
-    html: `<div style="width:10px;height:10px;background:#8B9DC3;border:2px solid #8B9DC3;border-radius:50%;box-shadow:0 0 0 4px rgba(139,157,195,0.2);"></div>`,
-    iconSize: [10, 10], iconAnchor: [5, 5],
+    html: `<div style="width:12px;height:12px;background:${color};border:2px solid ${color};border-radius:50%;box-shadow:0 0 0 4px ${glow};"></div>`,
+    iconSize: [12, 12], iconAnchor: [6, 6],
   });
 }
 
@@ -130,13 +134,13 @@ function TravelMap({ dark }) {
           <Marker
             key={spot.name}
             position={[spot.lat, spot.lng]}
-            icon={makeTravelIcon()}
+            icon={makeTravelIcon(dark)}
             eventHandlers={{ click: () => navigate(`/photography?category=Travels&sub=${encodeURIComponent(spot.name)}`) }}
           >
             <Tooltip direction="top" offset={[0, -8]} className="travel-tooltip">{spot.name}</Tooltip>
           </Marker>
         ))}
-        <Marker position={[homePin.lat, homePin.lng]} icon={makeHomeIcon()}>
+        <Marker position={[homePin.lat, homePin.lng]} icon={makeHomeIcon(dark)}>
           <Tooltip direction="top" offset={[0, -8]} className="travel-tooltip">{homePin.name}</Tooltip>
         </Marker>
       </MapContainer>

@@ -26,33 +26,6 @@ function useInView(threshold = 0.15) {
   return [ref, inView];
 }
 
-function Card({ to, label, sub, accent, dark }) {
-  return (
-    <Link
-      to={to}
-      className={`group relative overflow-hidden rounded-2xl border transition-all duration-500 p-8 flex flex-col justify-between min-h-[200px] ${
-        dark
-          ? "border-white/8 bg-white/[0.03] hover:bg-white/[0.06]"
-          : "border-[#b0a090] bg-[#ede8e0] hover:bg-[#e8e2da]"
-      }`}
-    >
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{ background: `radial-gradient(circle at 30% 50%, ${accent}22 0%, transparent 70%)` }}
-      />
-      <span className={`text-[11px] tracking-[0.3em] uppercase ${dark ? "text-white/30" : "text-[#5a4a3a]"}`}>{sub}</span>
-      <div>
-        <h3 className={`font-display text-2xl mb-3 transition-colors duration-300 ${dark ? "text-white/90 group-hover:text-white" : "text-black/80 group-hover:text-black"}`}>{label}</h3>
-        <span className={`inline-flex items-center gap-2 text-[12px] tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/40 group-hover:text-white/70" : "text-black/35 group-hover:text-black/60"}`}>
-          View Work
-          <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-        </span>
-      </div>
-    </Link>
-  );
-}
 
 export default function Home() {
   const { dark } = useTheme();
@@ -60,7 +33,6 @@ export default function Home() {
   const [fade, setFade] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [bioRef, bioInView] = useInView();
-  const [cardsRef, cardsInView] = useInView();
 
   const previewPhotos = useMemo(() => {
     const shuffled = [...allPhotoSrcs].sort(() => Math.random() - 0.5);
@@ -243,17 +215,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section cards */}
-      <section ref={cardsRef} className="px-6 md:px-16 py-16 pb-32">
-        <div className="max-w-6xl mx-auto">
-          <p className={`text-[11px] tracking-[0.35em] uppercase mb-12 ${superMuted}`}>Explore</p>
-          <div className={`grid md:grid-cols-3 gap-4 transition-all duration-700 ${cardsInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "100ms" }}>
-            <Card to="/developer" label="Software Dev" sub="Engineering" accent="#8B9DC3" dark={dark} />
-            <Card to="/photography" label="Photography" sub="Visual Arts" accent="#E8D5B7" dark={dark} />
-            <Card to="/videography" label="Videography" sub="Motion" accent="#C4A882" dark={dark} />
+      {/* Footer */}
+      <footer className={`px-6 md:px-16 py-10 border-t ${dark ? "border-white/8" : "border-black/8"}`}>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <p className={`font-display text-lg ${dark ? "text-white/50" : "text-[#5a4a3a]"}`}>Toby Ansohn</p>
+          <div className="flex items-center gap-6">
+            <Link to="/developer" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}>Dev</Link>
+            <Link to="/photography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}>Photography</Link>
+            <Link to="/videography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}>Videography</Link>
+            <Link to="/contact" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}>Contact</Link>
           </div>
+          <p className={`text-[11px] tracking-[0.1em] ${dark ? "text-white/20" : "text-[#9a8a7a]"}`}>© {new Date().getFullYear()}</p>
         </div>
-      </section>
+      </footer>
     </main>
   );
 }
