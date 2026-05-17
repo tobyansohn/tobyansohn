@@ -247,6 +247,158 @@ function CardModal({ card, onClose, dark }) {
   );
 }
 
+const CUISINES = ['any','American','British','Chinese','French','Indian','Italian','Japanese','Mexican','Thai'];
+const WEIGHTS  = ['any','light','medium','heavy'];
+const TIMES    = ['any','quick','medium','long'];
+
+function MealCard({ course, meal, dark }) {
+  const border = dark ? "border-white/8" : "border-[#b0a090]";
+  const muted  = dark ? "text-white/30" : "text-[#5a4a3a]";
+
+  const badgeColor = {
+    quick: "text-emerald-400 bg-emerald-400/10",
+    medium: "text-amber-400 bg-amber-400/10",
+    long: "text-red-400 bg-red-400/10",
+    light: "text-sky-400 bg-sky-400/10",
+    heavy: dark ? "text-[#E8D5B7] bg-[#E8D5B7]/10" : "text-[#6B4F2A] bg-[#6B4F2A]/10",
+  };
+
+  return (
+    <div className={`rounded-2xl border overflow-hidden ${border} ${dark ? "bg-white/[0.02]" : "bg-[#faf8f5]"}`}>
+      {meal ? (
+        <>
+          <div className="relative aspect-video overflow-hidden">
+            <img src={meal.strMealThumb} alt={meal.strMeal} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <span className={`absolute top-3 left-3 text-[9px] tracking-[0.2em] uppercase px-2 py-1 rounded-md ${dark ? "bg-black/50 text-white/60" : "bg-black/40 text-white/80"} backdrop-blur-sm`}>
+              {course}
+            </span>
+          </div>
+          <div className="p-4">
+            <p className={`font-display text-base leading-tight mb-1 ${dark ? "text-white/90" : "text-[#1a1a1a]"}`}>{meal.strMeal}</p>
+            <p className={`text-[10px] tracking-[0.1em] uppercase mb-3 ${muted}`}>{meal.strArea} · {meal.strCategory}</p>
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {meal.cookTimeEstimate !== 'unknown' && (
+                <span className={`text-[10px] px-2 py-0.5 rounded-md ${badgeColor[meal.cookTimeEstimate] || muted}`}>
+                  {meal.cookTimeEstimate}
+                </span>
+              )}
+              {meal.weightEstimate !== 'unknown' && (
+                <span className={`text-[10px] px-2 py-0.5 rounded-md ${badgeColor[meal.weightEstimate] || muted}`}>
+                  {meal.weightEstimate}
+                </span>
+              )}
+              <span className={`text-[10px] px-2 py-0.5 rounded-md ${dark ? "bg-white/5 text-white/30" : "bg-black/5 text-[#5a4a3a]"}`}>
+                {meal.ingredients?.length} ingredients
+              </span>
+            </div>
+            {meal.strYoutube && (
+              <a href={meal.strYoutube} target="_blank" rel="noopener noreferrer"
+                className={`inline-flex items-center gap-1.5 text-[10px] tracking-[0.1em] uppercase transition-colors ${dark ? "text-white/25 hover:text-[#E8D5B7]" : "text-[#9a8a7a] hover:text-[#6B4F2A]"}`}>
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                Watch on YouTube
+              </a>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="aspect-video flex items-center justify-center">
+          <p className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>{course}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MealGeneratorWidget({ dark }) {
+  const [meals, setMeals]       = useState(null);
+  const [loading, setLoading]   = useState(false);
+  const [ready, setReady]       = useState(!!window.MealGenerator);
+  const [cuisine, setCuisine]   = useState('any');
+  const [weight, setWeight]     = useState('any');
+  const [cookTime, setCookTime] = useState('any');
+  const muted  = dark ? "text-white/30" : "text-[#5a4a3a]";
+  const border = dark ? "border-white/8" : "border-[#b0a090]";
+
+  useEffect(() => {
+    if (window.MealGenerator) { setReady(true); return; }
+    const script = document.createElement('script');
+    script.src = '/meal-generator.js';
+    script.onload = () => setReady(true);
+    document.head.appendChild(script);
+  }, []);
+
+  const pillBase     = "px-3 py-1 rounded-full text-[10px] tracking-[0.1em] uppercase transition-all duration-200 border";
+  const pillActive   = dark ? "bg-white text-[#080808] border-white" : "bg-[#1a1a1a] text-white border-[#1a1a1a]";
+  const pillInactive = dark ? "border-white/10 text-white/35 hover:border-white/25 hover:text-white/60" : "border-black/10 text-[#5a4a3a] hover:border-black/25 hover:text-[#1a1a1a]";
+
+  const generate = async () => {
+    if (!window.MealGenerator) return;
+    setLoading(true);
+    try {
+      const result = await window.MealGenerator.generate({ cuisine, weight, cookTime, pairing: 'match' });
+      setMeals(result);
+    } catch {
+      // silent fail — meals stays null
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="mt-24">
+      <p className={`text-[11px] tracking-[0.35em] uppercase mb-4 ${muted}`}>Meal Generator</p>
+      <p className={`max-w-lg text-[14px] leading-relaxed mb-8 ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
+        Generates a randomized 3-course meal plan — starter, main, dessert — powered by TheMealDB. Pick your filters or leave them on any for a surprise.
+      </p>
+
+      {/* Filters */}
+      <div className="flex flex-col gap-4 mb-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`text-[9px] tracking-[0.25em] uppercase w-16 shrink-0 ${muted}`}>Cuisine</span>
+          {CUISINES.map(c => (
+            <button key={c} onClick={() => setCuisine(c)} className={`${pillBase} ${cuisine === c ? pillActive : pillInactive}`}>
+              {c === 'any' ? 'Any' : c}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`text-[9px] tracking-[0.25em] uppercase w-16 shrink-0 ${muted}`}>Weight</span>
+          {WEIGHTS.map(w => (
+            <button key={w} onClick={() => setWeight(w)} className={`${pillBase} ${weight === w ? pillActive : pillInactive}`}>
+              {w === 'any' ? 'Any' : w}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`text-[9px] tracking-[0.25em] uppercase w-16 shrink-0 ${muted}`}>Cook Time</span>
+          {TIMES.map(t => (
+            <button key={t} onClick={() => setCookTime(t)} className={`${pillBase} ${cookTime === t ? pillActive : pillInactive}`}>
+              {t === 'any' ? 'Any' : t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <button
+        onClick={generate}
+        disabled={loading}
+        className={`mb-8 px-6 py-3 rounded-full text-[12px] tracking-[0.15em] uppercase font-medium transition-all duration-300 disabled:opacity-50 ${dark ? "bg-white text-[#080808] hover:bg-[#E8D5B7]" : "bg-[#1a1a1a] text-white hover:bg-[#3a3a3a]"}`}
+      >
+        {loading ? "Generating..." : meals ? "Regenerate" : "Generate Meal Plan"}
+      </button>
+
+      {meals && (
+        <div className="grid md:grid-cols-3 gap-4">
+          <MealCard course="Starter" meal={meals.starter} dark={dark} />
+          <MealCard course="Main"    meal={meals.main}    dark={dark} />
+          <MealCard course="Dessert" meal={meals.dessert} dark={dark} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PokemonTracker({ dark }) {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -406,6 +558,7 @@ export default function Developer() {
         <TravelMap dark={dark} />
       </div>
 
+      <MealGeneratorWidget dark={dark} />
       <PokemonTracker dark={dark} />
     </main>
   );
