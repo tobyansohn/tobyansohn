@@ -215,19 +215,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className={`px-6 md:px-16 py-10 border-t ${dark ? "border-white/8" : "border-black/8"}`}>
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <p className={`font-display text-lg ${dark ? "text-white/50" : "text-[#5a4a3a]"}`}>Tobyan Sohn</p>
-          <div className="flex items-center gap-6">
-            <Link to="/developer" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}>Dev</Link>
-            <Link to="/photography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}>Photography</Link>
-            <Link to="/videography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}>Videography</Link>
-            <Link to="/contact" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}>Contact</Link>
-          </div>
-          <p className={`text-[11px] tracking-[0.1em] ${dark ? "text-white/20" : "text-[#9a8a7a]"}`}>© {new Date().getFullYear()}</p>
-        </div>
-      </footer>
     </main>
   );
 }

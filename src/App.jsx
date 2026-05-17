@@ -10,6 +10,7 @@ import Contact from "./pages/Contact.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import PageTransition from "./components/PageTransition.jsx";
 import { ThemeProvider, useTheme } from "./context/ThemeContext.jsx";
+import Footer from "./components/Footer.jsx";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -32,6 +33,7 @@ function ThemedApp() {
     <div className={`min-h-screen font-body overflow-x-hidden transition-colors duration-500 ${dark ? "bg-[#080808] text-white" : "bg-[#F5F2ED] text-[#1a1a1a]"}`}>
       <Navbar />
       <AnimatedRoutes />
+      <Footer />
     </div>
   );
 }
