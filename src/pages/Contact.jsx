@@ -53,7 +53,6 @@ export default function Contact() {
           >
             tobyansohn@gmail.com
           </a>
-          <p className={`text-[13px] mt-3 ${muted}`}>Response within 24 hours</p>
         </div>
 
         {/* Socials */}
@@ -82,12 +81,6 @@ export default function Contact() {
           </ul>
         </div>
 
-        {/* Availability */}
-        <div className={`transition-all duration-700 delay-300 ${bodyInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          <p className={`text-[12px] leading-relaxed ${muted}`}>
-            Currently available for freelance projects and full-time opportunities.
-          </p>
-        </div>
       </div>
     </main>
   );
