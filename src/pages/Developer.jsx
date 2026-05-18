@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import { useTheme } from "../context/ThemeContext.jsx";
+import SFXLibrary from "../components/SFXLibrary.jsx";
 
 function WaterCanvas({ dark }) {
   const canvasRef = useRef(null);
@@ -530,6 +531,7 @@ const TABS = [
   { id: 'travel',  label: 'Travel Tracker' },
   { id: 'meals',   label: 'Meal Generator' },
   { id: 'pokemon', label: 'Pokémon Cards'  },
+  { id: 'sfx',     label: 'SFX Library'   },
   { id: 'links',   label: 'Links'          },
 ];
 
@@ -588,6 +590,7 @@ export default function Developer() {
       )}
       {activeTab === 'meals'   && <MealGeneratorWidget dark={dark} />}
       {activeTab === 'pokemon' && <PokemonTracker dark={dark} />}
+      {activeTab === 'sfx'     && <SFXLibrary dark={dark} />}
       {activeTab === 'links' && (
         <div className="flex flex-col gap-4 max-w-sm">
           <a
