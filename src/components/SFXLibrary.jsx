@@ -370,7 +370,7 @@ export default function SFXLibrary({ dark }) {
         <select
           value={sort}
           onChange={e => { setSort(e.target.value); doSearch(query, 1, e.target.value); }}
-          className={`px-3 py-2.5 rounded-xl border text-[12px] outline-none ${dark ? "bg-white/[0.03] border-white/8 text-white/60" : "bg-[#faf8f5] border-[#b0a090] text-[#5a4a3a]"}`}
+          className={`w-full sm:w-auto px-3 py-2.5 rounded-xl border text-[12px] outline-none ${dark ? "bg-white/[0.03] border-white/8 text-white/60" : "bg-[#faf8f5] border-[#b0a090] text-[#5a4a3a]"}`}
         >
           {SORT_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>

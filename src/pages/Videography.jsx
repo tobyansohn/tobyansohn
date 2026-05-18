@@ -263,7 +263,7 @@ export default function Videography() {
       </a>
 
       {/* Controls: tag filter + view toggle */}
-      <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div className="flex gap-2 flex-wrap">
           {ALL_TAGS.map(tag => (
             <button key={tag} onClick={() => setActiveTag(tag)} className={`${pillBase} ${activeTag === tag ? pillActive : pillInactive}`}>{tag}</button>

@@ -189,8 +189,8 @@ function CardModal({ card, onClose, dark }) {
   }, [onClose]);
 
   return createPortal(
-    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 backdrop-blur-sm" onClick={onClose}>
-      <div className={`relative rounded-2xl border p-6 flex flex-col sm:flex-row gap-6 max-w-md w-full ${dark ? "bg-[#111] border-white/10" : "bg-[#F0EDE8] border-[#b0a090]"}`} onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 backdrop-blur-sm" onClick={onClose}>
+      <div className={`relative rounded-t-2xl sm:rounded-2xl border p-5 sm:p-6 flex flex-col sm:flex-row gap-5 sm:gap-6 w-full sm:max-w-md ${dark ? "bg-[#111] border-white/10" : "bg-[#F0EDE8] border-[#b0a090]"}`} onClick={e => e.stopPropagation()}>
         <button onClick={onClose} className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${dark ? "text-white/40 hover:text-white hover:bg-white/10" : "text-black/30 hover:text-black hover:bg-black/10"}`}>
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -330,12 +330,12 @@ function MealCard({ course, meal, dark }) {
 
       {open && meal && createPortal(
         <div
-          className="fixed inset-0 z-[999] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[999] flex items-end sm:items-center justify-center p-0 sm:p-4"
           style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
           onClick={(e) => e.target === e.currentTarget && setOpen(false)}
         >
           <div
-            className={`relative w-full max-w-2xl max-h-[88vh] overflow-y-auto rounded-2xl border ${dark ? "bg-[#111] border-white/10" : "bg-[#faf8f5] border-[#c0b0a0]"}`}
+            className={`relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border ${dark ? "bg-[#111] border-white/10" : "bg-[#faf8f5] border-[#c0b0a0]"}`}
             style={{ scrollbarWidth: 'thin' }}
           >
             {/* Header */}
@@ -547,19 +547,19 @@ function PokemonTracker({ dark }) {
       ) : (
         <div className={`rounded-2xl border ${border} overflow-hidden ${dark ? "bg-white/[0.015]" : "bg-[#faf8f5]"}`}>
           {/* Column headers */}
-          <div className={`grid grid-cols-[2rem_3rem_1fr_5rem_4.5rem] items-center gap-3 px-4 py-2 border-b ${border}`}>
+          <div className={`grid grid-cols-[1.5rem_2.5rem_1fr_4rem] sm:grid-cols-[2rem_3rem_1fr_5rem_4.5rem] items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 border-b ${border}`}>
             <span className={`text-[9px] tracking-[0.2em] uppercase ${muted}`}>#</span>
             <span />
             <span className={`text-[9px] tracking-[0.2em] uppercase ${muted}`}>Card</span>
             <span className={`text-[9px] tracking-[0.2em] uppercase text-right ${muted}`}>Price</span>
-            <span className={`text-[9px] tracking-[0.2em] uppercase text-right ${muted}`}>Change</span>
+            <span className={`hidden sm:block text-[9px] tracking-[0.2em] uppercase text-right ${muted}`}>Change</span>
           </div>
 
           {cards.map((card, i) => (
             <div
               key={card.id}
               onClick={() => setSelected(card)}
-              className={`grid grid-cols-[2rem_3rem_1fr_5rem_4.5rem] items-center gap-3 px-4 py-3 border-b last:border-b-0 transition-all duration-200 cursor-pointer group ${border} ${dark ? "hover:bg-white/[0.04]" : "hover:bg-[#f0ece6]"}`}
+              className={`grid grid-cols-[1.5rem_2.5rem_1fr_4rem] sm:grid-cols-[2rem_3rem_1fr_5rem_4.5rem] items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b last:border-b-0 transition-all duration-200 cursor-pointer group ${border} ${dark ? "hover:bg-white/[0.04]" : "hover:bg-[#f0ece6]"}`}
             >
               {/* Rank */}
               <span className={`text-[11px] tabular-nums text-right font-medium ${i < 3 ? (dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/60") : muted}`}>
@@ -593,8 +593,8 @@ function PokemonTracker({ dark }) {
                 )}
               </div>
 
-              {/* Change badge */}
-              <div className="flex justify-end">
+              {/* Change badge — hidden on mobile */}
+              <div className="hidden sm:flex justify-end">
                 {card.change !== null ? (
                   <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium tabular-nums ${
                     card.change >= 0
@@ -674,20 +674,22 @@ export default function Developer() {
       </div>
 
       {/* Tab nav */}
-      <div className={`flex items-center gap-1 border-b mb-12 ${border}`}>
-        {TABS.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 text-[11px] tracking-[0.2em] uppercase transition-all duration-200 border-b-2 -mb-px ${
-              activeTab === tab.id
-                ? (dark ? "border-white text-white" : "border-[#1a1a1a] text-[#1a1a1a]")
-                : `border-transparent ${dark ? "text-white/35 hover:text-white/60" : "text-[#9a8a7a] hover:text-[#3a3a3a]"}`
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div className={`overflow-x-auto no-scrollbar border-b mb-12 ${border}`}>
+        <div className="flex items-center gap-1 min-w-max">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`shrink-0 px-4 py-3 text-[11px] tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-200 border-b-2 -mb-px ${
+                activeTab === tab.id
+                  ? (dark ? "border-white text-white" : "border-[#1a1a1a] text-[#1a1a1a]")
+                  : `border-transparent ${dark ? "text-white/35 hover:text-white/60" : "text-[#9a8a7a] hover:text-[#3a3a3a]"}`
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Panels */}
