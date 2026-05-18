@@ -57,9 +57,9 @@ export default function Navbar() {
         {/* Logo */}
         <NavLink to="/" className="group flex items-center gap-2">
           <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E8D5B7] to-[#C4A882] flex items-center justify-center">
-            <span className="text-[#080808] font-display text-xs font-bold tracking-tight">TS</span>
+            <span className="text-[#080808] font-name text-xs font-bold tracking-tight">TS</span>
           </div>
-          <span className={`font-display text-sm tracking-[0.2em] uppercase transition-colors duration-300 ${dark ? "text-white/60 group-hover:text-white/90" : "text-black/50 group-hover:text-black/80"}`}>
+          <span className={`font-name text-sm tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/60 group-hover:text-white/90" : "text-black/50 group-hover:text-black/80"}`}>
             Tobyan Sohn
           </span>
         </NavLink>

@@ -252,7 +252,26 @@ const CUISINES = ['any','American','British','Chinese','French','Indian','Italia
 const WEIGHTS  = ['any','light','medium','heavy'];
 const TIMES    = ['any','quick','medium','long'];
 
+function parseMealSteps(text) {
+  if (!text) return [];
+  let parts = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  parts = parts.filter(p => !/^(step\s*)?\d+[\.\):]?\s*$/i.test(p));
+  parts = parts.map(p => p.replace(/^(step\s*)?\d+[\.\):\-]\s*/i, '').trim()).filter(Boolean);
+  if (parts.length <= 2) {
+    const sentences = text.replace(/\r?\n/g, ' ').split(/(?<=[.!?])\s+(?=[A-Z])/);
+    const chunks = []; let cur = '';
+    for (const s of sentences) {
+      cur += (cur ? ' ' : '') + s;
+      if (cur.length > 120) { chunks.push(cur.trim()); cur = ''; }
+    }
+    if (cur.trim()) chunks.push(cur.trim());
+    return chunks.filter(Boolean);
+  }
+  return parts;
+}
+
 function MealCard({ course, meal, dark }) {
+  const [open, setOpen] = useState(false);
   const border = dark ? "border-white/8" : "border-[#b0a090]";
   const muted  = dark ? "text-white/30" : "text-[#5a4a3a]";
 
@@ -265,49 +284,123 @@ function MealCard({ course, meal, dark }) {
   };
 
   return (
-    <div className={`rounded-2xl border overflow-hidden ${border} ${dark ? "bg-white/[0.02]" : "bg-[#faf8f5]"}`}>
-      {meal ? (
-        <>
-          <div className="relative aspect-video overflow-hidden">
-            <img src={meal.strMealThumb} alt={meal.strMeal} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <span className={`absolute top-3 left-3 text-[9px] tracking-[0.2em] uppercase px-2 py-1 rounded-md ${dark ? "bg-black/50 text-white/60" : "bg-black/40 text-white/80"} backdrop-blur-sm`}>
-              {course}
-            </span>
-          </div>
-          <div className="p-4">
-            <p className={`font-display text-base leading-tight mb-1 ${dark ? "text-white/90" : "text-[#1a1a1a]"}`}>{meal.strMeal}</p>
-            <p className={`text-[10px] tracking-[0.1em] uppercase mb-3 ${muted}`}>{meal.strArea} · {meal.strCategory}</p>
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {meal.cookTimeEstimate !== 'unknown' && (
-                <span className={`text-[10px] px-2 py-0.5 rounded-md ${badgeColor[meal.cookTimeEstimate] || muted}`}>
-                  {meal.cookTimeEstimate}
-                </span>
-              )}
-              {meal.weightEstimate !== 'unknown' && (
-                <span className={`text-[10px] px-2 py-0.5 rounded-md ${badgeColor[meal.weightEstimate] || muted}`}>
-                  {meal.weightEstimate}
-                </span>
-              )}
-              <span className={`text-[10px] px-2 py-0.5 rounded-md ${dark ? "bg-white/5 text-white/30" : "bg-black/5 text-[#5a4a3a]"}`}>
-                {meal.ingredients?.length} ingredients
+    <>
+      <div
+        onClick={() => meal && setOpen(true)}
+        className={`rounded-2xl border overflow-hidden transition-all duration-200 ${border} ${dark ? "bg-white/[0.02] hover:bg-white/[0.05]" : "bg-[#faf8f5] hover:bg-[#f3efe9]"} ${meal ? "cursor-pointer hover:scale-[1.01]" : ""}`}
+      >
+        {meal ? (
+          <>
+            <div className="relative aspect-video overflow-hidden">
+              <img src={meal.strMealThumb} alt={meal.strMeal} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <span className={`absolute top-3 left-3 text-[9px] tracking-[0.2em] uppercase px-2 py-1 rounded-md ${dark ? "bg-black/50 text-white/60" : "bg-black/40 text-white/80"} backdrop-blur-sm`}>
+                {course}
+              </span>
+              <span className={`absolute bottom-3 right-3 text-[9px] tracking-[0.1em] uppercase px-2 py-1 rounded-md bg-black/50 text-white/70 backdrop-blur-sm`}>
+                View Recipe →
               </span>
             </div>
+            <div className="p-4">
+              <p className={`font-display text-base leading-tight mb-1 ${dark ? "text-white/90" : "text-[#1a1a1a]"}`}>{meal.strMeal}</p>
+              <p className={`text-[10px] tracking-[0.1em] uppercase mb-3 ${muted}`}>{meal.strArea} · {meal.strCategory}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {meal.cookTimeEstimate !== 'unknown' && (
+                  <span className={`text-[10px] px-2 py-0.5 rounded-md ${badgeColor[meal.cookTimeEstimate] || muted}`}>
+                    {meal.cookTimeEstimate}
+                  </span>
+                )}
+                {meal.weightEstimate !== 'unknown' && (
+                  <span className={`text-[10px] px-2 py-0.5 rounded-md ${badgeColor[meal.weightEstimate] || muted}`}>
+                    {meal.weightEstimate}
+                  </span>
+                )}
+                <span className={`text-[10px] px-2 py-0.5 rounded-md ${dark ? "bg-white/5 text-white/30" : "bg-black/5 text-[#5a4a3a]"}`}>
+                  {meal.ingredients?.length} ingredients
+                </span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="aspect-video flex items-center justify-center">
+            <p className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>{course}</p>
+          </div>
+        )}
+      </div>
+
+      {open && meal && createPortal(
+        <div
+          className="fixed inset-0 z-[999] flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)' }}
+          onClick={(e) => e.target === e.currentTarget && setOpen(false)}
+        >
+          <div
+            className={`relative w-full max-w-2xl max-h-[88vh] overflow-y-auto rounded-2xl border ${dark ? "bg-[#111] border-white/10" : "bg-[#faf8f5] border-[#c0b0a0]"}`}
+            style={{ scrollbarWidth: 'thin' }}
+          >
+            {/* Header */}
+            <div className={`sticky top-0 z-10 flex items-start justify-between gap-4 px-6 py-4 border-b ${dark ? "bg-[#111] border-white/8" : "bg-[#faf8f5] border-[#d0c8bc]"}`}>
+              <div>
+                <p className={`text-[9px] tracking-[0.2em] uppercase mb-1 ${muted}`}>{course}</p>
+                <h2 className={`font-display text-xl leading-tight ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{meal.strMeal}</h2>
+                <p className={`text-[10px] tracking-[0.1em] uppercase mt-1 ${muted}`}>{meal.strArea} · {meal.strCategory}</p>
+              </div>
+              <button
+                onClick={() => setOpen(false)}
+                className={`shrink-0 mt-1 text-lg leading-none px-2 py-1 rounded-lg transition-colors ${dark ? "text-white/40 hover:text-white hover:bg-white/10" : "text-black/30 hover:text-black hover:bg-black/8"}`}
+              >✕</button>
+            </div>
+
+            {/* Image */}
+            <img src={meal.strMealThumb} alt={meal.strMeal} className="w-full h-48 object-cover" />
+
+            {/* Body */}
+            <div className="p-6 grid md:grid-cols-2 gap-8">
+              {/* Ingredients */}
+              <div>
+                <p className={`text-[9px] tracking-[0.2em] uppercase mb-4 ${dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/70"}`}>Ingredients</p>
+                <ul className="flex flex-col gap-2">
+                  {meal.ingredients?.map(({ measure, name }, i) => (
+                    <li key={i} className="flex gap-3 text-sm">
+                      <span className={`shrink-0 w-20 text-[11px] font-medium ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>{measure}</span>
+                      <span className={dark ? "text-white/50" : "text-[#5a4a3a]"}>{name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Method */}
+              <div>
+                <p className={`text-[9px] tracking-[0.2em] uppercase mb-4 ${dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/70"}`}>Method</p>
+                <ol className="flex flex-col gap-4">
+                  {parseMealSteps(meal.strInstructions).map((step, i) => (
+                    <li key={i} className="flex gap-3 text-sm leading-relaxed">
+                      <span className={`shrink-0 w-5 h-5 mt-0.5 rounded-full flex items-center justify-center text-[10px] font-bold ${dark ? "bg-[#E8D5B7]/15 text-[#E8D5B7]" : "bg-[#6B4F2A]/10 text-[#6B4F2A]"}`}>{i + 1}</span>
+                      <span className={dark ? "text-white/60" : "text-[#3a3a3a]"}>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+
+            {/* Footer */}
             {meal.strYoutube && (
-              <a href={meal.strYoutube} target="_blank" rel="noopener noreferrer"
-                className={`inline-flex items-center gap-1.5 text-[10px] tracking-[0.1em] uppercase transition-colors ${dark ? "text-white/25 hover:text-[#E8D5B7]" : "text-[#9a8a7a] hover:text-[#6B4F2A]"}`}>
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                Watch on YouTube
-              </a>
+              <div className={`px-6 pb-6 pt-0`}>
+                <a
+                  href={meal.strYoutube} target="_blank" rel="noopener noreferrer"
+                  onClick={e => e.stopPropagation()}
+                  className={`inline-flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase px-4 py-2 rounded-lg border transition-colors ${dark ? "border-white/10 text-white/40 hover:text-[#E8D5B7] hover:border-[#E8D5B7]/30" : "border-black/10 text-[#9a8a7a] hover:text-[#6B4F2A] hover:border-[#6B4F2A]/30"}`}
+                >
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  Watch on YouTube
+                </a>
+              </div>
             )}
           </div>
-        </>
-      ) : (
-        <div className="aspect-video flex items-center justify-center">
-          <p className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>{course}</p>
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   );
 }
 

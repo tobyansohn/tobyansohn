@@ -6,6 +6,7 @@ export default {
       fontFamily: {
         display: ["'Cormorant Garamond'", "Georgia", "serif"],
         body: ["'DM Sans'", "system-ui", "sans-serif"],
+        name: ["'Space Grotesk'", "Arial", "sans-serif"],
       },
       colors: {
         cream: "#E8D5B7",
