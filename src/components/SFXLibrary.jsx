@@ -236,8 +236,14 @@ export default function SFXLibrary({ dark }) {
     try {
       const url = await getAudioUrl(item.identifier);
       if (!url) return;
-      ensureAnalyser();
-      if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
+      try {
+        ensureAnalyser();
+        if (audioCtxRef.current?.state === "suspended") {
+          await audioCtxRef.current.resume();
+        }
+      } catch (ae) {
+        console.warn("AudioContext setup failed, playing without analyser:", ae);
+      }
       a.src = url;
       await a.play();
       setPlayingId(item.identifier);
@@ -334,7 +340,7 @@ export default function SFXLibrary({ dark }) {
 
   return (
     <div>
-      <audio ref={audioRef} preload="none" onEnded={stopAudio} />
+      <audio ref={audioRef} preload="none" crossOrigin="anonymous" onEnded={stopAudio} />
 
       <p className={`text-[14px] leading-relaxed mb-6 max-w-lg ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
         Browse royalty-free sounds from the Internet Archive. No account needed — click ▶ to preview, ⬇ to download.
