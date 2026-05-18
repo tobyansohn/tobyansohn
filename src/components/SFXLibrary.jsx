@@ -118,9 +118,9 @@ function SFXCard({ item, isPlaying, analyser, loadingAudio, onPlay, onDownload, 
           {item.title}
         </p>
 
-        {isPlaying && analyser && (
-          <LiveWaveBar analyser={analyser} color="#7c5cfc" />
-        )}
+        <div className="h-10">
+          {isPlaying && analyser && <LiveWaveBar analyser={analyser} color="#7c5cfc" />}
+        </div>
 
         <div className="flex items-center gap-2">
           <button
