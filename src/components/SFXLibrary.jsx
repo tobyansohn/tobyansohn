@@ -8,7 +8,13 @@ const PAGE_SZ   = 24;
 const QUICK_TAGS = [
   "explosion", "footstep", "laser", "coin", "jump",
   "sword", "magic", "ambient", "thunder", "rain",
-  "ui click", "game over", "level up", "fire",
+  "gunshot", "game over", "level up", "fire",
+];
+
+const SORT_OPTS = [
+  { value: "downloads desc", label: "Most downloaded" },
+  { value: "avg_rating desc", label: "Highest rated" },
+  { value: "publicdate desc", label: "Newest" },
 ];
 
 function formatDur(s) {
@@ -57,7 +63,7 @@ function SFXCard({ item, isPlaying, progress, loadingAudio, onPlay, onDownload, 
   const bg     = dark ? "bg-white/[0.02] hover:bg-white/[0.04]" : "bg-[#faf8f5] hover:bg-[#f0ece6]";
   const muted  = dark ? "text-white/30" : "text-[#9a8a7a]";
   const color  = dark ? "#E8D5B7" : "#6B4F2A";
-  const tags   = Array.isArray(item.subject) ? item.subject : [];
+  const tags   = Array.isArray(item.subject) ? item.subject.slice(0, 2) : [];
 
   return (
     <div className={`rounded-xl border overflow-hidden transition-all duration-200 ${border} ${bg}`}>
@@ -80,7 +86,7 @@ function SFXCard({ item, isPlaying, progress, loadingAudio, onPlay, onDownload, 
               ? <span className="w-3 h-3 rounded-full border-2 border-t-transparent border-current animate-spin inline-block" />
               : isPlaying ? "⏹" : "▶"}
           </button>
-          {tags.slice(0, 2).map(t => (
+          {tags.map(t => (
             <span key={t} className={`text-[9px] px-1.5 py-0.5 rounded truncate max-w-[80px] ${dark ? "bg-white/5 text-white/25" : "bg-black/5 text-[#9a8a7a]"}`}>{t}</span>
           ))}
           <button
@@ -89,7 +95,7 @@ function SFXCard({ item, isPlaying, progress, loadingAudio, onPlay, onDownload, 
             className="ml-auto text-[10px] font-semibold px-2.5 py-1 rounded-md transition-all hover:scale-105 disabled:opacity-60"
             style={{ background: "#22c55e22", color: "#4ade80" }}
           >
-            ⬇ MP3
+            ⬇ DL
           </button>
         </div>
       </div>
@@ -100,10 +106,11 @@ function SFXCard({ item, isPlaying, progress, loadingAudio, onPlay, onDownload, 
 export default function SFXLibrary({ dark }) {
   const [query, setQuery]           = useState("");
   const [results, setResults]       = useState([]);
-  const [loading, setLoading]       = useState(false);
+  const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState(null);
   const [total, setTotal]           = useState(0);
   const [page, setPage]             = useState(1);
-  const [sort, setSort]             = useState("downloads+desc");
+  const [sort, setSort]             = useState("downloads desc");
   const [playingId, setPlayingId]   = useState(null);
   const [loadingId, setLoadingId]   = useState(null);
   const [progress, setProgress]     = useState(0);
@@ -199,14 +206,19 @@ export default function SFXLibrary({ dark }) {
   }, []);
 
   const doSearch = useCallback(async (q, pg = 1, srt = sort) => {
-    if (!q.trim()) return;
     setLoading(true);
+    setError(null);
+    const term = q.trim() || "sound effects";
     try {
+      // Filter to actual SFX by requiring subject tag
+      const fullQ = `(${term}) AND mediatype:audio AND (subject:("sound effects") OR subject:(sfx) OR subject:("sound effect"))`;
+      const sortEnc = encodeURIComponent(srt);
       const url =
-        `${IA_SEARCH}?q=${encodeURIComponent(q + " AND mediatype:audio")}` +
+        `${IA_SEARCH}?q=${encodeURIComponent(fullQ)}` +
         `&fl[]=identifier&fl[]=title&fl[]=subject&fl[]=downloads` +
-        `&sort[]=${encodeURIComponent(srt)}&rows=${PAGE_SZ}&page=${pg}&output=json`;
+        `&sort[]=${sortEnc}&rows=${PAGE_SZ}&page=${pg}&output=json`;
       const r = await fetch(url);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const data = await r.json();
       const items = (data.response?.docs || []).map(d => ({
         ...d,
@@ -219,10 +231,16 @@ export default function SFXLibrary({ dark }) {
       setPage(pg);
     } catch (e) {
       console.warn("SFX search failed:", e);
+      setError("Could not load sounds — check your connection and try again.");
     } finally {
       setLoading(false);
     }
   }, [sort]);
+
+  // Auto-load on mount
+  useEffect(() => {
+    doSearch("");
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSearch = (q) => {
     setQuery(q);
@@ -233,9 +251,13 @@ export default function SFXLibrary({ dark }) {
 
   const handleChip = (chip) => {
     if (activeChip === chip) {
-      setActiveChip(null); setQuery(""); setResults([]); setTotal(0);
+      setActiveChip(null);
+      setQuery("");
+      doSearch("", 1, sort);
     } else {
-      setActiveChip(chip); setQuery(chip); doSearch(chip, 1, sort);
+      setActiveChip(chip);
+      setQuery(chip);
+      doSearch(chip, 1, sort);
     }
   };
 
@@ -253,7 +275,7 @@ export default function SFXLibrary({ dark }) {
       <audio ref={audioRef} preload="none" onEnded={stopAudio} />
 
       <p className={`text-[14px] leading-relaxed mb-6 max-w-lg ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>
-        Search thousands of royalty-free sounds from the Internet Archive. No account needed — click ▶ to preview, ⬇ to download.
+        Browse royalty-free sounds from the Internet Archive. No account needed — click ▶ to preview, ⬇ to download.
       </p>
 
       {/* Search + sort */}
@@ -271,17 +293,18 @@ export default function SFXLibrary({ dark }) {
             className={`w-full pl-9 pr-8 py-2.5 rounded-xl border text-[13px] outline-none transition-colors duration-200 ${dark ? "bg-white/[0.03] border-white/8 text-white placeholder:text-white/20 focus:border-white/20" : "bg-[#faf8f5] border-[#b0a090] text-[#1a1a1a] placeholder:text-[#9a8a7a] focus:border-[#6B4F2A]/40"}`}
           />
           {query && (
-            <button onClick={() => { setQuery(""); setActiveChip(null); setResults([]); setTotal(0); }} className={`absolute right-3 top-1/2 -translate-y-1/2 text-[11px] ${muted}`}>✕</button>
+            <button
+              onClick={() => { setQuery(""); setActiveChip(null); doSearch("", 1, sort); }}
+              className={`absolute right-3 top-1/2 -translate-y-1/2 text-[11px] ${muted}`}
+            >✕</button>
           )}
         </div>
         <select
           value={sort}
-          onChange={e => { setSort(e.target.value); if (query) doSearch(query, 1, e.target.value); }}
+          onChange={e => { setSort(e.target.value); doSearch(query, 1, e.target.value); }}
           className={`px-3 py-2.5 rounded-xl border text-[12px] outline-none ${dark ? "bg-white/[0.03] border-white/8 text-white/60" : "bg-[#faf8f5] border-[#b0a090] text-[#5a4a3a]"}`}
         >
-          <option value="downloads+desc">Most downloaded</option>
-          <option value="avg_rating+desc">Highest rated</option>
-          <option value="publicdate+desc">Newest</option>
+          {SORT_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       </div>
 
@@ -301,7 +324,7 @@ export default function SFXLibrary({ dark }) {
       </div>
 
       {/* Stats */}
-      {total > 0 && (
+      {total > 0 && !loading && (
         <div className={`flex items-center justify-between mb-4 text-[11px] ${muted}`}>
           <span><strong className={dark ? "text-white/60" : "text-[#1a1a1a]"}>{total.toLocaleString()}</strong> sounds found</span>
           <span>Page <strong className={dark ? "text-white/60" : "text-[#1a1a1a]"}>{page}</strong> / {totalPages}</span>
@@ -313,10 +336,19 @@ export default function SFXLibrary({ dark }) {
         <div className="flex items-center justify-center py-24">
           <div className={`w-7 h-7 rounded-full border-2 border-t-transparent animate-spin ${dark ? "border-white/20" : "border-black/20"}`} />
         </div>
+      ) : error ? (
+        <div className={`py-16 text-center ${muted}`}>
+          <p className="text-3xl mb-3">⚠️</p>
+          <p className="text-[13px] mb-4">{error}</p>
+          <button
+            onClick={() => doSearch(query, page, sort)}
+            className={`px-4 py-2 rounded-xl border text-[12px] transition-all ${dark ? "border-white/15 hover:border-white/30 text-white/50 hover:text-white" : "border-black/15 hover:border-black/30 text-[#5a4a3a]"}`}
+          >Try again</button>
+        </div>
       ) : results.length === 0 ? (
         <div className={`py-24 text-center ${muted}`}>
           <p className="text-3xl mb-3">🎵</p>
-          <p className="text-[13px]">{query ? "No sounds matched your search." : "Search above or tap a quick tag."}</p>
+          <p className="text-[13px]">No sounds matched your search — try a different term.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
@@ -336,17 +368,17 @@ export default function SFXLibrary({ dark }) {
       )}
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      {totalPages > 1 && !loading && (
         <div className="flex items-center justify-center gap-4 mb-6">
           <button
             disabled={page <= 1}
-            onClick={() => { doSearch(query, page - 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+            onClick={() => { doSearch(query, page - 1, sort); window.scrollTo({ top: 0, behavior: "smooth" }); }}
             className={`px-4 py-2 rounded-xl border text-[12px] transition-all duration-200 disabled:opacity-30 ${dark ? "border-white/8 text-white/50 hover:border-white/20 hover:text-white" : "border-[#b0a090] text-[#5a4a3a] hover:border-[#6B4F2A]"}`}
           >← Prev</button>
           <span className={`text-[12px] ${muted}`}>Page {page} / {totalPages}</span>
           <button
             disabled={page >= totalPages}
-            onClick={() => { doSearch(query, page + 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+            onClick={() => { doSearch(query, page + 1, sort); window.scrollTo({ top: 0, behavior: "smooth" }); }}
             className={`px-4 py-2 rounded-xl border text-[12px] transition-all duration-200 disabled:opacity-30 ${dark ? "border-white/8 text-white/50 hover:border-white/20 hover:text-white" : "border-[#b0a090] text-[#5a4a3a] hover:border-[#6B4F2A]"}`}
           >Next →</button>
         </div>
