@@ -122,9 +122,9 @@ function TravelMap({ dark }) {
       <MapContainer
         center={[25, -50]}
         zoom={2}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         style={{ height: "100%", width: "100%", background: dark ? "#0d0d0d" : "#ede8e0" }}
-        zoomControl={false}
+        zoomControl={true}
         attributionControl={false}
       >
         <TileLayer url={dark
