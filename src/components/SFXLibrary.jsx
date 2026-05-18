@@ -23,79 +23,126 @@ function formatDur(s) {
   return `${m}:${String(sec).padStart(2, "0")}`;
 }
 
-function WaveBar({ color, progress }) {
+/* Real-time frequency waveform driven by Web Audio AnalyserNode */
+function LiveWaveBar({ analyser, color }) {
   const canvasRef = useRef(null);
-  const seedRef   = useRef(Math.random() * 999);
+  const rafRef    = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const W = canvas.width  = canvas.offsetWidth  * (devicePixelRatio || 1);
-    const H = canvas.height = canvas.offsetHeight * (devicePixelRatio || 1);
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, W, H);
-    const bars = 50, bw = (W / bars) * 0.55, seed = seedRef.current;
-    ctx.fillStyle = color;
-    for (let i = 0; i < bars; i++) {
-      const t = i / bars;
-      const env = Math.sin(t * Math.PI) * 0.75 + 0.25;
-      const n   = Math.abs(Math.sin(seed + i * 1.9)) * 0.5 + 0.5;
-      const h   = Math.max(2, env * n * H * 0.85);
-      ctx.globalAlpha = 0.5 + env * 0.45;
-      ctx.fillRect(i * (W / bars), (H - h) / 2, bw, h);
-    }
-    ctx.globalAlpha = 1;
-  }, [color]);
+    if (!analyser || !canvas) return;
+
+    const bufLen = analyser.frequencyBinCount;
+    const data   = new Uint8Array(bufLen);
+
+    const draw = () => {
+      rafRef.current = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(data);
+
+      const dpr = devicePixelRatio || 1;
+      const W = canvas.width  = canvas.offsetWidth  * dpr;
+      const H = canvas.height = canvas.offsetHeight * dpr;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, W, H);
+
+      const bw   = (W / bufLen) * 0.55;
+      const gap  = W / bufLen;
+      for (let i = 0; i < bufLen; i++) {
+        const v = data[i] / 255;
+        const h = Math.max(2 * dpr, v * H * 0.9);
+        ctx.globalAlpha = 0.25 + v * 0.75;
+        ctx.fillStyle   = color;
+        ctx.fillRect(i * gap, (H - h) / 2, bw, h);
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    draw();
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [analyser, color]);
 
   return (
-    <div className="relative h-9 rounded-md overflow-hidden">
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ width: `${progress * 100}%`, background: "rgba(0,0,0,0.25)", transition: "none" }}
-      />
+    <div className="h-10 rounded-lg overflow-hidden">
+      <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   );
 }
 
-function SFXCard({ item, isPlaying, progress, loadingAudio, onPlay, onDownload, dark }) {
-  const border = dark ? "border-white/8" : "border-[#b0a090]";
-  const bg     = dark ? "bg-white/[0.02] hover:bg-white/[0.04]" : "bg-[#faf8f5] hover:bg-[#f0ece6]";
-  const muted  = dark ? "text-white/30" : "text-[#9a8a7a]";
-  const color  = dark ? "#E8D5B7" : "#6B4F2A";
-  const tags   = Array.isArray(item.subject) ? item.subject.slice(0, 2) : [];
+function PlayIcon() {
+  return (
+    <svg className="w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  );
+}
+
+function StopIcon() {
+  return (
+    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+      <rect x="5" y="5" width="14" height="14" rx="1" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+    </svg>
+  );
+}
+
+function SpinnerIcon() {
+  return <span className="w-3.5 h-3.5 rounded-full border-2 border-t-transparent border-current animate-spin inline-block" />;
+}
+
+function SFXCard({ item, isPlaying, analyser, loadingAudio, onPlay, onDownload, dark }) {
+  const border = dark ? "border-white/8"  : "border-[#b0a090]";
+  const bg     = dark ? "bg-white/[0.02]" : "bg-[#faf8f5]";
+  const muted  = dark ? "text-white/30"   : "text-[#9a8a7a]";
+  const accent = dark ? "#E8D5B7"         : "#6B4F2A";
+  const tags   = (Array.isArray(item.subject) ? item.subject : []).slice(0, 2);
+
+  const playBg = isPlaying
+    ? "bg-[#7c5cfc] text-white hover:bg-[#6a4de0]"
+    : dark
+      ? "bg-[#E8D5B7]/90 text-[#080808] hover:bg-[#E8D5B7]"
+      : "bg-[#6B4F2A] text-white hover:bg-[#5a4020]";
 
   return (
-    <div className={`rounded-xl border overflow-hidden transition-all duration-200 ${border} ${bg}`}>
-      <div className="h-[3px]" style={{ background: color }} />
-      <div className="p-3 flex flex-col gap-2">
+    <div className={`rounded-xl border overflow-hidden transition-all duration-200 ${border} ${bg} ${isPlaying ? (dark ? "border-[#7c5cfc]/40" : "border-[#7c5cfc]/30") : ""}`}>
+      <div className="h-[2px]" style={{ background: isPlaying ? "#7c5cfc" : accent }} />
+
+      <div className="p-3 flex flex-col gap-2.5">
         <p className={`text-[12px] font-medium leading-snug line-clamp-2 ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>
           {item.title}
         </p>
 
-        <WaveBar color={color} progress={isPlaying ? progress : 0} />
+        {isPlaying && analyser && (
+          <LiveWaveBar analyser={analyser} color="#7c5cfc" />
+        )}
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2">
           <button
             onClick={onPlay}
             disabled={loadingAudio}
-            className="w-7 h-7 rounded-md flex items-center justify-center text-[11px] transition-all duration-150 shrink-0 hover:scale-110 disabled:opacity-60"
-            style={{ background: isPlaying ? "#7c5cfc" : (dark ? "#E8D5B7" : "#6B4F2A"), color: isPlaying ? "#fff" : (dark ? "#080808" : "#fff") }}
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 shrink-0 hover:scale-105 active:scale-95 disabled:opacity-50 ${playBg}`}
           >
-            {loadingAudio
-              ? <span className="w-3 h-3 rounded-full border-2 border-t-transparent border-current animate-spin inline-block" />
-              : isPlaying ? "⏹" : "▶"}
+            {loadingAudio ? <SpinnerIcon /> : isPlaying ? <StopIcon /> : <PlayIcon />}
           </button>
-          {tags.map(t => (
-            <span key={t} className={`text-[9px] px-1.5 py-0.5 rounded truncate max-w-[80px] ${dark ? "bg-white/5 text-white/25" : "bg-black/5 text-[#9a8a7a]"}`}>{t}</span>
-          ))}
+
+          <div className="flex gap-1.5 flex-1 min-w-0">
+            {tags.map(t => (
+              <span key={t} className={`text-[9px] px-1.5 py-0.5 rounded truncate ${dark ? "bg-white/5 text-white/25" : "bg-black/5 text-[#9a8a7a]"}`}>{t}</span>
+            ))}
+          </div>
+
           <button
             onClick={onDownload}
             disabled={loadingAudio}
-            className="ml-auto text-[10px] font-semibold px-2.5 py-1 rounded-md transition-all hover:scale-105 disabled:opacity-60"
-            style={{ background: "#22c55e22", color: "#4ade80" }}
+            className={`flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1.5 rounded-lg border transition-all hover:scale-105 active:scale-95 disabled:opacity-50 ${dark ? "border-white/8 text-white/35 hover:border-white/20 hover:text-white/60" : "border-black/10 text-[#5a4a3a] hover:border-black/20 hover:text-[#1a1a1a]"}`}
           >
-            ⬇ DL
+            <DownloadIcon /> MP3
           </button>
         </div>
       </div>
@@ -118,15 +165,34 @@ export default function SFXLibrary({ dark }) {
   const [npTime, setNpTime]         = useState("0:00 / 0:00");
   const [activeChip, setActiveChip] = useState(null);
 
-  const audioRef    = useRef(null);
-  const rafRef      = useRef(null);
-  const searchRef   = useRef(null);
-  const debounceRef = useRef(null);
-  const urlCache    = useRef({});
+  const audioRef      = useRef(null);
+  const rafRef        = useRef(null);
+  const searchRef     = useRef(null);
+  const debounceRef   = useRef(null);
+  const urlCache      = useRef({});
+  const audioCtxRef   = useRef(null);
+  const analyserRef   = useRef(null);
+  const srcCreated    = useRef(false);
 
   const muted      = dark ? "text-white/30" : "text-[#5a4a3a]";
   const border     = dark ? "border-white/8" : "border-[#b0a090]";
   const totalPages = Math.ceil(total / PAGE_SZ);
+
+  /* Set up AudioContext + AnalyserNode once on first play */
+  const ensureAnalyser = useCallback(() => {
+    if (srcCreated.current || !audioRef.current) return;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx      = new AudioCtx();
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 128;
+    const source = ctx.createMediaElementSource(audioRef.current);
+    source.connect(analyser);
+    analyser.connect(ctx.destination);
+    audioCtxRef.current = ctx;
+    analyserRef.current = analyser;
+    srcCreated.current  = true;
+  }, []);
 
   const stopAudio = useCallback(() => {
     const a = audioRef.current;
@@ -150,7 +216,7 @@ export default function SFXLibrary({ dark }) {
 
   const getAudioUrl = async (identifier) => {
     if (urlCache.current[identifier]) return urlCache.current[identifier];
-    const r = await fetch(`${IA_META}/${identifier}`);
+    const r    = await fetch(`${IA_META}/${identifier}`);
     const data = await r.json();
     const files = data.files || [];
     const audio = files.find(f => /\.(mp3|ogg)$/i.test(f.name) && f.source === "original")
@@ -170,6 +236,8 @@ export default function SFXLibrary({ dark }) {
     try {
       const url = await getAudioUrl(item.identifier);
       if (!url) return;
+      ensureAnalyser();
+      if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
       a.src = url;
       await a.play();
       setPlayingId(item.identifier);
@@ -180,7 +248,7 @@ export default function SFXLibrary({ dark }) {
     } finally {
       setLoadingId(null);
     }
-  }, [playingId, stopAudio, tick]);
+  }, [playingId, stopAudio, tick, ensureAnalyser]);
 
   const downloadSound = useCallback(async (item) => {
     setLoadingId(item.identifier);
@@ -210,8 +278,7 @@ export default function SFXLibrary({ dark }) {
     setError(null);
     const term = q.trim() || "sound effects";
     try {
-      // Filter to actual SFX by requiring subject tag
-      const fullQ = `(${term}) AND mediatype:audio AND (subject:("sound effects") OR subject:(sfx) OR subject:("sound effect"))`;
+      const fullQ  = `(${term}) AND mediatype:audio AND (subject:("sound effects") OR subject:(sfx) OR subject:("sound effect"))`;
       const sortEnc = encodeURIComponent(srt);
       const url =
         `${IA_SEARCH}?q=${encodeURIComponent(fullQ)}` +
@@ -237,7 +304,6 @@ export default function SFXLibrary({ dark }) {
     }
   }, [sort]);
 
-  // Auto-load on mount
   useEffect(() => {
     doSearch("");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -251,13 +317,9 @@ export default function SFXLibrary({ dark }) {
 
   const handleChip = (chip) => {
     if (activeChip === chip) {
-      setActiveChip(null);
-      setQuery("");
-      doSearch("", 1, sort);
+      setActiveChip(null); setQuery(""); doSearch("", 1, sort);
     } else {
-      setActiveChip(chip);
-      setQuery(chip);
-      doSearch(chip, 1, sort);
+      setActiveChip(chip); setQuery(chip); doSearch(chip, 1, sort);
     }
   };
 
@@ -348,7 +410,7 @@ export default function SFXLibrary({ dark }) {
       ) : results.length === 0 ? (
         <div className={`py-24 text-center ${muted}`}>
           <p className="text-3xl mb-3">🎵</p>
-          <p className="text-[13px]">No sounds matched your search — try a different term.</p>
+          <p className="text-[13px]">No sounds matched — try a different term.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
@@ -357,7 +419,7 @@ export default function SFXLibrary({ dark }) {
               key={item.identifier}
               item={item}
               isPlaying={playingId === item.identifier}
-              progress={playingId === item.identifier ? progress : 0}
+              analyser={playingId === item.identifier ? analyserRef.current : null}
               loadingAudio={loadingId === item.identifier}
               onPlay={() => togglePlay(item)}
               onDownload={() => downloadSound(item)}
@@ -387,7 +449,7 @@ export default function SFXLibrary({ dark }) {
       {/* Now playing */}
       {npName && (
         <div className={`sticky bottom-0 -mx-6 md:-mx-16 px-6 md:px-16 py-3 border-t flex items-center gap-4 ${dark ? "bg-[#0d0d0d]/95 border-white/8" : "bg-[#F5F2ED]/95 border-black/8"} backdrop-blur-sm`}>
-          <svg className="w-4 h-4 shrink-0 text-[#E8D5B7]" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3z"/><path d="M3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>
+          <div className="w-1.5 h-1.5 rounded-full bg-[#7c5cfc] animate-pulse shrink-0" />
           <p className={`text-[12px] flex-1 truncate ${dark ? "text-white/70" : "text-[#3a3a3a]"}`}>{npName}</p>
           <span className={`text-[11px] tabular-nums shrink-0 ${muted}`}>{npTime}</span>
           <button onClick={stopAudio} className={`text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 rounded-lg border transition-colors duration-200 ${dark ? "border-white/10 text-white/30 hover:border-red-400/40 hover:text-red-400" : "border-black/10 text-[#9a8a7a] hover:border-red-400/40 hover:text-red-400"}`}>
