@@ -144,7 +144,7 @@ function TravelMap({ dark }) {
         <Marker
           position={[homePin.lat, homePin.lng]}
           icon={makeHomeIcon(dark)}
-          eventHandlers={{ click: () => navigate("/photography?category=For Fun&sub=Home") }}
+          eventHandlers={{ click: () => navigate(`/photography?category=Travels&sub=${encodeURIComponent("Austin, TX")}`) }}
         >
           <Tooltip direction="top" offset={[0, -8]} className="travel-tooltip">{homePin.name}</Tooltip>
         </Marker>
