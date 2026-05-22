@@ -155,13 +155,6 @@ function TravelMap({ dark }) {
 
 const projects = [
   {
-    title: "JARVIS",
-    year: "2025",
-    description: "A voice-first AI assistant for Mac — speaks back in a British accent with dry wit and an audio-reactive particle orb. Connects to Apple Calendar, Mail, and Notes, and spawns Claude Code sessions to build entire projects.",
-    tags: ["Claude API", "Node.js", "macOS", "Voice AI"],
-    link: "https://github.com/tobyansohn",
-  },
-  {
     title: "Socials Dashboard",
     year: "2025",
     description: "Full-stack social media analytics dashboard with per-user linked accounts, charts, a creative hub, and multi-platform reporting across Instagram, TikTok, YouTube, and more.",
