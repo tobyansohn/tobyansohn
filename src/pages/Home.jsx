@@ -36,7 +36,7 @@ export default function Home() {
 
   const previewPhotos = useMemo(() => {
     const shuffled = [...allPhotoSrcs].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 10);
+    return shuffled.slice(0, 14);
   }, []);
 
   useEffect(() => {
@@ -158,7 +158,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Photo strip */}
+      {/* Photo strip — infinite marquee */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-6 md:px-16 mb-8 flex items-center justify-between">
           <span className={`text-[11px] tracking-[0.35em] uppercase ${superMuted}`}>Photography</span>
@@ -169,12 +169,14 @@ export default function Home() {
             </svg>
           </Link>
         </div>
-        <div className="flex gap-3 overflow-x-auto px-6 md:px-16 pb-2 no-scrollbar">
-          {previewPhotos.map((src, i) => (
-            <Link key={i} to="/photography" className="flex-shrink-0 h-64 overflow-hidden rounded-xl">
-              <img src={src} alt="" className="h-full w-auto object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
-            </Link>
-          ))}
+        <div className="overflow-hidden">
+          <div className="flex gap-3 animate-marquee marquee-track w-max">
+            {[...previewPhotos, ...previewPhotos].map((src, i) => (
+              <Link key={i} to="/photography" className="flex-shrink-0 h-64 overflow-hidden rounded-xl cursor-pointer">
+                <img src={src} alt="" className="h-full w-auto object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

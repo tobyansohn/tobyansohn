@@ -56,7 +56,7 @@ function PhotoCard({ photo, index, onClick }) {
       ref={ref}
       className={`group cursor-pointer break-inside-avoid mb-3 overflow-hidden rounded-xl transition-all duration-700 ${inView ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}
       style={{ transitionDelay: `${(index % 9) * 40}ms` }}
-      onClick={() => onClick(photo)}
+      onClick={() => onClick(index)}
     >
       <div className="relative overflow-hidden rounded-xl">
         <img
@@ -76,16 +76,20 @@ function PhotoCard({ photo, index, onClick }) {
   );
 }
 
-function Lightbox({ photo, onClose }) {
+function Lightbox({ photo, onClose, onPrev, onNext, hasPrev, hasNext, counter }) {
   useEffect(() => {
-    const handler = (e) => { if (e.key === "Escape") onClose(); };
+    const handler = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft" && hasPrev) onPrev();
+      if (e.key === "ArrowRight" && hasNext) onNext();
+    };
     window.addEventListener("keydown", handler);
     document.body.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", handler);
       document.body.style.overflow = "";
     };
-  }, [onClose]);
+  }, [onClose, onPrev, onNext, hasPrev, hasNext]);
 
   return createPortal(
     <div className="fixed inset-0 bg-black/92 z-50 flex items-center justify-center p-6 backdrop-blur-sm" onClick={onClose}>
@@ -94,12 +98,27 @@ function Lightbox({ photo, onClose }) {
         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent rounded-b-2xl pointer-events-none">
           <p className="font-display text-2xl text-white">{photo.title}</p>
           <p className="text-white/50 text-sm mt-1">{photo.category}</p>
+          {counter && <p className="text-white/25 text-[11px] tracking-[0.15em] uppercase mt-2">{counter}</p>}
         </div>
-        <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all duration-200">
+        <button onClick={onClose} aria-label="Close" className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all duration-200 cursor-pointer">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
+        {hasPrev && (
+          <button onClick={onPrev} aria-label="Previous photo" className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all duration-200 cursor-pointer">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+        {hasNext && (
+          <button onClick={onNext} aria-label="Next photo" className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all duration-200 cursor-pointer">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
       </div>
     </div>,
     document.body
@@ -114,7 +133,7 @@ export default function Photography() {
   const [activeCategory, setActiveCategory] = useState(searchParams.get('category') || 'All');
   const [activeSub, setActiveSub] = useState(searchParams.get('sub') || 'All');
   const [allSeed, setAllSeed] = useState(0);
-  const [lightbox, setLightbox] = useState(null);
+  const [lightboxIdx, setLightboxIdx] = useState(null);
   const [headerRef, headerInView] = useInView();
 
   const randomAll = useMemo(() => {
@@ -215,11 +234,21 @@ export default function Photography() {
       {/* Masonry grid */}
       <div className="columns-2 md:columns-3 gap-3">
         {filtered.map((photo, i) => (
-          <PhotoCard key={photo.id} photo={photo} index={i} onClick={setLightbox} />
+          <PhotoCard key={photo.id} photo={photo} index={i} onClick={setLightboxIdx} />
         ))}
       </div>
 
-      {lightbox && <Lightbox photo={lightbox} onClose={() => setLightbox(null)} />}
+      {lightboxIdx !== null && filtered[lightboxIdx] && (
+        <Lightbox
+          photo={filtered[lightboxIdx]}
+          onClose={() => setLightboxIdx(null)}
+          onPrev={() => setLightboxIdx(i => Math.max(0, i - 1))}
+          onNext={() => setLightboxIdx(i => Math.min(filtered.length - 1, i + 1))}
+          hasPrev={lightboxIdx > 0}
+          hasNext={lightboxIdx < filtered.length - 1}
+          counter={`${lightboxIdx + 1} / ${filtered.length}`}
+        />
+      )}
     </main>
   );
 }
