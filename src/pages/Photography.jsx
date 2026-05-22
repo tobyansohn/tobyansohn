@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
+import { optimizeImage } from "../utils/image.js";
 
 function useInView(threshold = 0.1) {
   const ref = useRef(null);
@@ -60,7 +61,7 @@ function PhotoCard({ photo, index, onClick }) {
     >
       <div className="relative overflow-hidden rounded-xl">
         <img
-          src={photo.src}
+          src={optimizeImage(photo.src, 800)}
           alt={photo.title}
           className="w-full block group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
@@ -94,7 +95,7 @@ function Lightbox({ photo, onClose, onPrev, onNext, hasPrev, hasNext, counter })
   return createPortal(
     <div className="fixed inset-0 bg-black/92 z-50 flex items-center justify-center p-6 backdrop-blur-sm" onClick={onClose}>
       <div className="relative max-w-4xl w-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
-        <img src={photo.src} alt={photo.title} className="max-w-full max-h-[85vh] rounded-2xl object-contain" />
+        <img src={optimizeImage(photo.src, 1920)} alt={photo.title} className="max-w-full max-h-[85vh] rounded-2xl object-contain" />
         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent rounded-b-2xl pointer-events-none">
           <p className="font-display text-2xl text-white">{photo.title}</p>
           <p className="text-white/50 text-sm mt-1">{photo.category}</p>

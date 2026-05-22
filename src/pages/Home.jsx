@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
+import { optimizeImage } from "../utils/image.js";
 
 const allPhotosGlob = import.meta.glob('../Photos/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true });
 const allPhotoSrcs = Object.values(allPhotosGlob).map(m => m.default);
@@ -173,7 +174,7 @@ export default function Home() {
           <div className="flex gap-3 animate-marquee marquee-track w-max">
             {[...previewPhotos, ...previewPhotos].map((src, i) => (
               <Link key={i} to="/photography" className="flex-shrink-0 h-64 overflow-hidden rounded-xl cursor-pointer">
-                <img src={src} alt="" className="h-full w-auto object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
+                <img src={optimizeImage(src, 600)} alt="" className="h-full w-auto object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
               </Link>
             ))}
           </div>

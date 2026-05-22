@@ -1,3 +1,8 @@
 {
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
+  "images": {
+    "sizes": [400, 600, 800, 1200, 1920],
+    "minimumCacheTTL": 31536000,
+    "formats": ["image/avif", "image/webp"]
+  }
 }
