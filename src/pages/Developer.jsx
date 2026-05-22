@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import { useTheme } from "../context/ThemeContext.jsx";
 import SFXLibrary from "../components/SFXLibrary.jsx";
+import GitHubContributions from "../components/GitHubContributions.jsx";
+import ProjectModal from "../components/ProjectModal.jsx";
 
 function WaterCanvas({ dark }) {
   const canvasRef = useRef(null);
@@ -157,23 +159,47 @@ const projects = [
   {
     title: "Socials Dashboard",
     year: "2025",
+    status: "In Progress",
     description: "Full-stack social media analytics dashboard with per-user linked accounts, charts, a creative hub, and multi-platform reporting across Instagram, TikTok, YouTube, and more.",
+    highlights: [
+      "Per-user OAuth-linked accounts for Instagram, TikTok, YouTube, and more",
+      "Recharts-powered analytics with historical trend data",
+      "Creative hub for managing and organizing content assets",
+      "Aggregated multi-platform reporting in a single view",
+    ],
     tags: ["React", "TypeScript", "Node.js", "Tailwind"],
     link: "https://github.com/tobyansohn",
+    liveUrl: null,
   },
   {
     title: "Pokémon TCG Tracker",
     year: "2025",
+    status: "Live",
     description: "Tracks Special Illustration Rare and Illustration Rare cards every 12 hours via the Pokémon TCG API, storing price snapshots in Redis to surface which cards are climbing fastest in market value.",
+    highlights: [
+      "12-hour automated price snapshots stored in Redis",
+      "Tracks SIR and IR rarity cards via the Pokémon TCG API",
+      "Surfaces fastest-rising cards ranked by price change",
+      "Vercel cron jobs for fully automated data collection",
+    ],
     tags: ["Pokémon TCG API", "Redis", "Vercel", "Node.js"],
     link: "https://github.com/tobyansohn",
+    liveUrl: "/developer",
   },
   {
     title: "TobyanSohn.com",
     year: "2024",
+    status: "Live",
     description: "This portfolio — a personal creative platform showcasing photography, videography, and development work. Custom cursor, water ripple canvas, page transitions, and a full dark/light mode.",
+    highlights: [
+      "Custom water-ripple canvas effect that follows the cursor",
+      "Animated page transitions via React Router",
+      "Full dark/light mode with smooth color transitions",
+      "Embedded Pokémon TCG Tracker, Meal Generator, and SFX Library",
+    ],
     tags: ["React", "Vite", "Tailwind CSS", "Vercel"],
-    link: "https://tobyan.vercel.app",
+    link: "https://github.com/tobyansohn",
+    liveUrl: "https://tobyansohn.com",
   },
 ];
 
@@ -185,28 +211,40 @@ const skills = [
 
 function ProjectCard({ project, index, dark }) {
   const [ref, inView] = useInView();
+  const [open, setOpen] = useState(false);
   return (
-    <div ref={ref} className={`group border-b py-10 transition-all duration-700 ${dark ? "border-white/8" : "border-[#b0a090]"} ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`} style={{ transitionDelay: `${index * 80}ms` }}>
-      <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12">
-        <span className={`text-[11px] tracking-[0.3em] uppercase shrink-0 pt-1 md:w-16 ${dark ? "text-white/25" : "text-[#7a6a5a]"}`}>{project.year}</span>
-        <div className="flex-1">
-          <div className="flex items-start justify-between gap-4 mb-3">
-            <h3 className={`font-display text-2xl transition-colors duration-300 ${dark ? "text-white group-hover:text-[#E8D5B7]" : "text-[#1a1a1a] group-hover:text-[#6B4F2A]"}`}>{project.title}</h3>
-            <a href={project.link} className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${dark ? "border-white/15 group-hover:border-white/40 group-hover:bg-white/5" : "border-black/15 group-hover:border-black/40 group-hover:bg-black/5"}`} aria-label="View project">
-              <svg className={`w-3 h-3 transition-all duration-300 ${dark ? "text-white/50 group-hover:text-white" : "text-[#4a4a4a] group-hover:text-black"} group-hover:translate-x-px group-hover:-translate-y-px`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
-              </svg>
-            </a>
-          </div>
-          <p className={`text-[14px] leading-relaxed mb-5 max-w-xl ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>{project.description}</p>
-          <div className="flex flex-wrap gap-2">
-            {project.tags.map(tag => (
-              <span key={tag} className={`px-3 py-1 rounded-full border text-[11px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/35" : "border-black/10 text-black/35"}`}>{tag}</span>
-            ))}
+    <>
+      <div
+        ref={ref}
+        onClick={() => setOpen(true)}
+        className={`group border-b py-10 cursor-pointer transition-all duration-700 ${dark ? "border-white/8" : "border-[#b0a090]"} ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+        style={{ transitionDelay: `${index * 80}ms` }}
+      >
+        <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12">
+          <span className={`text-[11px] tracking-[0.3em] uppercase shrink-0 pt-1 md:w-16 ${dark ? "text-white/25" : "text-[#7a6a5a]"}`}>{project.year}</span>
+          <div className="flex-1">
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <div className="flex items-center gap-3">
+                <h3 className={`font-display text-2xl transition-colors duration-300 ${dark ? "text-white group-hover:text-[#E8D5B7]" : "text-[#1a1a1a] group-hover:text-[#6B4F2A]"}`}>{project.title}</h3>
+                <span className={`text-[9px] tracking-[0.15em] uppercase px-2 py-0.5 rounded-full ${project.status === "Live" ? "bg-emerald-400/10 text-emerald-400" : "bg-amber-400/10 text-amber-400"}`}>{project.status}</span>
+              </div>
+              <div className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${dark ? "border-white/15 group-hover:border-white/40 group-hover:bg-white/5" : "border-black/15 group-hover:border-black/40 group-hover:bg-black/5"}`}>
+                <svg className={`w-3 h-3 transition-all duration-300 ${dark ? "text-white/50 group-hover:text-white" : "text-[#4a4a4a] group-hover:text-black"} group-hover:translate-x-px group-hover:-translate-y-px`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </div>
+            </div>
+            <p className={`text-[14px] leading-relaxed mb-5 max-w-xl ${dark ? "text-white/45" : "text-[#3a3a3a]"}`}>{project.description}</p>
+            <div className="flex flex-wrap gap-2">
+              {project.tags.map(tag => (
+                <span key={tag} className={`px-3 py-1 rounded-full border text-[11px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/35" : "border-black/10 text-black/35"}`}>{tag}</span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      {open && <ProjectModal project={project} onClose={() => setOpen(false)} dark={dark} />}
+    </>
   );
 }
 
@@ -709,6 +747,11 @@ export default function Developer() {
                 {skill}
               </span>
             ))}
+          </div>
+
+          {/* GitHub contributions */}
+          <div className={`transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "350ms" }}>
+            <GitHubContributions dark={dark} />
           </div>
         </div>
       </div>
