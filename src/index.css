@@ -61,3 +61,18 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(232, 213, 183, 0.3);
 }
+
+/* Marquee pause on hover */
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  .marquee-track {
+    overflow-x: auto;
+    width: auto;
+  }
+}

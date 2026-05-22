@@ -12,6 +12,15 @@ export default {
         cream: "#E8D5B7",
         "cream-dark": "#C4A882",
       },
+      animation: {
+        marquee: "marquee 45s linear infinite",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+      },
     },
   },
   plugins: [],
