@@ -1,6 +1,6 @@
 # tobyansohn.com
 
-Personal portfolio site for Toby Ansohn — software developer, photographer, and videographer based in Austin, TX.
+Personal portfolio site for Tobyan Sohn — software developer, photographer, and videographer based in Austin, TX.
 
 Live at [tobyansohn.com](https://tobyansohn.com)
 
