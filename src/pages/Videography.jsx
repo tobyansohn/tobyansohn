@@ -1,17 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
-
-function useInView(threshold = 0.1) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } }, { threshold });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  return [ref, inView];
-}
+import { motion, AnimatePresence } from "framer-motion";
 
 const projects = [
   { id: "EZSCrRH-s98", title: "The Beginning",                  tags: ["Personal"],  desc: "Where it all started."                              },
@@ -83,30 +73,46 @@ function VideoModal({ project, onClose }) {
 
 /* Grid card */
 function GridCard({ project, index, dark, onClick }) {
-  const [ref, inView] = useInView();
   const [hovered, setHovered] = useState(false);
   const thumb = `https://i.ytimg.com/vi/${project.id}/hqdefault.jpg`;
 
   return (
-    <div
-      ref={ref}
+    <motion.div
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={`group cursor-pointer transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-      style={{ transitionDelay: `${index * 100}ms` }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      className="cursor-pointer"
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
+      whileHover={{ y: -4, transition: { type: "spring", stiffness: 340, damping: 28 } }}
     >
       <div className="relative overflow-hidden rounded-2xl mb-4 aspect-video bg-stone-800">
-        <img src={thumb} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/50 transition-colors duration-300 flex items-center justify-center">
-          <div className={`w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-300 ${hovered ? "scale-110 bg-white/30" : ""}`}>
+        <motion.img
+          src={thumb}
+          alt={project.title}
+          className="w-full h-full object-cover"
+          animate={{ scale: hovered ? 1.06 : 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 32 }}
+        />
+        <div className="absolute inset-0 bg-black/20 flex items-center justify-center"
+          style={{ background: hovered ? "rgba(0,0,0,0.48)" : "rgba(0,0,0,0.20)", transition: "background 0.25s ease" }}>
+          <motion.div
+            className="w-14 h-14 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center"
+            animate={{ scale: hovered ? 1.12 : 1, backgroundColor: hovered ? "rgba(255,255,255,0.28)" : "rgba(255,255,255,0.15)" }}
+            transition={{ type: "spring", stiffness: 400, damping: 26 }}
+          >
             <svg className="w-5 h-5 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-          </div>
+          </motion.div>
         </div>
-        {/* Hover overlay with desc */}
-        <div className={`absolute inset-x-0 bottom-0 p-4 transition-all duration-300 ${hovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}>
+        <motion.div
+          className="absolute inset-x-0 bottom-0 p-4"
+          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 6 }}
+          transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+        >
           <p className="text-white/70 text-[12px] leading-relaxed">{project.desc}</p>
-        </div>
+        </motion.div>
       </div>
       <h3 className={`font-display text-lg mb-2 transition-colors duration-300 ${dark ? (hovered ? "text-[#E8D5B7]" : "text-white") : (hovered ? "text-[#6B4F2A]" : "text-[#1a1a1a]")}`}>
         {project.title}
@@ -116,28 +122,35 @@ function GridCard({ project, index, dark, onClick }) {
           <span key={tag} className={`px-2 py-1 rounded border text-[10px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/30" : "border-black/10 text-[#5a4a3a]"}`}>{tag}</span>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 /* List row */
 function ListRow({ project, index, dark, onClick }) {
-  const [ref, inView] = useInView();
   const [hovered, setHovered] = useState(false);
   const thumb = `https://i.ytimg.com/vi/${project.id}/hqdefault.jpg`;
 
   return (
-    <div
-      ref={ref}
+    <motion.div
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={`group cursor-pointer flex items-center gap-5 py-4 border-b transition-all duration-700 ${dark ? "border-white/8 hover:border-white/20" : "border-[#b0a090] hover:border-[#8a7060]"} ${inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"}`}
-      style={{ transitionDelay: `${index * 80}ms` }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      className={`group cursor-pointer flex items-center gap-5 py-4 border-b ${dark ? "border-white/8 hover:border-white/20" : "border-[#b0a090] hover:border-[#8a7060]"}`}
+      initial={{ opacity: 0, x: -16 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, delay: index * 0.07, ease: [0.23, 1, 0.32, 1] }}
     >
       <span className={`text-[11px] tabular-nums w-6 shrink-0 ${dark ? "text-white/20" : "text-[#9a8a7a]"}`}>{String(index + 1).padStart(2, "0")}</span>
       <div className="relative w-28 aspect-video rounded-lg overflow-hidden shrink-0 bg-stone-800">
-        <img src={thumb} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        <motion.img
+          src={thumb}
+          alt={project.title}
+          className="w-full h-full object-cover"
+          animate={{ scale: hovered ? 1.07 : 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        />
         <div className={`absolute inset-0 bg-black/30 flex items-center justify-center transition-opacity duration-300 ${hovered ? "opacity-100" : "opacity-0"}`}>
           <svg className="w-4 h-4 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
         </div>
@@ -153,10 +166,15 @@ function ListRow({ project, index, dark, onClick }) {
           <span key={tag} className={`px-2 py-1 rounded border text-[9px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/25" : "border-black/10 text-[#9a8a7a]"}`}>{tag}</span>
         ))}
       </div>
-      <svg className={`w-4 h-4 shrink-0 transition-all duration-200 ${dark ? "text-white/15 group-hover:text-white/40" : "text-black/15 group-hover:text-black/40"} ${hovered ? "translate-x-1" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <motion.svg
+        className={`w-4 h-4 shrink-0 ${dark ? "text-white/15 group-hover:text-white/40" : "text-black/15 group-hover:text-black/40"}`}
+        fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}
+        animate={{ x: hovered ? 4 : 0 }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      >
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-      </svg>
-    </div>
+      </motion.svg>
+    </motion.div>
   );
 }
 
@@ -184,7 +202,7 @@ function FeaturedHero({ project, dark }) {
           >
             <img src={thumb} alt={project.title} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700" />
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-              <div className="w-20 h-20 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center group-hover:scale-110 group-hover:bg-white/25 transition-all duration-300">
+              <div className="w-20 h-20 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center transition-[transform,background-color] duration-200 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-110 [@media(hover:hover)_and_(pointer:fine)]:group-hover:bg-white/25">
                 <svg className="w-7 h-7 text-white translate-x-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
               </div>
             </div>
@@ -211,8 +229,6 @@ function FeaturedHero({ project, dark }) {
 
 export default function Videography() {
   const { dark } = useTheme();
-  const [headerRef, headerInView] = useInView();
-  const [gearRef, gearInView] = useInView();
   const [activeTag, setActiveTag]   = useState("All");
   const [view, setView]             = useState("grid");
   const [gearOpen, setGearOpen]     = useState(false);
@@ -224,7 +240,7 @@ export default function Videography() {
   const headingFaded = dark ? "text-white/30"  : "text-[#7a6a5a]";
   const border       = dark ? "border-white/8" : "border-[#b0a090]";
 
-  const pillBase     = "px-3 py-1 rounded-full text-[10px] tracking-[0.1em] uppercase transition-all duration-200 border";
+  const pillBase     = "px-3 py-1 rounded-full text-[10px] tracking-[0.1em] uppercase transition-[color,transform] duration-150 ease-snappy border";
   const pillActive   = dark ? "bg-white text-[#080808] border-white" : "bg-[#1a1a1a] text-white border-[#1a1a1a]";
   const pillInactive = dark ? "border-white/10 text-white/35 hover:border-white/25 hover:text-white/60" : "border-black/10 text-[#5a4a3a] hover:border-black/25 hover:text-[#1a1a1a]";
 
@@ -236,8 +252,13 @@ export default function Videography() {
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-6xl mx-auto">
 
       {/* Header */}
-      <div ref={headerRef} className="mb-16">
-        <div className={`transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+      <motion.div
+        className="mb-16"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.55, ease: [0.23, 1, 0.32, 1] }}
+      >
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Videography</span>
           <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${heading}`}>
             Documenting<br /><span className={headingFaded}>Life.</span>
@@ -245,8 +266,7 @@ export default function Videography() {
           <p className={`max-w-lg text-[15px] leading-relaxed ${body}`}>
             The main goal of my videography is to capture and document things happening in my life.
           </p>
-        </div>
-      </div>
+      </motion.div>
 
       {/* Featured hero */}
       <FeaturedHero project={featured} dark={dark} />
@@ -256,7 +276,7 @@ export default function Videography() {
         href="https://www.youtube.com/@1tobyan"
         target="_blank"
         rel="noopener noreferrer"
-        className={`mb-16 mt-2 inline-flex items-center gap-2 text-[12px] tracking-[0.15em] uppercase transition-all duration-300 ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}
+        className={`mb-16 mt-2 inline-flex items-center gap-2 text-[12px] tracking-[0.15em] uppercase transition-[opacity,transform] duration-200 ease-snappy ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
         View full channel @1tobyan
@@ -317,34 +337,46 @@ export default function Videography() {
       )}
 
       {/* Gear — collapsible */}
-      <div ref={gearRef}>
+      <div>
         <button
           onClick={() => setGearOpen(o => !o)}
           className={`w-full flex items-center justify-between py-4 border-t transition-colors duration-200 group ${border} ${dark ? "hover:border-white/20" : "hover:border-[#8a7060]"}`}
         >
           <span className={`text-[11px] tracking-[0.35em] uppercase ${muted}`}>My Gear</span>
-          <svg
-            className={`w-4 h-4 transition-transform duration-300 ${muted} ${gearOpen ? "rotate-180" : ""}`}
+          <motion.svg
+            className={`w-4 h-4 ${muted}`}
             fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}
+            animate={{ rotate: gearOpen ? 180 : 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 28 }}
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
+          </motion.svg>
         </button>
 
-        <div className={`overflow-hidden transition-all duration-500 ${gearOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+        <AnimatePresence initial={false}>
+          {gearOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1, transition: { duration: 0.36, ease: [0.23, 1, 0.32, 1] } }}
+              exit={{ height: 0, opacity: 0, transition: { duration: 0.24, ease: [0.23, 1, 0.32, 1] } }}
+              className="overflow-hidden"
+            >
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 pt-4 pb-8">
             {gear.map(({ name, type }, i) => (
-              <div
+              <motion.div
                 key={name}
-                className={`p-5 rounded-xl border transition-all duration-700 ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"} ${gearOpen && gearInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-                style={{ transitionDelay: `${i * 70}ms` }}
+                className={`p-5 rounded-xl border ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.3, ease: [0.23, 1, 0.32, 1] } }}
               >
                 <p className={`text-[10px] tracking-[0.25em] uppercase mb-2 ${muted}`}>{type}</p>
                 <p className={`text-[14px] ${dark ? "text-white/70" : "text-black/65"}`}>{name}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Lightbox */}

@@ -7,11 +7,11 @@ export default function Footer() {
   const icon  = dark ? "text-white/25 hover:text-white/60" : "text-[#9a8a7a] hover:text-[#1a1a1a]";
 
   return (
-    <footer className={`px-6 md:px-16 py-10 border-t ${dark ? "border-white/8" : "border-black/8"}`}>
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <p className={`font-display text-lg ${dark ? "text-white/50" : "text-[#5a4a3a]"}`}>Tobyan Sohn</p>
-
-        <div className="flex items-center gap-6">
+    <footer className={`px-6 md:px-16 py-8 border-t ${dark ? "border-white/8" : "border-black/8"}`}>
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="flex items-center gap-6 flex-wrap">
+          <p className={`font-display text-base ${dark ? "text-white/40" : "text-[#5a4a3a]"}`}>Tobyan Sohn</p>
+          <div className={`hidden sm:block w-px h-3 ${dark ? "bg-white/15" : "bg-black/15"}`} />
           <Link to="/developer"   className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Dev</Link>
           <Link to="/photography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Photography</Link>
           <Link to="/videography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Videography</Link>

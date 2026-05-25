@@ -11,6 +11,7 @@ import Contact from "./pages/Contact.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import PageTransition from "./components/PageTransition.jsx";
 import ScrollProgress from "./components/ScrollProgress.jsx";
+import GrainOverlay from "./components/GrainOverlay.jsx";
 import { ThemeProvider, useTheme } from "./context/ThemeContext.jsx";
 import Footer from "./components/Footer.jsx";
 
@@ -64,6 +65,7 @@ export default function App() {
     <ThemeProvider>
       <Router>
         <CustomCursor />
+        <GrainOverlay />
         <KeyboardNav />
         <ThemedApp />
         <SpeedInsights />

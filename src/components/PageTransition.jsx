@@ -1,27 +1,17 @@
-import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+const variants = {
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.28, ease: [0.23, 1, 0.32, 1] } },
+  exit:    { opacity: 0, y: -6,  transition: { duration: 0.18, ease: [0.23, 1, 0.32, 1] } },
+};
 
 export default function PageTransition({ children, locationKey }) {
-  const [displayed, setDisplayed] = useState(children);
-  const [stage, setStage] = useState("visible"); // 'visible' | 'out' | 'in'
-
-  useEffect(() => {
-    setStage("out");
-    const t1 = setTimeout(() => {
-      setDisplayed(children);
-      setStage("in");
-    }, 350);
-    const t2 = setTimeout(() => setStage("visible"), 650);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [locationKey]);
-
-  const opacity =
-    stage === "out" ? "opacity-0 translate-y-3" :
-    stage === "in"  ? "opacity-0 -translate-y-2" :
-    "opacity-100 translate-y-0";
-
   return (
-    <div className={`transition-all duration-300 ease-out ${opacity}`}>
-      {displayed}
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div key={locationKey} variants={variants} initial="initial" animate="animate" exit="exit">
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 }

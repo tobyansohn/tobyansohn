@@ -40,7 +40,7 @@ export default function Contact() {
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-4xl mx-auto">
       <div ref={headerRef} className="mb-20">
-        <div className={`transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div className={`transition-[opacity,transform] duration-600 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Contact</span>
           <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${heading}`}>
             Let's create<br /><span className={headingFaded}>something great.</span>
@@ -53,7 +53,7 @@ export default function Contact() {
 
       <div ref={bodyRef} className="flex flex-col gap-16">
         {/* Email */}
-        <div className={`transition-all duration-700 ${bodyInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div className={`transition-[opacity,transform] duration-600 ease-snappy ${bodyInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <p className={`text-[11px] tracking-[0.35em] uppercase mb-5 ${muted}`}>Email</p>
           <div className="flex items-center gap-4 flex-wrap">
             <a
@@ -65,7 +65,7 @@ export default function Contact() {
             <button
               onClick={copyEmail}
               aria-label="Copy email address"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] tracking-[0.15em] uppercase transition-all duration-300 ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] tracking-[0.15em] uppercase transition-[color,border-color,opacity,transform] duration-200 ease-snappy ${
                 copied
                   ? dark ? "border-[#E8D5B7]/40 text-[#E8D5B7]" : "border-[#6B4F2A]/40 text-[#6B4F2A]"
                   : dark ? "border-white/15 text-white/40 hover:border-white/30 hover:text-white/70" : "border-black/15 text-black/40 hover:border-black/30 hover:text-black/70"
@@ -92,7 +92,7 @@ export default function Contact() {
         </div>
 
         {/* Socials */}
-        <div className={`transition-all duration-700 delay-150 ${bodyInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div className={`transition-[opacity,transform] duration-600 ease-snappy delay-150 ${bodyInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <p className={`text-[11px] tracking-[0.35em] uppercase mb-6 ${muted}`}>Find Me</p>
           <ul className="space-y-5">
             {socials.map(({ label, handle, href }) => (
@@ -106,7 +106,7 @@ export default function Contact() {
                   <span className={`text-[13px] tracking-[0.1em] uppercase ${muted}`}>{label}</span>
                   <span className={`text-[15px] flex items-center gap-2 transition-colors duration-300 ${dark ? "text-white/60 group-hover:text-[#E8D5B7]" : "text-black/55 group-hover:text-[#6B4F2A]"}`}>
                     {handle}
-                    <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-px group-hover:-translate-y-px transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-px group-hover:-translate-y-px transition-[color,border-color,opacity,transform] duration-200 ease-snappy" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
                     </svg>
                   </span>

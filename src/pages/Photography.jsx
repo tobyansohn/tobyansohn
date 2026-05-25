@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { optimizeImage } from "../utils/image.js";
+import exifr from "exifr";
 
 function useInView(threshold = 0.1) {
   const ref = useRef(null);
@@ -55,7 +56,7 @@ function PhotoCard({ photo, index, onClick }) {
   return (
     <div
       ref={ref}
-      className={`group cursor-pointer break-inside-avoid mb-3 overflow-hidden rounded-xl transition-all duration-700 ${inView ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}
+      className={`group cursor-pointer break-inside-avoid mb-3 overflow-hidden rounded-xl transition-[opacity,transform] duration-600 ease-snappy ${inView ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}
       style={{ transitionDelay: `${(index % 9) * 40}ms` }}
       onClick={() => onClick(index)}
     >
@@ -63,11 +64,11 @@ function PhotoCard({ photo, index, onClick }) {
         <img
           src={optimizeImage(photo.src, 800)}
           alt={photo.title}
-          className="w-full block group-hover:scale-105 transition-transform duration-500"
+          className="w-full block transition-transform duration-300 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-400 flex items-end p-4">
-          <div className="translate-y-3 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-400">
+        <div className="absolute inset-0 bg-black/0 [@media(hover:hover)_and_(pointer:fine)]:group-hover:bg-black/40 transition-colors duration-300 flex items-end p-4">
+          <div className="translate-y-3 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-y-0 opacity-0 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100 transition-[opacity,transform] duration-300 ease-snappy">
             <p className="text-white font-display text-base leading-tight">{photo.title}</p>
             <p className="text-white/60 text-[11px] tracking-[0.1em] mt-0.5">{photo.category}</p>
           </div>
@@ -77,7 +78,43 @@ function PhotoCard({ photo, index, onClick }) {
   );
 }
 
+function useExif(src) {
+  const [exif, setExif] = useState(null);
+  useEffect(() => {
+    setExif(null);
+    exifr.parse(src, { pick: ["Make", "Model", "FocalLength", "FNumber", "ExposureTime", "ISO"] })
+      .then(data => setExif(data || {}))
+      .catch(() => setExif({}));
+  }, [src]);
+  return exif;
+}
+
+function formatExif(exif) {
+  if (!exif) return null;
+  const parts = [];
+  const make = (exif.Make || "").toLowerCase();
+  const model = exif.Model || "";
+  if (model) {
+    const clean = model.replace(/^(SONY|FUJIFILM)\s*/i, "");
+    if (make.includes("sony")) parts.push(`Sony ${clean}`);
+    else if (make.includes("fuji")) parts.push(`Fujifilm ${clean}`);
+    else parts.push(model);
+  }
+  if (exif.FocalLength) parts.push(`${Math.round(exif.FocalLength)}mm`);
+  if (exif.FNumber) parts.push(`f/${exif.FNumber}`);
+  if (exif.ExposureTime) {
+    const et = exif.ExposureTime;
+    parts.push(et < 1 ? `1/${Math.round(1 / et)}s` : `${et}s`);
+  }
+  if (exif.ISO) parts.push(`ISO ${exif.ISO}`);
+  return parts.length ? parts : null;
+}
+
 function Lightbox({ photo, onClose, onPrev, onNext, hasPrev, hasNext, counter }) {
+  const exif = useExif(photo.src);
+  const exifParts = formatExif(exif);
+  const touchStartX = useRef(null);
+
   useEffect(() => {
     const handler = (e) => {
       if (e.key === "Escape") onClose();
@@ -92,29 +129,54 @@ function Lightbox({ photo, onClose, onPrev, onNext, hasPrev, hasNext, counter })
     };
   }, [onClose, onPrev, onNext, hasPrev, hasNext]);
 
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0 && hasNext) onNext();
+    if (dx > 0 && hasPrev) onPrev();
+  };
+
   return createPortal(
-    <div className="fixed inset-0 bg-black/92 z-50 flex items-center justify-center p-6 backdrop-blur-sm" onClick={onClose}>
-      <div className="relative max-w-4xl w-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/92 z-50 flex items-center justify-center p-4 sm:p-6 backdrop-blur-sm" onClick={onClose}>
+      <div
+        className="relative max-w-4xl w-full flex items-center justify-center"
+        onClick={e => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         <img src={optimizeImage(photo.src, 1920)} alt={photo.title} className="max-w-full max-h-[85vh] rounded-2xl object-contain" />
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent rounded-b-2xl pointer-events-none">
-          <p className="font-display text-2xl text-white">{photo.title}</p>
+        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/70 to-transparent rounded-b-2xl pointer-events-none">
+          <p className="font-display text-xl sm:text-2xl text-white">{photo.title}</p>
           <p className="text-white/50 text-sm mt-1">{photo.category}</p>
-          {counter && <p className="text-white/25 text-[11px] tracking-[0.15em] uppercase mt-2">{counter}</p>}
+          <div className="flex items-center gap-3 mt-2 flex-wrap">
+            {counter && <p className="text-white/25 text-[11px] tracking-[0.15em] uppercase">{counter}</p>}
+            {exifParts && (
+              <>
+                {counter && <span className="text-white/15 text-[11px]">·</span>}
+                {exifParts.map((part, i) => (
+                  <span key={i} className="text-white/35 text-[11px] tracking-[0.1em]">{part}</span>
+                ))}
+              </>
+            )}
+          </div>
         </div>
-        <button onClick={onClose} aria-label="Close" className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all duration-200 cursor-pointer">
+        <button onClick={onClose} aria-label="Close" className="absolute top-3 right-3 sm:top-4 sm:right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
         {hasPrev && (
-          <button onClick={onPrev} aria-label="Previous photo" className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all duration-200 cursor-pointer">
+          <button onClick={onPrev} aria-label="Previous photo" className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
         )}
         {hasNext && (
-          <button onClick={onNext} aria-label="Next photo" className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-all duration-200 cursor-pointer">
+          <button onClick={onNext} aria-label="Next photo" className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -166,13 +228,13 @@ export default function Photography() {
   const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
   const body  = dark ? "text-white/45" : "text-[#3a3a3a]";
 
-  const pillBase = "px-4 py-2 rounded-full text-[12px] tracking-[0.1em] uppercase transition-all duration-300";
+  const pillBase = "px-4 py-2 rounded-full text-[12px] tracking-[0.1em] uppercase transition-colors duration-200";
   const pillActive = dark ? "bg-white text-[#080808]" : "bg-[#1a1a1a] text-white";
   const pillInactive = dark
     ? "border border-white/15 text-white/40 hover:text-white/70 hover:border-white/30"
     : "border border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30";
 
-  const subPillBase = "px-3 py-1 rounded-md text-[11px] tracking-[0.08em] transition-all duration-300";
+  const subPillBase = "px-3 py-1 rounded-md text-[11px] tracking-[0.08em] transition-colors duration-200";
   const subPillActive = dark
     ? "bg-[#E8D5B7]/15 text-[#E8D5B7] border border-[#E8D5B7]/30"
     : "bg-[#6B4F2A]/10 text-[#6B4F2A] border border-[#6B4F2A]/30";
@@ -183,7 +245,7 @@ export default function Photography() {
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-7xl mx-auto">
       <div ref={headerRef} className="mb-16">
-        <div className={`transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div className={`transition-[opacity,transform] duration-600 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Photography</span>
           <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>
             The world through<br />

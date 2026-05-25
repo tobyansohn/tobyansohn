@@ -52,7 +52,7 @@ export default function Navbar() {
   const dotColor = dark ? "bg-[#E8D5B7]" : "bg-[#6B4F2A]";
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${navBg}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500 ease-snappy ${navBg}`}>
       <nav className="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
         {/* Logo */}
         <NavLink to="/" className="group flex items-center gap-2">
@@ -72,7 +72,7 @@ export default function Navbar() {
                 to={to}
                 end={to === "/"}
                 className={({ isActive }) =>
-                  `relative px-4 py-2 text-[13px] tracking-[0.15em] uppercase font-body transition-all duration-300 ${isActive ? linkActive : linkInactive}`
+                  `relative px-4 py-2 text-[13px] tracking-[0.15em] uppercase font-body transition-colors duration-200 ${isActive ? linkActive : linkInactive}`
                 }
               >
                 {({ isActive }) => (
@@ -92,7 +92,7 @@ export default function Navbar() {
           <button
             onClick={toggle}
             aria-label="Toggle theme"
-            className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
+            className={`btn-press w-9 h-9 rounded-full border flex items-center justify-center ${
               dark
                 ? "border-white/15 text-white/50 hover:text-white hover:border-white/40"
                 : "border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30"
@@ -103,7 +103,7 @@ export default function Navbar() {
 
           <NavLink
             to="/contact"
-            className={`flex items-center gap-2 px-4 py-2 rounded-full border text-[12px] tracking-[0.15em] uppercase transition-all duration-300 ${
+            className={`btn-press flex items-center gap-2 px-4 py-2 rounded-full border text-[12px] tracking-[0.15em] uppercase ${
               dark
                 ? "border-white/15 text-white/60 hover:text-white hover:border-white/40"
                 : "border-black/20 text-black/50 hover:text-black hover:border-black/40"
@@ -118,7 +118,7 @@ export default function Navbar() {
           <button
             onClick={toggle}
             aria-label="Toggle theme"
-            className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
+            className={`btn-press w-8 h-8 rounded-full border flex items-center justify-center ${
               dark ? "border-white/15 text-white/50" : "border-black/15 text-[#4a4a4a]"
             }`}
           >
@@ -129,15 +129,15 @@ export default function Navbar() {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
-            <span className={`block w-6 h-px transition-all duration-300 ${dark ? "bg-white" : "bg-black"} ${menuOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
-            <span className={`block w-4 h-px transition-all duration-300 ${dark ? "bg-white/60" : "bg-black/40"} ${menuOpen ? "opacity-0" : ""}`} />
-            <span className={`block w-6 h-px transition-all duration-300 ${dark ? "bg-white" : "bg-black"} ${menuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
+            <span className={`block w-6 h-px transition-[transform,opacity] duration-250 ease-snappy ${dark ? "bg-white" : "bg-black"} ${menuOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
+            <span className={`block w-4 h-px transition-[transform,opacity] duration-250 ease-snappy ${dark ? "bg-white/60" : "bg-black/40"} ${menuOpen ? "opacity-0" : ""}`} />
+            <span className={`block w-6 h-px transition-[transform,opacity] duration-250 ease-snappy ${dark ? "bg-white" : "bg-black"} ${menuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
           </button>
         </div>
       </nav>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden transition-all duration-500 overflow-hidden ${menuOpen ? "max-h-80 border-b" : "max-h-0"} ${dark ? "border-white/5" : "border-[#b0a090]"}`}>
+      <div className={`md:hidden transition-[max-height,opacity] duration-350 ease-snappy overflow-hidden ${menuOpen ? "max-h-80 border-b opacity-100" : "max-h-0 opacity-0"} ${dark ? "border-white/5" : "border-[#b0a090]"}`}>
         <ul className={`px-6 py-4 backdrop-blur-xl flex flex-col gap-1 ${dark ? "bg-[#0d0d0d]/95" : "bg-[#F0EDE8]/95"}`}>
           {links.map(({ to, label }) => (
             <li key={to}>

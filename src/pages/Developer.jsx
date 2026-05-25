@@ -217,7 +217,7 @@ function ProjectCard({ project, index, dark }) {
       <div
         ref={ref}
         onClick={() => setOpen(true)}
-        className={`group border-b py-10 cursor-pointer transition-all duration-700 ${dark ? "border-white/8" : "border-[#b0a090]"} ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+        className={`group border-b py-10 cursor-pointer transition-[opacity,transform] duration-700 ease-snappy ${dark ? "border-white/8" : "border-[#b0a090]"} ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
         style={{ transitionDelay: `${index * 80}ms` }}
       >
         <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12">
@@ -228,8 +228,8 @@ function ProjectCard({ project, index, dark }) {
                 <h3 className={`font-display text-2xl transition-colors duration-300 ${dark ? "text-white group-hover:text-[#E8D5B7]" : "text-[#1a1a1a] group-hover:text-[#6B4F2A]"}`}>{project.title}</h3>
                 <span className={`text-[9px] tracking-[0.15em] uppercase px-2 py-0.5 rounded-full ${project.status === "Live" ? "bg-emerald-400/10 text-emerald-400" : "bg-amber-400/10 text-amber-400"}`}>{project.status}</span>
               </div>
-              <div className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${dark ? "border-white/15 group-hover:border-white/40 group-hover:bg-white/5" : "border-black/15 group-hover:border-black/40 group-hover:bg-black/5"}`}>
-                <svg className={`w-3 h-3 transition-all duration-300 ${dark ? "text-white/50 group-hover:text-white" : "text-[#4a4a4a] group-hover:text-black"} group-hover:translate-x-px group-hover:-translate-y-px`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <div className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-colors duration-200 ${dark ? "border-white/15 group-hover:border-white/40 group-hover:bg-white/5" : "border-black/15 group-hover:border-black/40 group-hover:bg-black/5"}`}>
+                <svg className={`w-3 h-3 transition-[color,transform] duration-200 ease-snappy ${dark ? "text-white/50 group-hover:text-white" : "text-[#4a4a4a] group-hover:text-black"} group-hover:translate-x-px group-hover:-translate-y-px`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
                 </svg>
               </div>
@@ -355,7 +355,7 @@ function MealCard({ course, meal, dark }) {
     <>
       <div
         onClick={() => meal && setOpen(true)}
-        className={`rounded-2xl border overflow-hidden transition-all duration-200 ${border} ${dark ? "bg-white/[0.02] hover:bg-white/[0.05]" : "bg-[#faf8f5] hover:bg-[#f3efe9]"} ${meal ? "cursor-pointer hover:scale-[1.01]" : ""}`}
+        className={`rounded-2xl border overflow-hidden transition-colors duration-150 ${border} ${dark ? "bg-white/[0.02] hover:bg-white/[0.05]" : "bg-[#faf8f5] hover:bg-[#f3efe9]"} ${meal ? "cursor-pointer hover:scale-[1.01]" : ""}`}
       >
         {meal ? (
           <>
@@ -490,7 +490,7 @@ function MealGeneratorWidget({ dark }) {
     document.head.appendChild(script);
   }, []);
 
-  const pillBase     = "px-3 py-1 rounded-full text-[10px] tracking-[0.1em] uppercase transition-all duration-200 border";
+  const pillBase     = "px-3 py-1 rounded-full text-[10px] tracking-[0.1em] uppercase transition-colors duration-150 border";
   const pillActive   = dark ? "bg-white text-[#080808] border-white" : "bg-[#1a1a1a] text-white border-[#1a1a1a]";
   const pillInactive = dark ? "border-white/10 text-white/35 hover:border-white/25 hover:text-white/60" : "border-black/10 text-[#5a4a3a] hover:border-black/25 hover:text-[#1a1a1a]";
 
@@ -544,7 +544,7 @@ function MealGeneratorWidget({ dark }) {
       <button
         onClick={generate}
         disabled={loading}
-        className={`mb-8 px-6 py-3 rounded-full text-[12px] tracking-[0.15em] uppercase font-medium transition-all duration-300 disabled:opacity-50 ${dark ? "bg-white text-[#080808] hover:bg-[#E8D5B7]" : "bg-[#1a1a1a] text-white hover:bg-[#3a3a3a]"}`}
+        className={`btn-press mb-8 px-6 py-3 rounded-full text-[12px] tracking-[0.15em] uppercase font-medium disabled:opacity-50 ${dark ? "bg-white text-[#080808] hover:bg-[#E8D5B7]" : "bg-[#1a1a1a] text-white hover:bg-[#3a3a3a]"}`}
       >
         {loading ? "Generating..." : meals ? "Regenerate" : "Generate Meal Plan"}
       </button>
@@ -613,70 +613,64 @@ function PokemonTracker({ dark }) {
           <p className={`text-[12px] tracking-[0.2em] uppercase ${muted}`}>No data yet — check back soon.</p>
         </div>
       ) : (
-        <div className={`rounded-2xl border ${border} overflow-hidden ${dark ? "bg-white/[0.015]" : "bg-[#faf8f5]"}`}>
-          {/* Column headers */}
-          <div className={`grid grid-cols-[1.5rem_2.5rem_1fr_4rem] sm:grid-cols-[2rem_3rem_1fr_5rem_4.5rem] items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 border-b ${border}`}>
-            <span className={`text-[9px] tracking-[0.2em] uppercase ${muted}`}>#</span>
-            <span />
-            <span className={`text-[9px] tracking-[0.2em] uppercase ${muted}`}>Card</span>
-            <span className={`text-[9px] tracking-[0.2em] uppercase text-right ${muted}`}>Price</span>
-            <span className={`hidden sm:block text-[9px] tracking-[0.2em] uppercase text-right ${muted}`}>Change</span>
-          </div>
-
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {cards.map((card, i) => (
             <div
               key={card.id}
               onClick={() => setSelected(card)}
-              className={`grid grid-cols-[1.5rem_2.5rem_1fr_4rem] sm:grid-cols-[2rem_3rem_1fr_5rem_4.5rem] items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 border-b last:border-b-0 transition-all duration-200 cursor-pointer group ${border} ${dark ? "hover:bg-white/[0.04]" : "hover:bg-[#f0ece6]"}`}
+              className="group relative cursor-pointer"
             >
-              {/* Rank */}
-              <span className={`text-[11px] tabular-nums text-right font-medium ${i < 3 ? (dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/60") : muted}`}>
-                {i + 1}
-              </span>
-
-              {/* Card art */}
-              <div className="relative">
+              {/* Card image */}
+              <div className="relative aspect-[5/7] rounded-xl overflow-hidden mb-3 transition-[transform,box-shadow] duration-250 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.03] [@media(hover:hover)_and_(pointer:fine)]:group-hover:shadow-2xl"
+                style={{ boxShadow: dark ? "0 4px 20px rgba(0,0,0,0.5)" : "0 4px 20px rgba(0,0,0,0.15)" }}
+              >
                 <img
                   src={card.image}
                   alt={card.name}
-                  className="w-9 h-12 object-contain rounded-md drop-shadow-sm group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
                 />
-              </div>
 
-              {/* Name + set */}
-              <div className="min-w-0">
-                <p className={`text-[13px] font-medium truncate leading-tight ${dark ? "text-white/85 group-hover:text-white" : "text-[#1a1a1a]"} transition-colors duration-200`}>
-                  {card.name}
-                </p>
-                <p className={`text-[10px] tracking-[0.06em] truncate mt-0.5 ${muted}`}>{card.set}</p>
-              </div>
+                {/* Rank badge */}
+                <div className={`absolute top-2 left-2 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold backdrop-blur-sm ${
+                  i === 0 ? "bg-[#E8D5B7] text-[#080808]" :
+                  i === 1 ? "bg-white/20 text-white border border-white/30" :
+                  i === 2 ? "bg-white/15 text-white border border-white/20" :
+                  "bg-black/40 text-white/60 border border-white/10"
+                }`}>
+                  {i + 1}
+                </div>
 
-              {/* Price */}
-              <div className="text-right">
-                <p className={`text-[13px] font-medium tabular-nums ${dark ? "text-white/80" : "text-[#1a1a1a]"}`}>
-                  ${card.market.toFixed(2)}
-                </p>
-                {card.prevMarket && (
-                  <p className={`text-[10px] tabular-nums ${muted}`}>${card.prevMarket.toFixed(2)}</p>
-                )}
-              </div>
-
-              {/* Change badge — hidden on mobile */}
-              <div className="hidden sm:flex justify-end">
-                {card.change !== null ? (
-                  <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium tabular-nums ${
-                    card.change >= 0
-                      ? "bg-emerald-400/10 text-emerald-400"
-                      : "bg-red-400/10 text-red-400"
+                {/* Change badge */}
+                {card.change !== null && (
+                  <div className={`absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-semibold tabular-nums backdrop-blur-sm ${
+                    card.change >= 0 ? "bg-emerald-400/20 text-emerald-300" : "bg-red-400/20 text-red-300"
                   }`}>
-                    <svg className="w-2.5 h-2.5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-2 h-2 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                       <path d={card.change >= 0 ? "M12 4l8 16H4z" : "M12 20L4 4h16z"} />
                     </svg>
                     {Math.abs(card.change).toFixed(1)}%
-                  </span>
-                ) : (
-                  <span className={`text-[11px] ${muted}`}>—</span>
+                  </div>
                 )}
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+              </div>
+
+              {/* Card info */}
+              <div className="px-0.5">
+                <p className={`text-[12px] font-medium leading-tight truncate mb-0.5 transition-colors duration-200 ${dark ? "text-white/80 group-hover:text-white" : "text-[#1a1a1a]"}`}>
+                  {card.name}
+                </p>
+                <p className={`text-[10px] tracking-[0.04em] truncate mb-1.5 ${muted}`}>{card.set}</p>
+                <div className="flex items-center justify-between">
+                  <p className={`text-[13px] font-semibold tabular-nums ${dark ? "text-[#E8D5B7]" : "text-[#6B4F2A]"}`}>
+                    ${card.market.toFixed(2)}
+                  </p>
+                  {card.prevMarket && (
+                    <p className={`text-[10px] tabular-nums ${muted}`}>${card.prevMarket.toFixed(2)}</p>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -710,7 +704,7 @@ export default function Developer() {
 
       {/* Header */}
       <div ref={headerRef} className="mb-16">
-        <div className={`transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div className={`transition-[opacity,transform] duration-700 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Software Development</span>
           <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>
             Building things<br />
@@ -724,7 +718,7 @@ export default function Developer() {
               href="https://github.com/tobyansohn"
               target="_blank"
               rel="noopener noreferrer"
-              className={`group flex items-center gap-2 text-[12px] tracking-[0.1em] uppercase transition-all duration-300 cursor-pointer ${dark ? "text-white/35 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}
+              className={`group flex items-center gap-2 text-[12px] tracking-[0.1em] uppercase transition-colors duration-200 cursor-pointer ${dark ? "text-white/35 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>
               GitHub
@@ -733,7 +727,7 @@ export default function Developer() {
               href="https://linkedin.com/in/tobyansohn"
               target="_blank"
               rel="noopener noreferrer"
-              className={`group flex items-center gap-2 text-[12px] tracking-[0.1em] uppercase transition-all duration-300 cursor-pointer ${dark ? "text-white/35 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}
+              className={`group flex items-center gap-2 text-[12px] tracking-[0.1em] uppercase transition-colors duration-200 cursor-pointer ${dark ? "text-white/35 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
               LinkedIn
@@ -741,7 +735,7 @@ export default function Developer() {
           </div>
 
           {/* Skills */}
-          <div className={`mt-8 flex flex-wrap gap-2 transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "250ms" }}>
+          <div className={`mt-8 flex flex-wrap gap-2 transition-[opacity,transform] duration-700 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "250ms" }}>
             {skills.map(skill => (
               <span key={skill} className={`px-3 py-1.5 rounded-full border text-[11px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/40" : "border-black/10 text-[#5a4a3a]"}`}>
                 {skill}
@@ -750,7 +744,7 @@ export default function Developer() {
           </div>
 
           {/* GitHub contributions */}
-          <div className={`transition-all duration-700 ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "350ms" }}>
+          <div className={`transition-[opacity,transform] duration-700 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "350ms" }}>
             <GitHubContributions dark={dark} />
           </div>
         </div>
@@ -763,7 +757,7 @@ export default function Developer() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`shrink-0 px-4 py-3 text-[11px] tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-200 border-b-2 -mb-px ${
+              className={`shrink-0 px-4 py-3 text-[11px] tracking-[0.2em] uppercase whitespace-nowrap transition-colors duration-150 border-b-2 -mb-px ${
                 activeTab === tab.id
                   ? (dark ? "border-white text-white" : "border-[#1a1a1a] text-[#1a1a1a]")
                   : `border-transparent ${dark ? "text-white/35 hover:text-white/60" : "text-[#9a8a7a] hover:text-[#3a3a3a]"}`

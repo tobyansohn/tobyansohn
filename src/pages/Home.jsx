@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { optimizeImage } from "../utils/image.js";
+import { AnimatePresence, motion } from "framer-motion";
+import WaterBackground from "../components/WaterBackground.jsx";
 
 const allPhotosGlob = import.meta.glob('../Photos/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true });
 const allPhotoSrcs = Object.values(allPhotosGlob).map(m => m.default);
@@ -28,10 +30,19 @@ function useInView(threshold = 0.15) {
 }
 
 
+function NowItem({ label, value }) {
+  const { dark } = useTheme();
+  return (
+    <span className="flex items-center gap-2">
+      <span className={`text-[10px] tracking-[0.2em] uppercase ${dark ? "text-white/25" : "text-[#9a8a7a]"}`}>{label}</span>
+      <span className={`text-[13px] ${dark ? "text-white/55" : "text-[#3a3a3a]"}`}>{value}</span>
+    </span>
+  );
+}
+
 export default function Home() {
   const { dark } = useTheme();
   const [roleIndex, setRoleIndex] = useState(0);
-  const [fade, setFade] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [bioRef, bioInView] = useInView();
 
@@ -43,8 +54,7 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     const interval = setInterval(() => {
-      setFade(false);
-      setTimeout(() => { setRoleIndex(i => (i + 1) % roles.length); setFade(true); }, 400);
+      setRoleIndex(i => (i + 1) % roles.length);
     }, 2800);
     return () => clearInterval(interval);
   }, []);
@@ -60,7 +70,7 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-16 pt-20 overflow-hidden">
+      <section className="relative min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 pt-20 overflow-hidden">
         {/* Hero background photo */}
         <div className="absolute inset-0">
           <img
@@ -79,62 +89,91 @@ export default function Home() {
         />
 
         <div className="relative max-w-6xl mx-auto w-full">
-          <div className={`flex items-center gap-3 mb-10 transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "100ms" }}>
+          <div className={`flex items-center gap-3 mb-10 transition-[opacity,transform] duration-700 ease-snappy ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "100ms" }}>
             <div className="w-6 h-px bg-[#E8D5B7]/60" />
             <span className={`text-[11px] tracking-[0.35em] uppercase ${dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/70"}`}>Welcome!</span>
           </div>
 
           <div className="overflow-hidden mb-4">
-            <h1 className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-all duration-1000 ${dark ? "text-white" : "text-[#1a1a1a]"} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "200ms" }}>
+            <h1 className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-[opacity,transform] duration-700 ease-snappy ${dark ? "text-white" : "text-[#1a1a1a]"} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "200ms" }}>
               Hi, I'm Toby.
             </h1>
           </div>
 
-          <div className="overflow-hidden mb-12 min-h-[5rem] md:min-h-[10rem]">
-            <p className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "350ms" }}>
-              <span className="bg-gradient-to-r from-[#E8D5B7] to-[#C4A882] bg-clip-text text-transparent transition-opacity duration-400" style={{ opacity: fade ? 1 : 0 }}>
-                {roles[roleIndex]}
-              </span>
+          <div className="mb-12 min-h-[5rem] md:min-h-[10rem]">
+            <p className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-[opacity,transform] duration-700 ease-snappy ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "350ms" }}>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={roleIndex}
+                  className="bg-gradient-to-r from-[#E8D5B7] to-[#C4A882] bg-clip-text text-transparent inline-block"
+                  style={{ paddingBottom: '0.2em' }}
+                  initial={{ opacity: 0, filter: "blur(8px)", y: 8 }}
+                  animate={{ opacity: 1, filter: "blur(0px)", y: 0, transition: { duration: 0.42, ease: [0.23, 1, 0.32, 1] } }}
+                  exit={{ opacity: 0, filter: "blur(6px)", y: -6, transition: { duration: 0.28, ease: [0.23, 1, 0.32, 1] } }}
+                >
+                  {roles[roleIndex]}
+                </motion.span>
+              </AnimatePresence>
             </p>
           </div>
 
-          <div className={`flex flex-col md:flex-row md:items-end gap-8 transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "550ms" }}>
+          <div className={`flex flex-col md:flex-row md:items-end gap-8 transition-[opacity,transform] duration-700 ease-snappy ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "550ms" }}>
             <p className={`max-w-md text-[15px] leading-relaxed font-body ${muted}`}>
               Hi, I'm Toby! A 24 yo creative and software developer based in Austin, TX. Currently, I work at Visa full time, and primarily shoot photos and videos for my church, Lifeway ATX.
             </p>
             <div className="flex gap-4 md:ml-auto">
-              <Link to="/developer" className={`px-6 py-3 rounded-full text-[13px] tracking-[0.1em] uppercase font-medium transition-colors duration-300 ${accentBg} ${accentText} ${accentHover}`}>
+              <Link to="/developer" className={`btn-press px-6 py-3 rounded-full text-[13px] tracking-[0.1em] uppercase font-medium ${accentBg} ${accentText} ${accentHover}`}>
                 See My Work
               </Link>
-              <Link to="/contact" className={`px-6 py-3 rounded-full border text-[13px] tracking-[0.1em] uppercase transition-colors duration-300 ${borderBtn}`}>
+              <Link to="/contact" className={`btn-press px-6 py-3 rounded-full border text-[13px] tracking-[0.1em] uppercase ${borderBtn}`}>
                 Get In Touch
               </Link>
             </div>
           </div>
         </div>
 
-        <div className={`absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 transition-all duration-1000 ${mounted ? "opacity-100" : "opacity-0"}`} style={{ transitionDelay: "1000ms" }}>
-          <span className={`text-[10px] tracking-[0.3em] uppercase ${superMuted}`}>Scroll</span>
-          <div className={`w-px h-12 bg-gradient-to-b animate-pulse ${dark ? "from-white/30" : "from-black/20"} to-transparent`} />
+        <div className={`absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 transition-[opacity] duration-700 ease-snappy ${mounted ? "opacity-100" : "opacity-0"}`} style={{ transitionDelay: "1000ms" }}>
+          <span className={`text-[9px] tracking-[0.35em] uppercase ${superMuted}`}>Scroll</span>
+          <div className={`w-[22px] h-9 rounded-full border flex items-start justify-center pt-[5px] ${dark ? "border-white/20" : "border-black/15"}`}>
+            <div className={`w-[3px] h-[6px] rounded-full ${dark ? "bg-white/50" : "bg-black/35"}`}
+              style={{ animation: "scrollDot 1.6s cubic-bezier(0.23,1,0.32,1) infinite" }} />
+          </div>
+        </div>
+      </section>
+
+      {/* Now */}
+      <section className={`px-6 md:px-16 py-5 border-y ${dark ? "border-white/6" : "border-black/6"}`}>
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-8">
+          <span className={`text-[10px] tracking-[0.35em] uppercase shrink-0 ${superMuted}`}>Now</span>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <NowItem label="Working on" value="Payment infrastructure at Visa" />
+            <NowItem label="Shooting" value="Sony a7V + Fujifilm XT30" />
+            <NowItem label="Serving" value="Lifeway ATX" />
+            <NowItem label="Based in" value="Austin, TX" />
+          </div>
         </div>
       </section>
 
       {/* About */}
-      <section ref={bioRef} className="px-6 md:px-16 py-32">
+      <section ref={bioRef} className="relative px-6 md:px-16 py-24 overflow-hidden">
+        <WaterBackground dark={dark} />
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 md:gap-24 items-center">
           <div>
-            <div className={`transition-all duration-700 ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            <div className={`transition-[opacity,transform] duration-600 ease-snappy ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
               <span className={`text-[11px] tracking-[0.35em] uppercase mb-6 block ${superMuted}`}>About Me</span>
               <h2 className={`font-display text-4xl md:text-5xl leading-tight mb-8 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>
                 Where has the<br />time gone?
               </h2>
-              <p className={`leading-relaxed text-[15px] mb-6 ${muted}`}>
+              <p className={`leading-relaxed text-[15px] mb-8 ${muted}`}>
                 Over the past few years of my life, my faith has led me on a journey of capturing what God shows me. Most of my inspiration comes from the idea of capturing the experiences and moments where God has worked or is working already.
               </p>
-              <p className={`leading-relaxed text-[15px] mb-10 ${muted}`}>
-                A verse that comes to mind: "Let this be recorded for a generation to come, so that a people yet to be created may praise the Lord:" -Psalm 102:18 ESV.
-              </p>
-              <Link to="/contact" className={`inline-flex items-center gap-3 text-[13px] tracking-[0.15em] uppercase hover:gap-5 transition-all duration-300 ${accent}`}>
+              <blockquote className={`relative pl-5 mb-10 border-l-2 ${dark ? "border-[#E8D5B7]/30" : "border-[#6B4F2A]/25"}`}>
+                <p className={`font-display text-[17px] leading-relaxed italic mb-2 ${dark ? "text-white/55" : "text-[#4a3a2a]"}`}>
+                  "Let this be recorded for a generation to come, so that a people yet to be created may praise the Lord."
+                </p>
+                <cite className={`not-italic text-[11px] tracking-[0.2em] uppercase ${dark ? "text-white/25" : "text-[#9a8a7a]"}`}>Psalm 102:18 ESV</cite>
+              </blockquote>
+              <Link to="/contact" className={`inline-flex items-center gap-3 text-[13px] tracking-[0.15em] uppercase hover:gap-5 transition-[color,gap] duration-200 ease-snappy ${accent}`}>
                 Let's work together
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -143,25 +182,39 @@ export default function Home() {
             </div>
           </div>
 
-          <div className={`grid grid-cols-2 gap-6 transition-all duration-700 ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`} style={{ transitionDelay: "200ms" }}>
-            {[
-              { num: "3+", label: "Years Coding" },
-              { num: `${allPhotoSrcs.length}+`, label: "Photos Shot" },
-              { num: "4", label: "Videos Made" },
-              { num: "∞", label: "Coffee Consumed" },
-            ].map(({ num, label }) => (
-              <div key={label} className={`p-8 rounded-2xl border ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
-                <p className={`font-display text-5xl mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{num}</p>
-                <p className={`text-[12px] tracking-[0.2em] uppercase ${superMuted}`}>{label}</p>
+          <div
+            className={`transition-[opacity,transform] duration-600 ease-snappy ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+            style={{ transitionDelay: "200ms" }}
+          >
+            {/* Row 1: featured wide + small */}
+            <div className="grid grid-cols-2 sm:grid-cols-[2fr_1fr] gap-4 mb-4">
+              <div className={`p-8 rounded-2xl border flex flex-col justify-between min-h-[140px] ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
+                <p className={`font-display text-[clamp(3rem,5vw,4rem)] leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>3+</p>
+                <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>Years Coding</p>
               </div>
-            ))}
+              <div className={`p-6 rounded-2xl border flex flex-col justify-between min-h-[140px] ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
+                <p className={`font-display text-4xl leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>4</p>
+                <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>Videos Made</p>
+              </div>
+            </div>
+            {/* Row 2: small + featured wide (flipped ratio) */}
+            <div className="grid grid-cols-2 sm:grid-cols-[1fr_2fr] gap-4">
+              <div className={`p-6 rounded-2xl border flex flex-col justify-between min-h-[120px] ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
+                <p className={`font-display text-4xl leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{allPhotoSrcs.length}+</p>
+                <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>Photos Shot</p>
+              </div>
+              <div className={`p-8 rounded-2xl border flex flex-col justify-between min-h-[120px] ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
+                <p className={`font-display text-[clamp(2.5rem,4vw,3.5rem)] leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>∞</p>
+                <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>Coffee Consumed</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Photo strip — infinite marquee */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-6 md:px-16 mb-8 flex items-center justify-between">
+      <section className="px-6 md:px-16 py-16">
+        <div className="max-w-6xl mx-auto mb-8 flex items-center justify-between">
           <span className={`text-[11px] tracking-[0.35em] uppercase ${superMuted}`}>Photography</span>
           <Link to="/photography" className={`inline-flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${accent}`}>
             View all
@@ -170,11 +223,11 @@ export default function Home() {
             </svg>
           </Link>
         </div>
-        <div className="overflow-hidden">
-          <div className="flex gap-3 animate-marquee marquee-track w-max">
+        <div className="-mx-6 md:-mx-16 overflow-hidden">
+          <div className="flex gap-3 animate-marquee marquee-track w-max pl-6 md:pl-16">
             {[...previewPhotos, ...previewPhotos].map((src, i) => (
               <Link key={i} to="/photography" className="flex-shrink-0 h-64 overflow-hidden rounded-xl cursor-pointer">
-                <img src={optimizeImage(src, 600)} alt="" className="h-full w-auto object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
+                <img src={optimizeImage(src, 600)} alt="" className="h-full w-auto object-cover transition-transform duration-300 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:hover:scale-105" loading="lazy" />
               </Link>
             ))}
           </div>
@@ -200,7 +253,7 @@ export default function Home() {
                   <img
                     src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`}
                     alt={v.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover transition-transform duration-300 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
