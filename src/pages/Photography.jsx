@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { optimizeImage } from "../utils/image.js";
 import exifr from "exifr";
+import { motion } from "framer-motion";
 
 function useInView(threshold = 0.1) {
   const ref = useRef(null);
@@ -52,29 +53,43 @@ const topCategories = ['All', 'For Fun', 'Grad Pics', 'People', 'Travels'];
 // ── Sub-components ─────────────────────────────────────────────────────────────
 
 function PhotoCard({ photo, index, onClick }) {
-  const [ref, inView] = useInView();
+  const [hovered, setHovered] = useState(false);
   return (
-    <div
-      ref={ref}
-      className={`group cursor-pointer break-inside-avoid mb-3 overflow-hidden rounded-xl transition-[opacity,transform] duration-600 ease-snappy ${inView ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]"}`}
-      style={{ transitionDelay: `${(index % 9) * 40}ms` }}
+    <motion.div
+      className="cursor-pointer break-inside-avoid mb-3 rounded-xl overflow-hidden"
       onClick={() => onClick(index)}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      initial={{ opacity: 0, scale: 0.96 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.45, delay: (index % 9) * 0.04, ease: [0.23, 1, 0.32, 1] }}
+      whileHover={{ y: -4, transition: { type: "spring", stiffness: 340, damping: 28 } }}
     >
       <div className="relative overflow-hidden rounded-xl">
-        <img
+        <motion.img
           src={optimizeImage(photo.src, 800)}
           alt={photo.title}
-          className="w-full block transition-transform duration-300 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105"
+          className="w-full block"
           loading="lazy"
+          animate={{ scale: hovered ? 1.06 : 1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 32 }}
         />
-        <div className="absolute inset-0 bg-black/0 [@media(hover:hover)_and_(pointer:fine)]:group-hover:bg-black/40 transition-colors duration-300 flex items-end p-4">
-          <div className="translate-y-3 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-y-0 opacity-0 [@media(hover:hover)_and_(pointer:fine)]:group-hover:opacity-100 transition-[opacity,transform] duration-300 ease-snappy">
+        <motion.div
+          className="absolute inset-0 flex items-end p-4"
+          animate={{ backgroundColor: hovered ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0)" }}
+          transition={{ duration: 0.22 }}
+        >
+          <motion.div
+            animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 8 }}
+            transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+          >
             <p className="text-white font-display text-base leading-tight">{photo.title}</p>
             <p className="text-white/60 text-[11px] tracking-[0.1em] mt-0.5">{photo.category}</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

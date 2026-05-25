@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext.jsx";
+import { motion } from "framer-motion";
 
 function useInView(threshold = 0.1) {
   const ref = useRef(null);
@@ -95,13 +96,21 @@ export default function Contact() {
         <div className={`transition-[opacity,transform] duration-600 ease-snappy delay-150 ${bodyInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <p className={`text-[11px] tracking-[0.35em] uppercase mb-6 ${muted}`}>Find Me</p>
           <ul className="space-y-5">
-            {socials.map(({ label, handle, href }) => (
-              <li key={label}>
-                <a
+            {socials.map(({ label, handle, href }, i) => (
+              <motion.li
+                key={label}
+                initial={{ opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08, ease: [0.23, 1, 0.32, 1] }}
+              >
+                <motion.a
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between group"
+                  whileHover={{ x: 4 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 >
                   <span className={`text-[13px] tracking-[0.1em] uppercase ${muted}`}>{label}</span>
                   <span className={`text-[15px] flex items-center gap-2 transition-colors duration-300 ${dark ? "text-white/60 group-hover:text-[#E8D5B7]" : "text-black/55 group-hover:text-[#6B4F2A]"}`}>
@@ -110,9 +119,9 @@ export default function Contact() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
                     </svg>
                   </span>
-                </a>
+                </motion.a>
                 <div className={`mt-5 h-px ${dark ? "bg-white/8" : "bg-black/8"}`} />
-              </li>
+              </motion.li>
             ))}
           </ul>
         </div>

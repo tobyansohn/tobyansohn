@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import { useTheme } from "../context/ThemeContext.jsx";
@@ -210,15 +211,17 @@ const skills = [
 ];
 
 function ProjectCard({ project, index, dark }) {
-  const [ref, inView] = useInView();
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div
-        ref={ref}
+      <motion.div
         onClick={() => setOpen(true)}
-        className={`group border-b py-10 cursor-pointer transition-[opacity,transform] duration-700 ease-snappy ${dark ? "border-white/8" : "border-[#b0a090]"} ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-        style={{ transitionDelay: `${index * 80}ms` }}
+        className={`group border-b py-10 cursor-pointer ${dark ? "border-white/8" : "border-[#b0a090]"}`}
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.5, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
+        whileHover={{ x: 6, transition: { type: "spring", stiffness: 340, damping: 30 } }}
       >
         <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12">
           <span className={`text-[11px] tracking-[0.3em] uppercase shrink-0 pt-1 md:w-16 ${dark ? "text-white/25" : "text-[#7a6a5a]"}`}>{project.year}</span>
@@ -242,7 +245,7 @@ function ProjectCard({ project, index, dark }) {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
       {open && <ProjectModal project={project} onClose={() => setOpen(false)} dark={dark} />}
     </>
   );

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
+import { motion } from "framer-motion";
 
 const links = [
   { to: "/", label: "Home" },
@@ -78,7 +79,7 @@ export default function Navbar() {
                 {({ isActive }) => (
                   <>
                     {label}
-                    {isActive && <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${dotColor}`} />}
+                    {isActive && <motion.span layoutId="nav-dot" className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${dotColor}`} transition={{ type: "spring", stiffness: 400, damping: 30 }} />}
                   </>
                 )}
               </NavLink>

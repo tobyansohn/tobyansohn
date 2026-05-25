@@ -182,31 +182,46 @@ export default function Home() {
             </div>
           </div>
 
-          <div
-            className={`transition-[opacity,transform] duration-600 ease-snappy ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-            style={{ transitionDelay: "200ms" }}
-          >
-            {/* Row 1: featured wide + small */}
+          <div>
+            {/* Row 1 */}
             <div className="grid grid-cols-2 sm:grid-cols-[2fr_1fr] gap-4 mb-4">
-              <div className={`p-8 rounded-2xl border flex flex-col justify-between min-h-[140px] ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
-                <p className={`font-display text-[clamp(3rem,5vw,4rem)] leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>3+</p>
-                <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>Years Coding</p>
-              </div>
-              <div className={`p-6 rounded-2xl border flex flex-col justify-between min-h-[140px] ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
-                <p className={`font-display text-4xl leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>4</p>
-                <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>Videos Made</p>
-              </div>
+              {[
+                { val: "3+", label: "Years Coding", p: "p-8", h: "min-h-[140px]", size: "text-[clamp(3rem,5vw,4rem)]" },
+                { val: "4",  label: "Videos Made",  p: "p-6", h: "min-h-[140px]", size: "text-4xl" },
+              ].map((s, i) => (
+                <motion.div
+                  key={s.label}
+                  className={`${s.p} rounded-2xl border flex flex-col justify-between ${s.h} ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.5, delay: i * 0.1, ease: [0.23, 1, 0.32, 1] }}
+                  whileHover={{ y: -3, transition: { type: "spring", stiffness: 340, damping: 28 } }}
+                >
+                  <p className={`font-display ${s.size} leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{s.val}</p>
+                  <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>{s.label}</p>
+                </motion.div>
+              ))}
             </div>
-            {/* Row 2: small + featured wide (flipped ratio) */}
+            {/* Row 2 */}
             <div className="grid grid-cols-2 sm:grid-cols-[1fr_2fr] gap-4">
-              <div className={`p-6 rounded-2xl border flex flex-col justify-between min-h-[120px] ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
-                <p className={`font-display text-4xl leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{allPhotoSrcs.length}+</p>
-                <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>Photos Shot</p>
-              </div>
-              <div className={`p-8 rounded-2xl border flex flex-col justify-between min-h-[120px] ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}>
-                <p className={`font-display text-[clamp(2.5rem,4vw,3.5rem)] leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>∞</p>
-                <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>Coffee Consumed</p>
-              </div>
+              {[
+                { val: `${allPhotoSrcs.length}+`, label: "Photos Shot",      p: "p-6", h: "min-h-[120px]", size: "text-4xl" },
+                { val: "∞",                       label: "Coffee Consumed",  p: "p-8", h: "min-h-[120px]", size: "text-[clamp(2.5rem,4vw,3.5rem)]" },
+              ].map((s, i) => (
+                <motion.div
+                  key={s.label}
+                  className={`${s.p} rounded-2xl border flex flex-col justify-between ${s.h} ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.5, delay: 0.2 + i * 0.1, ease: [0.23, 1, 0.32, 1] }}
+                  whileHover={{ y: -3, transition: { type: "spring", stiffness: 340, damping: 28 } }}
+                >
+                  <p className={`font-display ${s.size} leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{s.val}</p>
+                  <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>{s.label}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
@@ -224,13 +239,24 @@ export default function Home() {
           </Link>
         </div>
         <div className="-mx-6 md:-mx-16 overflow-hidden">
-          <div className="flex gap-3 animate-marquee marquee-track w-max pl-6 md:pl-16">
+          <motion.div
+            className="flex gap-3 w-max pl-6 md:pl-16"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+            whileHover={{ animationPlayState: "paused" }}
+          >
             {[...previewPhotos, ...previewPhotos].map((src, i) => (
-              <Link key={i} to="/photography" className="flex-shrink-0 h-64 overflow-hidden rounded-xl cursor-pointer">
-                <img src={optimizeImage(src, 600)} alt="" className="h-full w-auto object-cover transition-transform duration-300 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:hover:scale-105" loading="lazy" />
+              <Link key={i} to="/photography" className="flex-shrink-0 h-64 overflow-hidden rounded-xl cursor-pointer group">
+                <motion.img
+                  src={optimizeImage(src, 600)} alt=""
+                  className="h-full w-auto object-cover"
+                  whileHover={{ scale: 1.06 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 32 }}
+                  loading="lazy"
+                />
               </Link>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
