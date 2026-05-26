@@ -158,6 +158,21 @@ function TravelMap({ dark }) {
 
 const projects = [
   {
+    title: "Agent Command Center",
+    year: "2025",
+    status: "Live",
+    description: "RPG-themed desktop command center where Claude agents live as pixel-art characters in a fantasy world. Talk to Claude (the Oracle), who collaborates with specialist agents behind the scenes — each with a Pokémon identity, room, and role.",
+    highlights: [
+      "Six Claude agents with distinct personalities, sprites, and tool-use capabilities",
+      "Oracle orchestrates parallel specialist consultations with mid-task clarifications",
+      "Hermes (Metagross) auto-logs significant interactions to an Obsidian-compatible Library",
+      "8-directional pixel-art walk cycles across a procedurally roaming world map",
+    ],
+    tags: ["Electron", "Claude API", "Tool Use", "Pixel Art"],
+    link: "https://github.com/tobyansohn/Agent-Command-Center",
+    liveUrl: null,
+  },
+  {
     title: "Socials Dashboard",
     year: "2025",
     status: "In Progress",
