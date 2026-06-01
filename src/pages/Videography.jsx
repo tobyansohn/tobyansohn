@@ -114,12 +114,12 @@ function GridCard({ project, index, dark, onClick }) {
           <p className="text-white/70 text-[12px] leading-relaxed">{project.desc}</p>
         </motion.div>
       </div>
-      <h3 className={`font-display text-lg mb-2 transition-colors duration-300 ${dark ? (hovered ? "text-[#E8D5B7]" : "text-white") : (hovered ? "text-[#6B4F2A]" : "text-[#1a1a1a]")}`}>
+      <h3 className={`font-display text-lg mb-2 transition-colors duration-300 ${dark ? (hovered ? "text-[#E8B257]" : "text-white") : (hovered ? "text-[#2D4A2B]" : "text-[#2A2014]")}`}>
         {project.title}
       </h3>
       <div className="flex flex-wrap gap-2">
         {project.tags.map(tag => (
-          <span key={tag} className={`px-2 py-1 rounded border text-[10px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/30" : "border-black/10 text-[#5a4a3a]"}`}>{tag}</span>
+          <span key={tag} className={`px-2 py-1 rounded border text-[10px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/30" : "border-black/10 text-[#5A4A36]"}`}>{tag}</span>
         ))}
       </div>
     </motion.div>
@@ -136,13 +136,13 @@ function ListRow({ project, index, dark, onClick }) {
       onClick={onClick}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      className={`group cursor-pointer flex items-center gap-5 py-4 border-b ${dark ? "border-white/8 hover:border-white/20" : "border-[#b0a090] hover:border-[#8a7060]"}`}
+      className={`group cursor-pointer flex items-center gap-5 py-4 border-b ${dark ? "border-white/8 hover:border-white/20" : "border-[#C8B996] hover:border-[#A89770]"}`}
       initial={{ opacity: 0, x: -16 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: index * 0.07, ease: [0.23, 1, 0.32, 1] }}
     >
-      <span className={`text-[11px] tabular-nums w-6 shrink-0 ${dark ? "text-white/20" : "text-[#9a8a7a]"}`}>{String(index + 1).padStart(2, "0")}</span>
+      <span className={`text-[11px] tabular-nums w-6 shrink-0 ${dark ? "text-white/20" : "text-[#9A8A70]"}`}>{String(index + 1).padStart(2, "0")}</span>
       <div className="relative w-28 aspect-video rounded-lg overflow-hidden shrink-0 bg-stone-800">
         <motion.img
           src={thumb}
@@ -156,14 +156,14 @@ function ListRow({ project, index, dark, onClick }) {
         </div>
       </div>
       <div className="flex-1 min-w-0">
-        <h3 className={`font-display text-base truncate transition-colors duration-200 ${dark ? (hovered ? "text-[#E8D5B7]" : "text-white/85") : (hovered ? "text-[#6B4F2A]" : "text-[#1a1a1a]")}`}>
+        <h3 className={`font-display text-base truncate transition-colors duration-200 ${dark ? (hovered ? "text-[#E8B257]" : "text-white/85") : (hovered ? "text-[#2D4A2B]" : "text-[#2A2014]")}`}>
           {project.title}
         </h3>
-        <p className={`text-[12px] mt-0.5 truncate ${dark ? "text-white/30" : "text-[#9a8a7a]"}`}>{project.desc}</p>
+        <p className={`text-[12px] mt-0.5 truncate ${dark ? "text-white/30" : "text-[#9A8A70]"}`}>{project.desc}</p>
       </div>
       <div className="hidden sm:flex gap-2 shrink-0">
         {project.tags.map(tag => (
-          <span key={tag} className={`px-2 py-1 rounded border text-[9px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/25" : "border-black/10 text-[#9a8a7a]"}`}>{tag}</span>
+          <span key={tag} className={`px-2 py-1 rounded border text-[9px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/25" : "border-black/10 text-[#9A8A70]"}`}>{tag}</span>
         ))}
       </div>
       <motion.svg
@@ -182,7 +182,7 @@ function ListRow({ project, index, dark, onClick }) {
 function FeaturedHero({ project, dark }) {
   const [playing, setPlaying] = useState(false);
   const thumb = `https://i.ytimg.com/vi/${project.id}/maxresdefault.jpg`;
-  const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
+  const muted = dark ? "text-white/30" : "text-[#5A4A36]";
 
   return (
     <div className="mb-6">
@@ -214,12 +214,12 @@ function FeaturedHero({ project, dark }) {
       </div>
       <div className="mt-4 flex items-start justify-between gap-4">
         <div>
-          <h2 className={`font-display text-2xl ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{project.title}</h2>
+          <h2 className={`font-display text-2xl ${dark ? "text-white" : "text-[#2A2014]"}`}>{project.title}</h2>
           <p className={`text-[13px] mt-1 ${muted}`}>{project.desc}</p>
         </div>
         <div className="flex gap-2 shrink-0">
           {project.tags.map(tag => (
-            <span key={tag} className={`px-2 py-1 rounded border text-[10px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/30" : "border-black/10 text-[#5a4a3a]"}`}>{tag}</span>
+            <span key={tag} className={`px-2 py-1 rounded border text-[10px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/30" : "border-black/10 text-[#5A4A36]"}`}>{tag}</span>
           ))}
         </div>
       </div>
@@ -234,15 +234,15 @@ export default function Videography() {
   const [gearOpen, setGearOpen]     = useState(false);
   const [selected, setSelected]     = useState(null);
 
-  const muted        = dark ? "text-white/30"  : "text-[#5a4a3a]";
-  const body         = dark ? "text-white/45"  : "text-[#3a3a3a]";
-  const heading      = dark ? "text-white"     : "text-[#1a1a1a]";
-  const headingFaded = dark ? "text-white/30"  : "text-[#7a6a5a]";
-  const border       = dark ? "border-white/8" : "border-[#b0a090]";
+  const muted        = dark ? "text-white/30"  : "text-[#5A4A36]";
+  const body         = dark ? "text-white/45"  : "text-[#3D2F1F]";
+  const heading      = dark ? "text-white"     : "text-[#2A2014]";
+  const headingFaded = dark ? "text-white/30"  : "text-[#7A6B53]";
+  const border       = dark ? "border-white/8" : "border-[#C8B996]";
 
   const pillBase     = "px-3 py-1 rounded-full text-[10px] tracking-[0.1em] uppercase transition-[color,transform] duration-150 ease-snappy border";
-  const pillActive   = dark ? "bg-white text-[#080808] border-white" : "bg-[#1a1a1a] text-white border-[#1a1a1a]";
-  const pillInactive = dark ? "border-white/10 text-white/35 hover:border-white/25 hover:text-white/60" : "border-black/10 text-[#5a4a3a] hover:border-black/25 hover:text-[#1a1a1a]";
+  const pillActive   = dark ? "bg-white text-[#0E1812] border-white" : "bg-[#2A2014] text-white border-[#2A2014]";
+  const pillInactive = dark ? "border-white/10 text-white/35 hover:border-white/25 hover:text-white/60" : "border-black/10 text-[#5A4A36] hover:border-black/25 hover:text-[#2A2014]";
 
   const featured = projects[0];
   const rest      = projects.slice(1);
@@ -276,7 +276,7 @@ export default function Videography() {
         href="https://www.youtube.com/@1tobyan"
         target="_blank"
         rel="noopener noreferrer"
-        className={`mb-16 mt-2 inline-flex items-center gap-2 text-[12px] tracking-[0.15em] uppercase transition-[opacity,transform] duration-200 ease-snappy ${dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]"}`}
+        className={`mb-16 mt-2 inline-flex items-center gap-2 text-[12px] tracking-[0.15em] uppercase transition-[opacity,transform] duration-200 ease-snappy ${dark ? "text-white/30 hover:text-white/70" : "text-[#5A4A36] hover:text-[#2A2014]"}`}
       >
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
         View full channel @1tobyan
@@ -294,7 +294,7 @@ export default function Videography() {
         <div className={`flex items-center rounded-lg border overflow-hidden ${border}`}>
           <button
             onClick={() => setView("grid")}
-            className={`px-3 py-2 transition-colors duration-200 ${view === "grid" ? (dark ? "bg-white/10 text-white" : "bg-black/8 text-[#1a1a1a]") : (dark ? "text-white/30 hover:text-white/60" : "text-[#9a8a7a] hover:text-[#3a3a3a]")}`}
+            className={`px-3 py-2 transition-colors duration-200 ${view === "grid" ? (dark ? "bg-white/10 text-white" : "bg-black/8 text-[#2A2014]") : (dark ? "text-white/30 hover:text-white/60" : "text-[#9A8A70] hover:text-[#3D2F1F]")}`}
             aria-label="Grid view"
           >
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 16 16">
@@ -304,7 +304,7 @@ export default function Videography() {
           </button>
           <button
             onClick={() => setView("list")}
-            className={`px-3 py-2 transition-colors duration-200 ${view === "list" ? (dark ? "bg-white/10 text-white" : "bg-black/8 text-[#1a1a1a]") : (dark ? "text-white/30 hover:text-white/60" : "text-[#9a8a7a] hover:text-[#3a3a3a]")}`}
+            className={`px-3 py-2 transition-colors duration-200 ${view === "list" ? (dark ? "bg-white/10 text-white" : "bg-black/8 text-[#2A2014]") : (dark ? "text-white/30 hover:text-white/60" : "text-[#9A8A70] hover:text-[#3D2F1F]")}`}
             aria-label="List view"
           >
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 16 16">
@@ -340,7 +340,7 @@ export default function Videography() {
       <div>
         <button
           onClick={() => setGearOpen(o => !o)}
-          className={`w-full flex items-center justify-between py-4 border-t transition-colors duration-200 group ${border} ${dark ? "hover:border-white/20" : "hover:border-[#8a7060]"}`}
+          className={`w-full flex items-center justify-between py-4 border-t transition-colors duration-200 group ${border} ${dark ? "hover:border-white/20" : "hover:border-[#A89770]"}`}
         >
           <span className={`text-[11px] tracking-[0.35em] uppercase ${muted}`}>My Gear</span>
           <motion.svg
@@ -365,7 +365,7 @@ export default function Videography() {
             {gear.map(({ name, type }, i) => (
               <motion.div
                 key={name}
-                className={`p-5 rounded-xl border ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}
+                className={`p-5 rounded-xl border ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#C8B996] bg-[#E0D5BA]"}`}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.3, ease: [0.23, 1, 0.32, 1] } }}
               >

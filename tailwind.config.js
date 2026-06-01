@@ -4,13 +4,17 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ["'Cormorant Garamond'", "Georgia", "serif"],
-        body: ["'DM Sans'", "system-ui", "sans-serif"],
-        name: ["'Space Grotesk'", "Arial", "sans-serif"],
+        display: ["'Fraunces'", "Georgia", "serif"],
+        body: ["'Manrope'", "system-ui", "sans-serif"],
+        name: ["'Fraunces'", "Georgia", "serif"],
       },
       colors: {
-        cream: "#E8D5B7",
-        "cream-dark": "#C4A882",
+        // Honey/amber accent (dark mode) — golden-hour tone
+        honey: "#E8B257",
+        "honey-dark": "#C9913B",
+        // Forest accent (light mode) — pairs with the dark-mode base
+        forest: "#2D4A2B",
+        "forest-dark": "#1F3320",
       },
       animation: {
         marquee: "marquee 45s linear infinite",

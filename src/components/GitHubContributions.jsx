@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 
 const LEVELS_DARK = [
   "bg-white/[0.06]",
-  "bg-[#E8D5B7]/25",
-  "bg-[#E8D5B7]/50",
-  "bg-[#E8D5B7]/75",
-  "bg-[#E8D5B7]",
+  "bg-[#E8B257]/25",
+  "bg-[#E8B257]/50",
+  "bg-[#E8B257]/75",
+  "bg-[#E8B257]",
 ];
 const LEVELS_LIGHT = [
-  "bg-[#6B4F2A]/[0.07]",
-  "bg-[#6B4F2A]/25",
-  "bg-[#6B4F2A]/50",
-  "bg-[#6B4F2A]/75",
-  "bg-[#6B4F2A]",
+  "bg-[#2D4A2B]/[0.07]",
+  "bg-[#2D4A2B]/25",
+  "bg-[#2D4A2B]/50",
+  "bg-[#2D4A2B]/75",
+  "bg-[#2D4A2B]",
 ];
 
 export default function GitHubContributions({ dark }) {
@@ -39,7 +39,7 @@ export default function GitHubContributions({ dark }) {
   }, []);
 
   const levels = dark ? LEVELS_DARK : LEVELS_LIGHT;
-  const muted = dark ? "text-white/25" : "text-[#9a8a7a]";
+  const muted = dark ? "text-white/25" : "text-[#9A8A70]";
 
   if (loading) {
     return (
@@ -62,7 +62,7 @@ export default function GitHubContributions({ dark }) {
           href="https://github.com/tobyansohn"
           target="_blank"
           rel="noopener noreferrer"
-          className={`text-[10px] tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/25 hover:text-[#E8D5B7]" : "text-[#9a8a7a] hover:text-[#6B4F2A]"}`}
+          className={`text-[10px] tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/25 hover:text-[#E8B257]" : "text-[#9A8A70] hover:text-[#2D4A2B]"}`}
         >
           View on GitHub →
         </a>

@@ -3,14 +3,14 @@ import { useTheme } from "../context/ThemeContext.jsx";
 
 export default function Footer() {
   const { dark } = useTheme();
-  const muted = dark ? "text-white/30 hover:text-white/70" : "text-[#5a4a3a] hover:text-[#1a1a1a]";
-  const icon  = dark ? "text-white/25 hover:text-white/60" : "text-[#9a8a7a] hover:text-[#1a1a1a]";
+  const muted = dark ? "text-white/30 hover:text-white/70" : "text-[#5A4A36] hover:text-[#2A2014]";
+  const icon  = dark ? "text-white/25 hover:text-white/60" : "text-[#9A8A70] hover:text-[#2A2014]";
 
   return (
     <footer className={`px-6 md:px-16 py-8 border-t ${dark ? "border-white/8" : "border-black/8"}`}>
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-5">
         <div className="flex items-center gap-6 flex-wrap">
-          <p className={`font-display text-base ${dark ? "text-white/40" : "text-[#5a4a3a]"}`}>Tobyan Sohn</p>
+          <p className={`font-display text-base ${dark ? "text-white/40" : "text-[#5A4A36]"}`}>Tobyan Sohn</p>
           <div className={`hidden sm:block w-px h-3 ${dark ? "bg-white/15" : "bg-black/15"}`} />
           <Link to="/developer"   className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Dev</Link>
           <Link to="/photography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Photography</Link>
@@ -44,7 +44,7 @@ export default function Footer() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
             </svg>
           </a>
-          <p className={`text-[11px] tracking-[0.1em] ${dark ? "text-white/20" : "text-[#9a8a7a]"}`}>© {new Date().getFullYear()}</p>
+          <p className={`text-[11px] tracking-[0.1em] ${dark ? "text-white/20" : "text-[#9A8A70]"}`}>© {new Date().getFullYear()}</p>
         </div>
       </div>
     </footer>

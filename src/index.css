@@ -10,6 +10,19 @@
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
+/* Give Fraunces its playful character on large display text — variable axes
+   for warmth (SOFT) and a touch of mischief (WONK), at the largest optical
+   size. Smaller .font-display uses still get a softer feel via base settings. */
+.font-display {
+  font-variation-settings: "opsz" 48, "SOFT" 50, "WONK" 0;
+  font-feature-settings: "ss01" on;
+}
+h1.font-display,
+h2.font-display {
+  font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 1;
+  letter-spacing: -0.015em;
+}
+
 * {
   cursor: none !important;
 }
@@ -29,9 +42,9 @@ html {
 
 .travel-tooltip {
   background: rgba(8,8,8,0.85) !important;
-  border: 1px solid rgba(232,213,183,0.2) !important;
+  border: 1px solid rgba(232,178,87,0.2) !important;
   border-radius: 6px !important;
-  color: #E8D5B7 !important;
+  color: #E8B257 !important;
   font-family: inherit !important;
   font-size: 11px !important;
   letter-spacing: 0.08em !important;
@@ -44,12 +57,12 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #080808;
+  background-color: #0E1812;
 }
 
 ::selection {
-  background-color: rgba(232, 213, 183, 0.2);
-  color: #E8D5B7;
+  background-color: rgba(232, 178, 87, 0.2);
+  color: #E8B257;
 }
 
 /* Smooth scrollbar on webkit */
@@ -57,14 +70,14 @@ body {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #080808;
+  background: #0E1812;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(232, 213, 183, 0.3);
+  background: rgba(232, 178, 87, 0.3);
 }
 
 /* Press feedback — scale(0.97) on active for pill buttons */

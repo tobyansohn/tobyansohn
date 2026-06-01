@@ -240,31 +240,31 @@ export default function Photography() {
         return true;
       });
 
-  const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
-  const body  = dark ? "text-white/45" : "text-[#3a3a3a]";
+  const muted = dark ? "text-white/30" : "text-[#5A4A36]";
+  const body  = dark ? "text-white/45" : "text-[#3D2F1F]";
 
   const pillBase = "px-4 py-2 rounded-full text-[12px] tracking-[0.1em] uppercase transition-colors duration-200";
-  const pillActive = dark ? "bg-white text-[#080808]" : "bg-[#1a1a1a] text-white";
+  const pillActive = dark ? "bg-white text-[#0E1812]" : "bg-[#2A2014] text-white";
   const pillInactive = dark
     ? "border border-white/15 text-white/40 hover:text-white/70 hover:border-white/30"
-    : "border border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30";
+    : "border border-black/15 text-[#4A3D2D] hover:text-black/70 hover:border-black/30";
 
   const subPillBase = "px-3 py-1 rounded-md text-[11px] tracking-[0.08em] transition-colors duration-200";
   const subPillActive = dark
-    ? "bg-[#E8D5B7]/15 text-[#E8D5B7] border border-[#E8D5B7]/30"
-    : "bg-[#6B4F2A]/10 text-[#6B4F2A] border border-[#6B4F2A]/30";
+    ? "bg-[#E8B257]/15 text-[#E8B257] border border-[#E8B257]/30"
+    : "bg-[#2D4A2B]/10 text-[#2D4A2B] border border-[#2D4A2B]/30";
   const subPillInactive = dark
     ? "border border-white/10 text-white/35 hover:text-white/65 hover:border-white/25 hover:bg-white/5"
-    : "border border-black/10 text-[#5a4a3a] hover:text-[#1a1a1a] hover:border-black/20 hover:bg-black/5";
+    : "border border-black/10 text-[#5A4A36] hover:text-[#2A2014] hover:border-black/20 hover:bg-black/5";
 
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-7xl mx-auto">
       <div ref={headerRef} className="mb-16">
         <div className={`transition-[opacity,transform] duration-600 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Photography</span>
-          <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>
+          <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${dark ? "text-white" : "text-[#2A2014]"}`}>
             The world through<br />
-            <span className={dark ? "text-white/30" : "text-[#7a6a5a]"}>my lens.</span>
+            <span className={dark ? "text-white/30" : "text-[#7A6B53]"}>my lens.</span>
           </h1>
           <p className={`max-w-lg text-[15px] leading-relaxed ${body}`}>
             I love the opportunity to capture everywhere I go, whether it's at home or on the go.
@@ -290,7 +290,7 @@ export default function Photography() {
       {/* Sub-category pills */}
       {subCategories.length > 0 ? (
         <div className={`mb-10 pl-4 border-l-2 ${dark ? "border-white/10" : "border-black/10"}`}>
-          <p className={`text-[10px] tracking-[0.25em] uppercase mb-2.5 ${dark ? "text-white/25" : "text-[#9a8a7a]"}`}>
+          <p className={`text-[10px] tracking-[0.25em] uppercase mb-2.5 ${dark ? "text-white/25" : "text-[#9A8A70]"}`}>
             {activeCategory}
           </p>
           <div className="flex flex-wrap gap-2">

@@ -25,7 +25,7 @@ export default function WaterBackground({ dark }) {
     initCanvas();
 
     const C = dark ? {
-      ripple: [232, 213, 183],
+      ripple: [232, 178, 87],
       large:  [210, 185, 148],
       small:  [240, 220, 190],
     } : {

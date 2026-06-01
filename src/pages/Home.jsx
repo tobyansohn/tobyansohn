@@ -36,8 +36,8 @@ function NowItem({ label, value }) {
   const { dark } = useTheme();
   return (
     <span className="flex items-center gap-2">
-      <span className={`text-[10px] tracking-[0.2em] uppercase ${dark ? "text-white/25" : "text-[#9a8a7a]"}`}>{label}</span>
-      <span className={`text-[13px] ${dark ? "text-white/55" : "text-[#3a3a3a]"}`}>{value}</span>
+      <span className={`text-[10px] tracking-[0.2em] uppercase ${dark ? "text-white/25" : "text-[#9A8A70]"}`}>{label}</span>
+      <span className={`text-[13px] ${dark ? "text-white/55" : "text-[#3D2F1F]"}`}>{value}</span>
     </span>
   );
 }
@@ -61,12 +61,12 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const muted = dark ? "text-white/45" : "text-[#3a3a3a]";
-  const superMuted = dark ? "text-white/30" : "text-[#5a4a3a]";
-  const accent = dark ? "text-[#E8D5B7]" : "text-[#6B4F2A]";
-  const accentBg = dark ? "bg-white" : "bg-[#1a1a1a]";
-  const accentText = dark ? "text-[#080808]" : "text-white";
-  const accentHover = dark ? "hover:bg-[#E8D5B7]" : "hover:bg-[#3a3a3a]";
+  const muted = dark ? "text-white/45" : "text-[#3D2F1F]";
+  const superMuted = dark ? "text-white/30" : "text-[#5A4A36]";
+  const accent = dark ? "text-[#E8B257]" : "text-[#2D4A2B]";
+  const accentBg = dark ? "bg-white" : "bg-[#2A2014]";
+  const accentText = dark ? "text-[#0E1812]" : "text-white";
+  const accentHover = dark ? "hover:bg-[#E8B257]" : "hover:bg-[#3D2F1F]";
   const borderBtn = dark ? "border-white/20 text-white hover:border-white/50" : "border-black/20 text-black/70 hover:border-black/50";
 
   return (
@@ -87,10 +87,10 @@ export default function Home() {
             className="w-full h-full object-cover object-center"
           />
           <div className={`absolute inset-0 ${dark
-            ? "bg-gradient-to-r from-[#080808] from-[45%] via-[#080808]/80 to-[#080808]/40"
-            : "bg-gradient-to-r from-[#F5F2ED] from-[45%] via-[#F5F2ED]/80 to-[#F5F2ED]/40"
+            ? "bg-gradient-to-r from-[#0E1812] from-[45%] via-[#0E1812]/80 to-[#0E1812]/40"
+            : "bg-gradient-to-r from-[#EFE6D2] from-[45%] via-[#EFE6D2]/80 to-[#EFE6D2]/40"
           }`} />
-          <div className={`absolute inset-0 ${dark ? "bg-[#080808]/30" : "bg-[#F5F2ED]/20"}`} />
+          <div className={`absolute inset-0 ${dark ? "bg-[#0E1812]/30" : "bg-[#EFE6D2]/20"}`} />
         </div>
         <div className={`absolute inset-0 opacity-[0.02] ${dark ? "" : "invert"}`}
           style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)`, backgroundSize: "80px 80px" }}
@@ -98,22 +98,20 @@ export default function Home() {
 
         <div className="relative max-w-6xl mx-auto w-full">
           <div className={`flex items-center gap-3 mb-10 transition-[opacity,transform] duration-700 ease-snappy ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "100ms" }}>
-            <div className="w-6 h-px bg-[#E8D5B7]/60" />
-            <span className={`text-[11px] tracking-[0.35em] uppercase ${dark ? "text-[#E8D5B7]/60" : "text-[#6B4F2A]/70"}`}>Welcome!</span>
+            <div className="w-6 h-px bg-[#E8B257]/60" />
+            <span className={`text-[11px] tracking-[0.35em] uppercase ${dark ? "text-[#E8B257]/60" : "text-[#2D4A2B]/70"}`}>Welcome!</span>
           </div>
 
-          <div className="overflow-hidden mb-4">
-            <h1 className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-[opacity,transform] duration-700 ease-snappy ${dark ? "text-white" : "text-[#1a1a1a]"} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "200ms" }}>
-              Hi, I'm Toby.
-            </h1>
-          </div>
+          <h1 className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[1.05] tracking-tight pb-[0.05em] mb-4 transition-[opacity,transform] duration-700 ease-snappy ${dark ? "text-white" : "text-[#2A2014]"} ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`} style={{ transitionDelay: "200ms" }}>
+            Hi, I'm Toby.
+          </h1>
 
           <div className="mb-12 min-h-[5rem] md:min-h-[10rem]">
             <p className={`font-display text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-tight transition-[opacity,transform] duration-700 ease-snappy ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full"}`} style={{ transitionDelay: "350ms" }}>
               <AnimatePresence mode="wait">
                 <motion.span
                   key={roleIndex}
-                  className="bg-gradient-to-r from-[#E8D5B7] to-[#C4A882] bg-clip-text text-transparent inline-block"
+                  className={`bg-gradient-to-r bg-clip-text text-transparent inline-block ${dark ? "from-[#E8B257] to-[#C9913B]" : "from-[#2D4A2B] to-[#1F3320]"}`}
                   style={{ paddingBottom: '0.2em' }}
                   initial={{ opacity: 0, filter: "blur(8px)", y: 8 }}
                   animate={{ opacity: 1, filter: "blur(0px)", y: 0, transition: { duration: 0.42, ease: [0.23, 1, 0.32, 1] } }}
@@ -129,12 +127,52 @@ export default function Home() {
             <p className={`max-w-md text-[15px] leading-relaxed font-body ${muted}`}>
               Hi, I'm Toby! A 24 yo creative and software developer based in Austin, TX. Currently, I work at Visa full time, and primarily shoot photos and videos for my church, Lifeway ATX.
             </p>
-            <div className="flex gap-4 md:ml-auto">
-              <Link to="/developer" className={`btn-press px-6 py-3 rounded-full text-[13px] tracking-[0.1em] uppercase font-medium ${accentBg} ${accentText} ${accentHover}`}>
-                See My Work
+            <div className="flex flex-wrap gap-4 md:ml-auto items-center">
+              {/* Primary CTA — sticker-pill, slight tilt, italic Fraunces, nested arrow island */}
+              <Link
+                to="/developer"
+                className={`group relative inline-flex items-center gap-3 pl-7 pr-2 py-2 rounded-full font-display italic text-[17px] leading-none active:scale-[0.97] -rotate-[2deg] hover:rotate-0 hover:-translate-y-0.5 transition-[transform,box-shadow,background-color] duration-500 ${
+                  dark
+                    ? "bg-[#E8B257] text-[#0E1812] shadow-[0_10px_28px_-10px_rgba(232,178,87,0.55)] hover:shadow-[0_14px_36px_-10px_rgba(232,178,87,0.65)]"
+                    : "bg-[#2D4A2B] text-[#EFE6D2] shadow-[0_10px_28px_-10px_rgba(45,74,43,0.45)] hover:shadow-[0_14px_36px_-10px_rgba(45,74,43,0.55)]"
+                }`}
+                style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}
+              >
+                <span style={{ fontVariationSettings: '"opsz" 24, "SOFT" 80, "WONK" 1' }}>See my work</span>
+                <span
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:rotate-45 group-hover:scale-110 ${
+                    dark ? "bg-[#0E1812]/15" : "bg-[#EFE6D2]/25"
+                  }`}
+                  style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H8M17 7v9" />
+                  </svg>
+                </span>
               </Link>
-              <Link to="/contact" className={`btn-press px-6 py-3 rounded-full border text-[13px] tracking-[0.1em] uppercase ${borderBtn}`}>
-                Get In Touch
+
+              {/* Secondary CTA — tilted opposite, glass ring, sparkle that wiggles */}
+              <Link
+                to="/contact"
+                className={`group relative inline-flex items-center gap-3 pl-7 pr-2 py-2 rounded-full font-display italic text-[17px] leading-none active:scale-[0.97] rotate-[2deg] hover:rotate-0 hover:-translate-y-0.5 ring-1 backdrop-blur-sm transition-[transform,box-shadow,background-color,border-color] duration-500 ${
+                  dark
+                    ? "text-white ring-white/25 hover:ring-white/55 bg-white/[0.06] hover:bg-white/[0.12]"
+                    : "text-[#2A2014] ring-[#2A2014]/25 hover:ring-[#2A2014]/55 bg-white/40 hover:bg-white/60"
+                }`}
+                style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}
+              >
+                <span style={{ fontVariationSettings: '"opsz" 24, "SOFT" 80, "WONK" 1' }}>Say hi</span>
+                <span
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-[15deg] ${
+                    dark ? "bg-white/10" : "bg-[#2A2014]/[0.08]"
+                  }`}
+                  style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}
+                >
+                  {/* sparkle / 4-point star — playful "say hi" mark */}
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2c.4 4.6 2.4 6.6 7 7-4.6.4-6.6 2.4-7 7-.4-4.6-2.4-6.6-7-7 4.6-.4 6.6-2.4 7-7z"/>
+                  </svg>
+                </span>
               </Link>
             </div>
           </div>
@@ -171,17 +209,17 @@ export default function Home() {
           <div>
             <div className={`transition-[opacity,transform] duration-600 ease-snappy ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
               <span className={`text-[11px] tracking-[0.35em] uppercase mb-6 block ${superMuted}`}>About Me</span>
-              <h2 className={`font-display text-4xl md:text-5xl leading-tight mb-8 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>
+              <h2 className={`font-display text-4xl md:text-5xl leading-tight mb-8 ${dark ? "text-white" : "text-[#2A2014]"}`}>
                 Where has the<br />time gone?
               </h2>
               <p className={`leading-relaxed text-[15px] mb-8 ${muted}`}>
                 Over the past few years of my life, my faith has led me on a journey of capturing what God shows me. Most of my inspiration comes from the idea of capturing the experiences and moments where God has worked or is working already.
               </p>
-              <blockquote className={`relative pl-5 mb-10 border-l-2 ${dark ? "border-[#E8D5B7]/30" : "border-[#6B4F2A]/25"}`}>
-                <p className={`font-display text-[17px] leading-relaxed italic mb-2 ${dark ? "text-white/55" : "text-[#4a3a2a]"}`}>
+              <blockquote className={`relative pl-5 mb-10 border-l-2 ${dark ? "border-[#E8B257]/30" : "border-[#2D4A2B]/25"}`}>
+                <p className={`font-display text-[17px] leading-relaxed italic mb-2 ${dark ? "text-white/55" : "text-[#5A4A36]"}`}>
                   "Let this be recorded for a generation to come, so that a people yet to be created may praise the Lord."
                 </p>
-                <cite className={`not-italic text-[11px] tracking-[0.2em] uppercase ${dark ? "text-white/25" : "text-[#9a8a7a]"}`}>Psalm 102:18 ESV</cite>
+                <cite className={`not-italic text-[11px] tracking-[0.2em] uppercase ${dark ? "text-white/25" : "text-[#9A8A70]"}`}>Psalm 102:18 ESV</cite>
               </blockquote>
               <Link to="/contact" className={`inline-flex items-center gap-3 text-[13px] tracking-[0.15em] uppercase hover:gap-5 transition-[color,gap] duration-200 ease-snappy ${accent}`}>
                 Let's work together
@@ -201,14 +239,14 @@ export default function Home() {
               ].map((s, i) => (
                 <motion.div
                   key={s.label}
-                  className={`${s.p} rounded-2xl border flex flex-col justify-between ${s.h} ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}
+                  className={`${s.p} rounded-2xl border flex flex-col justify-between ${s.h} ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#C8B996] bg-[#E0D5BA]"}`}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.5, delay: i * 0.1, ease: [0.23, 1, 0.32, 1] }}
                   whileHover={{ y: -3, transition: { type: "spring", stiffness: 340, damping: 28 } }}
                 >
-                  <p className={`font-display ${s.size} leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{s.val}</p>
+                  <p className={`font-display ${s.size} leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#2A2014]"}`}>{s.val}</p>
                   <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>{s.label}</p>
                 </motion.div>
               ))}
@@ -221,14 +259,14 @@ export default function Home() {
               ].map((s, i) => (
                 <motion.div
                   key={s.label}
-                  className={`${s.p} rounded-2xl border flex flex-col justify-between ${s.h} ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#b0a090] bg-[#ede8e0]"}`}
+                  className={`${s.p} rounded-2xl border flex flex-col justify-between ${s.h} ${dark ? "border-white/8 bg-white/[0.02]" : "border-[#C8B996] bg-[#E0D5BA]"}`}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.5, delay: 0.2 + i * 0.1, ease: [0.23, 1, 0.32, 1] }}
                   whileHover={{ y: -3, transition: { type: "spring", stiffness: 340, damping: 28 } }}
                 >
-                  <p className={`font-display ${s.size} leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#1a1a1a]"}`}>{s.val}</p>
+                  <p className={`font-display ${s.size} leading-none tracking-tighter mb-2 ${dark ? "text-white" : "text-[#2A2014]"}`}>{s.val}</p>
                   <p className={`text-[11px] tracking-[0.25em] uppercase ${superMuted}`}>{s.label}</p>
                 </motion.div>
               ))}
@@ -300,7 +338,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <p className={`text-[13px] leading-tight transition-colors duration-300 ${dark ? "text-white/70 group-hover:text-white" : "text-[#3a3a3a] group-hover:text-[#6B4F2A]"}`}>{v.title}</p>
+                <p className={`text-[13px] leading-tight transition-colors duration-300 ${dark ? "text-white/70 group-hover:text-white" : "text-[#3D2F1F] group-hover:text-[#2D4A2B]"}`}>{v.title}</p>
               </a>
             ))}
           </div>

@@ -44,21 +44,21 @@ export default function Navbar() {
 
   const navBg = scrolled
     ? dark
-      ? "bg-[#080808]/90 backdrop-blur-xl border-b border-white/5"
-      : "bg-[#F5F2ED]/90 backdrop-blur-xl border-b border-[#b0a090]"
+      ? "bg-[#0E1812]/90 backdrop-blur-xl border-b border-white/5"
+      : "bg-[#EFE6D2]/90 backdrop-blur-xl border-b border-[#C8B996]"
     : "bg-transparent";
 
-  const linkActive = dark ? "text-[#E8D5B7]" : "text-[#6B4F2A]";
-  const linkInactive = dark ? "text-white/50 hover:text-white/80" : "text-[#4a4a4a] hover:text-black/70";
-  const dotColor = dark ? "bg-[#E8D5B7]" : "bg-[#6B4F2A]";
+  const linkActive = dark ? "text-[#E8B257]" : "text-[#2D4A2B]";
+  const linkInactive = dark ? "text-white/50 hover:text-white/80" : "text-[#4A3D2D] hover:text-black/70";
+  const dotColor = dark ? "bg-[#E8B257]" : "bg-[#2D4A2B]";
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500 ease-snappy ${navBg}`}>
       <nav className="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
         {/* Logo */}
         <NavLink to="/" className="group flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E8D5B7] to-[#C4A882] flex items-center justify-center">
-            <span className="text-[#080808] font-name text-xs font-bold tracking-tight">TS</span>
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E8B257] to-[#C9913B] flex items-center justify-center">
+            <span className="text-[#0E1812] font-name text-xs font-bold tracking-tight">TS</span>
           </div>
           <span className={`font-name text-sm tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/60 group-hover:text-white/90" : "text-black/50 group-hover:text-black/80"}`}>
             Tobyan Sohn
@@ -96,7 +96,7 @@ export default function Navbar() {
             className={`btn-press w-9 h-9 rounded-full border flex items-center justify-center ${
               dark
                 ? "border-white/15 text-white/50 hover:text-white hover:border-white/40"
-                : "border-black/15 text-[#4a4a4a] hover:text-black/70 hover:border-black/30"
+                : "border-black/15 text-[#4A3D2D] hover:text-black/70 hover:border-black/30"
             }`}
           >
             {dark ? <SunIcon /> : <MoonIcon />}
@@ -120,7 +120,7 @@ export default function Navbar() {
             onClick={toggle}
             aria-label="Toggle theme"
             className={`btn-press w-8 h-8 rounded-full border flex items-center justify-center ${
-              dark ? "border-white/15 text-white/50" : "border-black/15 text-[#4a4a4a]"
+              dark ? "border-white/15 text-white/50" : "border-black/15 text-[#4A3D2D]"
             }`}
           >
             {dark ? <SunIcon /> : <MoonIcon />}
@@ -138,8 +138,8 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden transition-[max-height,opacity] duration-350 ease-snappy overflow-hidden ${menuOpen ? "max-h-80 border-b opacity-100" : "max-h-0 opacity-0"} ${dark ? "border-white/5" : "border-[#b0a090]"}`}>
-        <ul className={`px-6 py-4 backdrop-blur-xl flex flex-col gap-1 ${dark ? "bg-[#0d0d0d]/95" : "bg-[#F0EDE8]/95"}`}>
+      <div className={`md:hidden transition-[max-height,opacity] duration-350 ease-snappy overflow-hidden ${menuOpen ? "max-h-80 border-b opacity-100" : "max-h-0 opacity-0"} ${dark ? "border-white/5" : "border-[#C8B996]"}`}>
+        <ul className={`px-6 py-4 backdrop-blur-xl flex flex-col gap-1 ${dark ? "bg-[#16221C]/95" : "bg-[#E6DBC0]/95"}`}>
           {links.map(({ to, label }) => (
             <li key={to}>
               <NavLink

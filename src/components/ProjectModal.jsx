@@ -9,10 +9,10 @@ export default function ProjectModal({ project, onClose, dark }) {
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, [onClose]);
 
-  const border = dark ? "border-white/10" : "border-[#b0a090]";
-  const muted = dark ? "text-white/30" : "text-[#7a6a5a]";
-  const body = dark ? "text-white/55" : "text-[#3a3a3a]";
-  const heading = dark ? "text-white" : "text-[#1a1a1a]";
+  const border = dark ? "border-white/10" : "border-[#C8B996]";
+  const muted = dark ? "text-white/30" : "text-[#7A6B53]";
+  const body = dark ? "text-white/55" : "text-[#3D2F1F]";
+  const heading = dark ? "text-white" : "text-[#2A2014]";
 
   const statusColor = project.status === "Live"
     ? "bg-emerald-400/10 text-emerald-400"
@@ -24,11 +24,11 @@ export default function ProjectModal({ project, onClose, dark }) {
       onClick={onClose}
     >
       <div
-        className={`relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border ${dark ? "bg-[#111]" : "bg-[#F0EDE8]"} ${border}`}
+        className={`relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border ${dark ? "bg-[#111]" : "bg-[#E6DBC0]"} ${border}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className={`sticky top-0 z-10 px-6 py-5 border-b flex items-start justify-between gap-4 ${dark ? "bg-[#111]" : "bg-[#F0EDE8]"} ${border}`}>
+        <div className={`sticky top-0 z-10 px-6 py-5 border-b flex items-start justify-between gap-4 ${dark ? "bg-[#111]" : "bg-[#E6DBC0]"} ${border}`}>
           <div>
             <div className="flex items-center gap-2.5 mb-1">
               <span className={`text-[9px] tracking-[0.25em] uppercase ${muted}`}>{project.year}</span>
@@ -57,7 +57,7 @@ export default function ProjectModal({ project, onClose, dark }) {
               <ul className="flex flex-col gap-3">
                 {project.highlights.map((h) => (
                   <li key={h} className="flex items-start gap-3">
-                    <span className={`mt-[7px] w-1 h-1 rounded-full flex-shrink-0 ${dark ? "bg-[#E8D5B7]/50" : "bg-[#6B4F2A]/50"}`} />
+                    <span className={`mt-[7px] w-1 h-1 rounded-full flex-shrink-0 ${dark ? "bg-[#E8B257]/50" : "bg-[#2D4A2B]/50"}`} />
                     <span className={`text-[14px] leading-relaxed ${body}`}>{h}</span>
                   </li>
                 ))}
@@ -84,7 +84,7 @@ export default function ProjectModal({ project, onClose, dark }) {
                 href={project.liveUrl}
                 target={project.liveUrl.startsWith("http") ? "_blank" : "_self"}
                 rel="noopener noreferrer"
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[11px] tracking-[0.15em] uppercase transition-all duration-300 ${dark ? "bg-white text-[#080808] hover:bg-[#E8D5B7]" : "bg-[#1a1a1a] text-white hover:bg-[#3a3a3a]"}`}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[11px] tracking-[0.15em] uppercase transition-all duration-300 ${dark ? "bg-white text-[#0E1812] hover:bg-[#E8B257]" : "bg-[#2A2014] text-white hover:bg-[#3D2F1F]"}`}
               >
                 View Live
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -96,7 +96,7 @@ export default function ProjectModal({ project, onClose, dark }) {
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center gap-1.5 text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/35 hover:text-white/70" : "text-[#7a6a5a] hover:text-[#1a1a1a]"}`}
+              className={`flex items-center gap-1.5 text-[11px] tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/35 hover:text-white/70" : "text-[#7A6B53] hover:text-[#2A2014]"}`}
             >
               GitHub
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

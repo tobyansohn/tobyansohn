@@ -33,10 +33,10 @@ export default function Contact() {
     });
   }, []);
 
-  const muted = dark ? "text-white/30" : "text-[#5a4a3a]";
-  const body = dark ? "text-white/45" : "text-[#3a3a3a]";
-  const heading = dark ? "text-white" : "text-[#1a1a1a]";
-  const headingFaded = dark ? "text-white/30" : "text-[#7a6a5a]";
+  const muted = dark ? "text-white/30" : "text-[#5A4A36]";
+  const body = dark ? "text-white/45" : "text-[#3D2F1F]";
+  const heading = dark ? "text-white" : "text-[#2A2014]";
+  const headingFaded = dark ? "text-white/30" : "text-[#7A6B53]";
 
   return (
     <main className="pt-28 pb-32 px-6 md:px-16 max-w-4xl mx-auto">
@@ -59,7 +59,7 @@ export default function Contact() {
           <div className="flex items-center gap-4 flex-wrap">
             <a
               href="mailto:tobyansohn@gmail.com"
-              className={`font-display text-3xl md:text-4xl transition-colors duration-300 ${dark ? "text-white/80 hover:text-[#E8D5B7]" : "text-[#1a1a1a] hover:text-[#6B4F2A]"}`}
+              className={`font-display text-3xl md:text-4xl transition-colors duration-300 ${dark ? "text-white/80 hover:text-[#E8B257]" : "text-[#2A2014] hover:text-[#2D4A2B]"}`}
             >
               tobyansohn@gmail.com
             </a>
@@ -68,7 +68,7 @@ export default function Contact() {
               aria-label="Copy email address"
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] tracking-[0.15em] uppercase transition-[color,border-color,opacity,transform] duration-200 ease-snappy ${
                 copied
-                  ? dark ? "border-[#E8D5B7]/40 text-[#E8D5B7]" : "border-[#6B4F2A]/40 text-[#6B4F2A]"
+                  ? dark ? "border-[#E8B257]/40 text-[#E8B257]" : "border-[#2D4A2B]/40 text-[#2D4A2B]"
                   : dark ? "border-white/15 text-white/40 hover:border-white/30 hover:text-white/70" : "border-black/15 text-black/40 hover:border-black/30 hover:text-black/70"
               }`}
             >
@@ -113,7 +113,7 @@ export default function Contact() {
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 >
                   <span className={`text-[13px] tracking-[0.1em] uppercase ${muted}`}>{label}</span>
-                  <span className={`text-[15px] flex items-center gap-2 transition-colors duration-300 ${dark ? "text-white/60 group-hover:text-[#E8D5B7]" : "text-black/55 group-hover:text-[#6B4F2A]"}`}>
+                  <span className={`text-[15px] flex items-center gap-2 transition-colors duration-300 ${dark ? "text-white/60 group-hover:text-[#E8B257]" : "text-black/55 group-hover:text-[#2D4A2B]"}`}>
                     {handle}
                     <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-px group-hover:-translate-y-px transition-[color,border-color,opacity,transform] duration-200 ease-snappy" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />

@@ -54,7 +54,7 @@ function AnimatedRoutes() {
 function ThemedApp() {
   const { dark } = useTheme();
   return (
-    <div className={`min-h-screen font-body overflow-x-hidden transition-colors duration-500 ${dark ? "bg-[#080808] text-white" : "bg-[#F5F2ED] text-[#1a1a1a]"}`}>
+    <div className={`min-h-screen font-body overflow-x-hidden transition-colors duration-500 ${dark ? "bg-[#0E1812] text-white" : "bg-[#EFE6D2] text-[#2A2014]"}`}>
       <ScrollProgress />
       <Navbar />
       <AnimatedRoutes />
