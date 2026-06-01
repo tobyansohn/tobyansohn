@@ -161,7 +161,7 @@ export default function Home() {
                   <AnimatePresence mode="popLayout">
                     <motion.img
                       key={workIdx}
-                      src={optimizeImage(previewPhotos[workIdx], 120)}
+                      src={optimizeImage(previewPhotos[workIdx], 400)}
                       alt=""
                       className="absolute inset-0 w-full h-full object-cover"
                       initial={{ opacity: 0, scale: 1.15 }}
