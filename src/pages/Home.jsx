@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { optimizeImage } from "../utils/image.js";
 import { AnimatePresence, motion } from "framer-motion";
-import WaterBackground from "../components/WaterBackground.jsx";
+// WaterBackground only renders in the About section (below the fold) — lazy so
+// its canvas code isn't in the critical-path bundle.
+const WaterBackground = lazy(() => import("../components/WaterBackground.jsx"));
 
 const allPhotosGlob = import.meta.glob('../Photos/**/*.{jpg,JPG,jpeg,JPEG,png,PNG}', { eager: true });
 const allPhotoSrcs = Object.values(allPhotosGlob).map(m => m.default);
@@ -162,7 +164,9 @@ export default function Home() {
 
       {/* About */}
       <section ref={bioRef} className="relative px-6 md:px-16 py-24 overflow-hidden">
-        <WaterBackground dark={dark} />
+        <Suspense fallback={null}>
+          {bioInView && <WaterBackground dark={dark} />}
+        </Suspense>
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 md:gap-24 items-center">
           <div>
             <div className={`transition-[opacity,transform] duration-600 ease-snappy ${bioInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
