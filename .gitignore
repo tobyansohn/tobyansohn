@@ -35,3 +35,29 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Node / Vite #
+###############
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Env files #
+#############
+.env
+.env.local
+.env.*.local
+
+# Editor / IDE #
+################
+.vscode/
+.idea/
+
+# Claude / agent tooling — local config & caches, not source #
+##############################################################
+.claude/
+.claude-flow/
+.agents/
+.cache/
+.hermes/
