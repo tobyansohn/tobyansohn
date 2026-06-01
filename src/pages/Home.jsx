@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useMemo, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { optimizeImage } from "../utils/image.js";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 // WaterBackground only renders in the About section (below the fold) — lazy so
 // its canvas code isn't in the critical-path bundle.
 const WaterBackground = lazy(() => import("../components/WaterBackground.jsx"));
@@ -45,8 +45,10 @@ function NowItem({ label, value }) {
 export default function Home() {
   const { dark } = useTheme();
   const [roleIndex, setRoleIndex] = useState(0);
+  const [workIdx, setWorkIdx] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [bioRef, bioInView] = useInView();
+  const reduceMotion = useReducedMotion();
 
   const previewPhotos = useMemo(() => {
     const shuffled = [...allPhotoSrcs].sort(() => Math.random() - 0.5);
@@ -60,6 +62,16 @@ export default function Home() {
     }, 2800);
     return () => clearInterval(interval);
   }, []);
+
+  // Cycle the photo thumbnail inside the primary CTA — the button literally
+  // becomes a tiny rotating window into Toby's photography.
+  useEffect(() => {
+    if (!previewPhotos.length || reduceMotion) return;
+    const id = setInterval(() => {
+      setWorkIdx(i => (i + 1) % previewPhotos.length);
+    }, 2400);
+    return () => clearInterval(id);
+  }, [previewPhotos.length, reduceMotion]);
 
   const muted = dark ? "text-white/45" : "text-[#3D2F1F]";
   const superMuted = dark ? "text-white/30" : "text-[#5A4A36]";
@@ -128,7 +140,8 @@ export default function Home() {
               Hi, I'm Toby! A 24 yo creative and software developer based in Austin, TX. Currently, I work at Visa full time, and primarily shoot photos and videos for my church, Lifeway ATX.
             </p>
             <div className="flex flex-wrap gap-4 md:ml-auto items-center">
-              {/* Primary CTA — sticker-pill, slight tilt, italic Fraunces, nested arrow island */}
+              {/* Primary CTA — sticker pill whose icon is a tiny cycling
+                  photo of Toby's actual work. The button IS the portfolio. */}
               <Link
                 to="/developer"
                 className={`group relative inline-flex items-center gap-3 pl-7 pr-2 py-2 rounded-full font-display italic text-[17px] leading-none active:scale-[0.97] -rotate-[2deg] hover:rotate-0 hover:-translate-y-0.5 transition-[transform,box-shadow,background-color] duration-500 ${
@@ -140,18 +153,29 @@ export default function Home() {
               >
                 <span style={{ fontVariationSettings: '"opsz" 24, "SOFT" 80, "WONK" 1' }}>See my work</span>
                 <span
-                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:rotate-45 group-hover:scale-110 ${
-                    dark ? "bg-[#0E1812]/15" : "bg-[#EFE6D2]/25"
+                  className={`relative w-9 h-9 rounded-full overflow-hidden ring-1 transition-transform duration-500 group-hover:scale-[1.18] group-hover:rotate-[8deg] ${
+                    dark ? "ring-[#0E1812]/25 bg-[#0E1812]/20" : "ring-[#EFE6D2]/40 bg-[#EFE6D2]/20"
                   }`}
                   style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H8M17 7v9" />
-                  </svg>
+                  <AnimatePresence mode="popLayout">
+                    <motion.img
+                      key={workIdx}
+                      src={optimizeImage(previewPhotos[workIdx], 120)}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover"
+                      initial={{ opacity: 0, scale: 1.15 }}
+                      animate={{ opacity: 1, scale: 1, transition: { duration: 0.55, ease: [0.32, 0.72, 0, 1] } }}
+                      exit={{ opacity: 0, transition: { duration: 0.45 } }}
+                      loading="lazy"
+                      draggable={false}
+                    />
+                  </AnimatePresence>
                 </span>
               </Link>
 
-              {/* Secondary CTA — tilted opposite, glass ring, sparkle that wiggles */}
+              {/* Secondary CTA — paper plane that flies off on hover, leaves
+                  a tiny dashed trail behind. */}
               <Link
                 to="/contact"
                 className={`group relative inline-flex items-center gap-3 pl-7 pr-2 py-2 rounded-full font-display italic text-[17px] leading-none active:scale-[0.97] rotate-[2deg] hover:rotate-0 hover:-translate-y-0.5 ring-1 backdrop-blur-sm transition-[transform,box-shadow,background-color,border-color] duration-500 ${
@@ -163,14 +187,26 @@ export default function Home() {
               >
                 <span style={{ fontVariationSettings: '"opsz" 24, "SOFT" 80, "WONK" 1' }}>Say hi</span>
                 <span
-                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-[15deg] ${
+                  className={`relative w-9 h-9 rounded-full flex items-center justify-center overflow-visible ${
                     dark ? "bg-white/10" : "bg-[#2A2014]/[0.08]"
                   }`}
-                  style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}
                 >
-                  {/* sparkle / 4-point star — playful "say hi" mark */}
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2c.4 4.6 2.4 6.6 7 7-4.6.4-6.6 2.4-7 7-.4-4.6-2.4-6.6-7-7 4.6-.4 6.6-2.4 7-7z"/>
+                  {/* dashed trail — appears as plane "takes off" */}
+                  <svg
+                    aria-hidden
+                    className="absolute right-7 top-1/2 -translate-y-1/2 w-10 h-3 opacity-0 group-hover:opacity-70 transition-opacity duration-500"
+                    viewBox="0 0 40 12"
+                    style={{ transitionDelay: "120ms" }}
+                  >
+                    <path d="M2 6 H38" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeDasharray="2 3" fill="none" />
+                  </svg>
+                  {/* paper plane */}
+                  <svg
+                    className="w-4 h-4 transition-transform duration-700 group-hover:translate-x-3 group-hover:-translate-y-1.5 group-hover:rotate-[18deg]"
+                    style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}
+                    viewBox="0 0 24 24" fill="currentColor"
+                  >
+                    <path d="M2.5 11.2 21 3l-7.2 18-2.7-7.1L2.5 11.2zm9 1.8 6.2-6.2-4 10z" />
                   </svg>
                 </span>
               </Link>
