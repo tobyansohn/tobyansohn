@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css"; // co-located so it ships with the Developer chunk only
 import { useTheme } from "../context/ThemeContext.jsx";
 import SFXLibrary from "../components/SFXLibrary.jsx";
 import GitHubContributions from "../components/GitHubContributions.jsx";

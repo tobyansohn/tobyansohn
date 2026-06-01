@@ -131,7 +131,8 @@ export default function WaterBackground({ dark }) {
       ctx.restore();
     }
 
-    let rafId, prevT = null;
+    let rafId = null, prevT = null;
+    let onscreen = true;
 
     function draw(now) {
       const dt = prevT ? clamp((now - prevT) / 1000, 0, 0.05) : 0.016;
@@ -140,19 +141,30 @@ export default function WaterBackground({ dark }) {
 
       ctx.clearRect(0, 0, W, H);
 
-      // Large blobs first (behind)
       for (const b of largeBlobs) drawBlob(b, t, C.large);
-
-      // Small blobs on top (detail layer)
       for (const b of smallBlobs) drawBlob(b, t, C.small);
-
-      // Wave crests
       for (const g of waveGroups) drawWaveGroup(g, t);
 
-      rafId = requestAnimationFrame(draw);
+      if (onscreen) rafId = requestAnimationFrame(draw);
+      else rafId = null;
     }
 
-    rafId = requestAnimationFrame(draw);
+    function start() {
+      if (rafId == null) { prevT = null; rafId = requestAnimationFrame(draw); }
+    }
+    function stop() { if (rafId != null) { cancelAnimationFrame(rafId); rafId = null; } }
+
+    // Only animate while the canvas (or page tab) is actually visible.
+    const io = new IntersectionObserver(([e]) => {
+      onscreen = e.isIntersecting && !document.hidden;
+      if (onscreen) start(); else stop();
+    }, { threshold: 0 });
+    io.observe(canvas);
+    const onVis = () => {
+      if (document.hidden) stop();
+      else if (onscreen) start();
+    };
+    document.addEventListener("visibilitychange", onVis);
 
     const ro = new ResizeObserver(() => {
       initCanvas();
@@ -164,8 +176,10 @@ export default function WaterBackground({ dark }) {
     ro.observe(canvas);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      stop();
       ro.disconnect();
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
     };
   }, [dark]);
 

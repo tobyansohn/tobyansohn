@@ -10,7 +10,26 @@ export default function CustomCursor() {
 
     let mouseX = 0, mouseY = 0;
     let ringX = 0, ringY = 0;
-    let animId;
+    let animId = null;
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    // Animate only while the ring is still catching up to the cursor.
+    // Once it has converged we cancel the rAF loop and only restart on the
+    // next mousemove — instead of burning a frame every 16ms forever.
+    const animate = () => {
+      ringX = lerp(ringX, mouseX, 0.18);
+      ringY = lerp(ringY, mouseY, 0.18);
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+      }
+      const dx = mouseX - ringX, dy = mouseY - ringY;
+      if (dx * dx + dy * dy > 0.25) {
+        animId = requestAnimationFrame(animate);
+      } else {
+        animId = null;
+      }
+    };
 
     const move = (e) => {
       mouseX = e.clientX;
@@ -18,17 +37,7 @@ export default function CustomCursor() {
       if (dotRef.current) {
         dotRef.current.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
       }
-    };
-
-    const lerp = (a, b, t) => a + (b - a) * t;
-
-    const animate = () => {
-      ringX = lerp(ringX, mouseX, 0.12);
-      ringY = lerp(ringY, mouseY, 0.12);
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
-      }
-      animId = requestAnimationFrame(animate);
+      if (animId == null) animId = requestAnimationFrame(animate);
     };
 
     const handleHover = () => {
@@ -39,7 +48,6 @@ export default function CustomCursor() {
     };
 
     window.addEventListener("mousemove", move);
-    animId = requestAnimationFrame(animate);
 
     const interactives = document.querySelectorAll("a, button");
     interactives.forEach(el => {

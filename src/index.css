@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Grotesk:wght@300;400;500&display=swap');
-@import 'leaflet/dist/leaflet.css';
+/* Fonts moved to <link> in index.html (avoid render-blocking @import). */
+/* Leaflet CSS is now lazy-loaded with the Developer page chunk. */
 
 @tailwind base;
 @tailwind components;

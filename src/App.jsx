@@ -1,13 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
-import Developer from "./pages/Developer.jsx";
-import Photography from "./pages/Photography.jsx";
-import Videography from "./pages/Videography.jsx";
-import Contact from "./pages/Contact.jsx";
+// Heavy / off-home routes are split so leaflet + exifr stay out of the initial bundle.
+const Developer = lazy(() => import("./pages/Developer.jsx"));
+const Photography = lazy(() => import("./pages/Photography.jsx"));
+const Videography = lazy(() => import("./pages/Videography.jsx"));
+const Contact = lazy(() => import("./pages/Contact.jsx"));
 import CustomCursor from "./components/CustomCursor.jsx";
 import PageTransition from "./components/PageTransition.jsx";
 import ScrollProgress from "./components/ScrollProgress.jsx";
@@ -37,13 +38,15 @@ function AnimatedRoutes() {
   const location = useLocation();
   return (
     <PageTransition locationKey={location.pathname}>
-      <Routes location={location}>
-        <Route path="/" element={<Home />} />
-        <Route path="/developer" element={<Developer />} />
-        <Route path="/photography" element={<Photography />} />
-        <Route path="/videography" element={<Videography />} />
-<Route path="/contact" element={<Contact />} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          <Route path="/developer" element={<Developer />} />
+          <Route path="/photography" element={<Photography />} />
+          <Route path="/videography" element={<Videography />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </Suspense>
     </PageTransition>
   );
 }

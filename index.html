@@ -14,6 +14,14 @@
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://tobyansohn.com/og-image.jpg" />
+
+    <!-- Preload LCP hero image (matches the largest srcset variant the Home hero requests) -->
+    <link rel="preload" as="image" href="/_vercel/image?url=%2FDSC04511.jpg&w=1920&q=82" fetchpriority="high" />
+
+    <!-- Fonts: non-blocking via <link> + preconnect (was a render-blocking @import in CSS) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Grotesk:wght@300;400;500&display=swap" />
   </head>
   <body>
     <div id="root"></div>

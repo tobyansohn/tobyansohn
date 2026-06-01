@@ -74,8 +74,14 @@ export default function Home() {
         {/* Hero background photo */}
         <div className="absolute inset-0">
           <img
-            src="/DSC04511.jpg"
+            src={optimizeImage("/DSC04511.jpg", 1920)}
+            srcSet={`${optimizeImage("/DSC04511.jpg", 800)} 800w, ${optimizeImage("/DSC04511.jpg", 1200)} 1200w, ${optimizeImage("/DSC04511.jpg", 1920)} 1920w`}
+            sizes="100vw"
+            width="1600"
+            height="2400"
             alt=""
+            fetchpriority="high"
+            decoding="async"
             className="w-full h-full object-cover object-center"
           />
           <div className={`absolute inset-0 ${dark
