@@ -7,15 +7,15 @@ export default function Footer() {
   const icon  = dark ? "text-white/25 hover:text-white/60" : "text-[#9A8A70] hover:text-[#2A2014]";
 
   return (
-    <footer className={`px-6 md:px-16 py-8 border-t ${dark ? "border-white/8" : "border-black/8"}`}>
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+    <footer className={`px-6 md:px-12 py-8 border-t ${dark ? "border-white/12" : "border-black/12"}`}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
         <div className="flex items-center gap-6 flex-wrap">
-          <p className={`font-display text-base ${dark ? "text-white/40" : "text-[#5A4A36]"}`}>Tobyan Sohn</p>
-          <div className={`hidden sm:block w-px h-3 ${dark ? "bg-white/15" : "bg-black/15"}`} />
-          <Link to="/developer"   className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Dev</Link>
-          <Link to="/photography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Photography</Link>
-          <Link to="/videography" className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Videography</Link>
-          <Link to="/contact"     className={`text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${muted}`}>Contact</Link>
+          <p className={`text-[12px] font-medium tracking-[0.24em] uppercase ${dark ? "text-white/45" : "text-[#5A4A36]"}`}>Tobyan Sohn</p>
+          <div className={`hidden sm:block w-px h-3 ${dark ? "bg-white/12" : "bg-black/12"}`} />
+          <Link to="/developer"   className={`text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-200 ${muted}`}>Dev</Link>
+          <Link to="/photography" className={`text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-200 ${muted}`}>Photography</Link>
+          <Link to="/videography" className={`text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-200 ${muted}`}>Videography</Link>
+          <Link to="/contact"     className={`text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-200 ${muted}`}>Contact</Link>
         </div>
 
         <div className="flex items-center gap-4">
@@ -44,7 +44,7 @@ export default function Footer() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
             </svg>
           </a>
-          <p className={`text-[11px] tracking-[0.1em] ${dark ? "text-white/20" : "text-[#9A8A70]"}`}>© {new Date().getFullYear()}</p>
+          <p className={`text-[11px] font-medium tracking-[0.15em] ${dark ? "text-white/25" : "text-[#9A8A70]"}`}>© {new Date().getFullYear()}</p>
         </div>
       </div>
     </footer>

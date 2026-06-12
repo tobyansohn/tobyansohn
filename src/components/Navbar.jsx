@@ -54,13 +54,13 @@ export default function Navbar() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500 ease-snappy ${navBg}`}>
-      <nav className="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
+      <nav className="px-6 md:px-12 h-16 flex items-center justify-between">
         {/* Logo */}
-        <NavLink to="/" className="group flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#E8B257] to-[#C9913B] flex items-center justify-center">
-            <span className="text-[#0E1812] font-name text-xs font-bold tracking-tight">TS</span>
+        <NavLink to="/" className="group flex items-center gap-2.5">
+          <div className={`w-7 h-7 flex items-center justify-center border transition-colors duration-300 ${dark ? "border-[#E8B257]/60 group-hover:border-[#E8B257]" : "border-[#2D4A2B]/50 group-hover:border-[#2D4A2B]"}`}>
+            <span className={`font-name text-[11px] font-semibold tracking-tight ${dark ? "text-[#E8B257]" : "text-[#2D4A2B]"}`}>TS</span>
           </div>
-          <span className={`font-name text-sm tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/60 group-hover:text-white/90" : "text-black/50 group-hover:text-black/80"}`}>
+          <span className={`text-[12px] font-medium tracking-[0.24em] uppercase transition-colors duration-300 ${dark ? "text-white/65 group-hover:text-white/90" : "text-[#4A3D2D] group-hover:text-black/80"}`}>
             Tobyan Sohn
           </span>
         </NavLink>
@@ -73,13 +73,13 @@ export default function Navbar() {
                 to={to}
                 end={to === "/"}
                 className={({ isActive }) =>
-                  `relative px-4 py-2 text-[13px] tracking-[0.15em] uppercase font-body transition-colors duration-200 ${isActive ? linkActive : linkInactive}`
+                  `relative px-4 py-2 text-[12px] font-medium tracking-[0.22em] uppercase transition-colors duration-200 ${isActive ? linkActive : linkInactive}`
                 }
               >
                 {({ isActive }) => (
                   <>
                     {label}
-                    {isActive && <motion.span layoutId="nav-dot" className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${dotColor}`} transition={{ type: "spring", stiffness: 400, damping: 30 }} />}
+                    {isActive && <motion.span layoutId="nav-dot" className={`absolute -bottom-0.5 left-4 right-4 h-px ${dotColor}`} transition={{ type: "spring", stiffness: 400, damping: 30 }} />}
                   </>
                 )}
               </NavLink>
@@ -93,7 +93,7 @@ export default function Navbar() {
           <button
             onClick={toggle}
             aria-label="Toggle theme"
-            className={`btn-press w-9 h-9 rounded-full border flex items-center justify-center ${
+            className={`btn-press w-9 h-9 border flex items-center justify-center ${
               dark
                 ? "border-white/15 text-white/50 hover:text-white hover:border-white/40"
                 : "border-black/15 text-[#4A3D2D] hover:text-black/70 hover:border-black/30"
@@ -104,13 +104,14 @@ export default function Navbar() {
 
           <NavLink
             to="/contact"
-            className={`btn-press flex items-center gap-2 px-4 py-2 rounded-full border text-[12px] tracking-[0.15em] uppercase ${
+            className={`group inline-flex items-center gap-1.5 pb-1 border-b text-[11px] font-medium tracking-[0.22em] uppercase transition-colors duration-200 ${
               dark
-                ? "border-white/15 text-white/60 hover:text-white hover:border-white/40"
-                : "border-black/20 text-black/50 hover:text-black hover:border-black/40"
+                ? "border-[#E8B257]/50 text-[#E8B257] hover:border-[#E8B257]"
+                : "border-[#2D4A2B]/50 text-[#2D4A2B] hover:border-[#2D4A2B]"
             }`}
           >
             Contact Me
+            <span className="transition-transform duration-300 group-hover:translate-x-0.5">&#8599;</span>
           </NavLink>
         </div>
 
@@ -119,7 +120,7 @@ export default function Navbar() {
           <button
             onClick={toggle}
             aria-label="Toggle theme"
-            className={`btn-press w-8 h-8 rounded-full border flex items-center justify-center ${
+            className={`btn-press w-8 h-8 border flex items-center justify-center ${
               dark ? "border-white/15 text-white/50" : "border-black/15 text-[#4A3D2D]"
             }`}
           >
@@ -146,7 +147,7 @@ export default function Navbar() {
                 to={to}
                 end={to === "/"}
                 className={({ isActive }) =>
-                  `block py-3 text-sm tracking-[0.2em] uppercase ${isActive ? linkActive : linkInactive}`
+                  `block py-3 text-[13px] font-medium tracking-[0.22em] uppercase ${isActive ? linkActive : linkInactive}`
                 }
               >
                 {label}

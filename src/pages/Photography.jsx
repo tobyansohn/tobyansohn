@@ -56,7 +56,7 @@ function PhotoCard({ photo, index, onClick }) {
   const [hovered, setHovered] = useState(false);
   return (
     <motion.div
-      className="cursor-pointer break-inside-avoid mb-3 rounded-xl overflow-hidden"
+      className="cursor-pointer break-inside-avoid mb-3 overflow-hidden"
       onClick={() => onClick(index)}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
@@ -66,7 +66,7 @@ function PhotoCard({ photo, index, onClick }) {
       transition={{ duration: 0.45, delay: (index % 9) * 0.04, ease: [0.23, 1, 0.32, 1] }}
       whileHover={{ y: -4, transition: { type: "spring", stiffness: 340, damping: 28 } }}
     >
-      <div className="relative overflow-hidden rounded-xl">
+      <div className="relative overflow-hidden">
         <motion.img
           src={optimizeImage(photo.src, 800)}
           alt={photo.title}
@@ -84,8 +84,8 @@ function PhotoCard({ photo, index, onClick }) {
             animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 8 }}
             transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
           >
-            <p className="text-white font-display text-base leading-tight">{photo.title}</p>
-            <p className="text-white/60 text-[11px] tracking-[0.1em] mt-0.5">{photo.category}</p>
+            <p className="text-white text-[12px] font-medium tracking-[0.15em] uppercase leading-tight">{photo.title}</p>
+            <p className="text-white/60 text-[10px] font-medium tracking-[0.2em] uppercase mt-1">{photo.category}</p>
           </motion.div>
         </motion.div>
       </div>
@@ -162,36 +162,36 @@ function Lightbox({ photo, onClose, onPrev, onNext, hasPrev, hasNext, counter })
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <img src={optimizeImage(photo.src, 1920)} alt={photo.title} className="max-w-full max-h-[85vh] rounded-2xl object-contain" />
-        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/70 to-transparent rounded-b-2xl pointer-events-none">
-          <p className="font-display text-xl sm:text-2xl text-white">{photo.title}</p>
-          <p className="text-white/50 text-sm mt-1">{photo.category}</p>
+        <img src={optimizeImage(photo.src, 1920)} alt={photo.title} className="max-w-full max-h-[85vh] object-contain" />
+        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/70 to-transparent pointer-events-none">
+          <p className="font-light tracking-tight text-xl sm:text-2xl text-white">{photo.title}</p>
+          <p className="text-white/50 text-[11px] font-medium tracking-[0.2em] uppercase mt-1">{photo.category}</p>
           <div className="flex items-center gap-3 mt-2 flex-wrap">
-            {counter && <p className="text-white/25 text-[11px] tracking-[0.15em] uppercase">{counter}</p>}
+            {counter && <p className="text-white/30 text-[11px] font-medium tracking-[0.15em] uppercase">{counter}</p>}
             {exifParts && (
               <>
                 {counter && <span className="text-white/15 text-[11px]">·</span>}
                 {exifParts.map((part, i) => (
-                  <span key={i} className="text-white/35 text-[11px] tracking-[0.1em]">{part}</span>
+                  <span key={i} className="text-white/40 text-[11px] tracking-[0.05em]">{part}</span>
                 ))}
               </>
             )}
           </div>
         </div>
-        <button onClick={onClose} aria-label="Close" className="absolute top-3 right-3 sm:top-4 sm:right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
+        <button onClick={onClose} aria-label="Close" className="absolute top-3 right-3 sm:top-4 sm:right-4 w-10 h-10 bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
         {hasPrev && (
-          <button onClick={onPrev} aria-label="Previous photo" className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
+          <button onClick={onPrev} aria-label="Previous photo" className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 backdrop-blur-sm items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
         )}
         {hasNext && (
-          <button onClick={onNext} aria-label="Next photo" className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
+          <button onClick={onNext} aria-label="Next photo" className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 backdrop-blur-sm items-center justify-center text-white/60 hover:text-white hover:bg-black/70 transition-colors duration-150 cursor-pointer">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -240,34 +240,42 @@ export default function Photography() {
         return true;
       });
 
-  const muted = dark ? "text-white/30" : "text-[#5A4A36]";
-  const body  = dark ? "text-white/45" : "text-[#3D2F1F]";
+  const muted = dark ? "text-white/55" : "text-[#3D2F1F]";
+  const superMuted = dark ? "text-white/35" : "text-[#5A4A36]";
+  const body  = dark ? "text-white/55" : "text-[#3D2F1F]";
 
-  const pillBase = "px-4 py-2 rounded-full text-[12px] tracking-[0.1em] uppercase transition-colors duration-200";
-  const pillActive = dark ? "bg-white text-[#0E1812]" : "bg-[#2A2014] text-white";
+  const accent = dark ? "text-[#E8B257]" : "text-[#2D4A2B]";
+  const rule = dark ? "bg-white/12" : "bg-black/12";
+  const wrap = "max-w-5xl mx-auto px-6 sm:px-8";
+  const kicker = "text-[11px] tracking-[0.24em] uppercase font-medium";
+
+  const pillBase = "pb-1 text-[11px] font-medium tracking-[0.2em] uppercase border-b transition-colors duration-200";
+  const pillActive = dark ? "text-[#E8B257] border-[#E8B257]" : "text-[#2D4A2B] border-[#2D4A2B]";
   const pillInactive = dark
-    ? "border border-white/15 text-white/40 hover:text-white/70 hover:border-white/30"
-    : "border border-black/15 text-[#4A3D2D] hover:text-black/70 hover:border-black/30";
+    ? "border-transparent text-white/40 hover:text-white/75"
+    : "border-transparent text-[#5A4A36] hover:text-black/70";
 
-  const subPillBase = "px-3 py-1 rounded-md text-[11px] tracking-[0.08em] transition-colors duration-200";
-  const subPillActive = dark
-    ? "bg-[#E8B257]/15 text-[#E8B257] border border-[#E8B257]/30"
-    : "bg-[#2D4A2B]/10 text-[#2D4A2B] border border-[#2D4A2B]/30";
+  const subPillBase = "pb-0.5 text-[10px] font-medium tracking-[0.15em] uppercase border-b transition-colors duration-200";
+  const subPillActive = dark ? "text-[#E8B257] border-[#E8B257]/60" : "text-[#2D4A2B] border-[#2D4A2B]/60";
   const subPillInactive = dark
-    ? "border border-white/10 text-white/35 hover:text-white/65 hover:border-white/25 hover:bg-white/5"
-    : "border border-black/10 text-[#5A4A36] hover:text-[#2A2014] hover:border-black/20 hover:bg-black/5";
+    ? "border-transparent text-white/30 hover:text-white/60"
+    : "border-transparent text-[#7A6B53] hover:text-[#2A2014]";
 
   return (
-    <main className="pt-28 pb-32 px-6 md:px-16 max-w-7xl mx-auto">
+    <main className={`pt-32 pb-32 ${wrap}`}>
+      <div className="flex items-baseline gap-3 mb-4">
+        <span className={`${kicker} ${accent}`}>Photography</span>
+        <span className={`${kicker} ${superMuted}`}>03</span>
+      </div>
+      <div className={`h-px mb-16 ${rule}`} />
       <div ref={headerRef} className="mb-16">
         <div className={`transition-[opacity,transform] duration-600 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Photography</span>
-          <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${dark ? "text-white" : "text-[#2A2014]"}`}>
+          <h1 className={`font-bold tracking-tight leading-[1.05] mb-8 ${dark ? "text-white" : "text-[#1F1810]"}`} style={{ fontSize: "clamp(2.5rem, 7vw, 5rem)" }}>
             The world through<br />
-            <span className={dark ? "text-white/30" : "text-[#7A6B53]"}>my lens.</span>
+            <span className={`font-display italic ${accent}`}>my lens.</span>
           </h1>
-          <p className={`max-w-lg text-[15px] leading-relaxed ${body}`}>
-            I love the opportunity to capture everywhere I go, whether it's at home or on the go.
+          <p className={`max-w-lg text-[16px] leading-relaxed ${body}`}>
+            I love the opportunity to capture everywhere I go, whether it&rsquo;s at home or on the go.
             <br /><br />
             I normally shoot on Sony (a7V) and a Fujifilm xt30.
           </p>
@@ -275,7 +283,7 @@ export default function Photography() {
       </div>
 
       {/* Top-level pills */}
-      <div className="flex flex-wrap gap-2 mb-3">
+      <div className="flex flex-wrap gap-x-6 gap-y-3 mb-5">
         {topCategories.map(cat => (
           <button
             key={cat}
@@ -289,11 +297,11 @@ export default function Photography() {
 
       {/* Sub-category pills */}
       {subCategories.length > 0 ? (
-        <div className={`mb-10 pl-4 border-l-2 ${dark ? "border-white/10" : "border-black/10"}`}>
-          <p className={`text-[10px] tracking-[0.25em] uppercase mb-2.5 ${dark ? "text-white/25" : "text-[#9A8A70]"}`}>
+        <div className={`mb-10 pl-4 border-l ${dark ? "border-white/12" : "border-black/12"}`}>
+          <p className={`${kicker} mb-3 ${dark ? "text-white/30" : "text-[#9A8A70]"}`}>
             {activeCategory}
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-x-5 gap-y-2.5">
             {subCategories.map(sub => (
               <button
                 key={sub}

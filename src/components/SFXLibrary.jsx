@@ -62,7 +62,7 @@ function LiveWaveBar({ analyser, color }) {
   }, [analyser, color]);
 
   return (
-    <div className="h-10 rounded-lg overflow-hidden">
+    <div className="h-10 overflow-hidden">
       <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   );
@@ -97,9 +97,9 @@ function SpinnerIcon() {
 }
 
 function SFXCard({ item, isPlaying, analyser, loadingAudio, onPlay, onDownload, dark }) {
-  const border = dark ? "border-white/8"  : "border-[#C8B996]";
+  const border = dark ? "border-white/12"  : "border-[#C8B996]";
   const bg     = dark ? "bg-white/[0.02]" : "bg-[#F5EEDC]";
-  const muted  = dark ? "text-white/30"   : "text-[#9A8A70]";
+  const muted  = dark ? "text-white/35"   : "text-[#9A8A70]";
   const accent = dark ? "#E8B257"         : "#2D4A2B";
   const tags   = (Array.isArray(item.subject) ? item.subject : []).slice(0, 2);
 
@@ -110,11 +110,11 @@ function SFXCard({ item, isPlaying, analyser, loadingAudio, onPlay, onDownload, 
       : "bg-[#2D4A2B] text-white hover:bg-[#1F3320]";
 
   return (
-    <div className={`rounded-xl border overflow-hidden transition-all duration-200 ${border} ${bg} ${isPlaying ? (dark ? "border-[#7c5cfc]/40" : "border-[#7c5cfc]/30") : ""}`}>
+    <div className={`border overflow-hidden transition-all duration-200 ${border} ${bg} ${isPlaying ? (dark ? "border-[#7c5cfc]/40" : "border-[#7c5cfc]/30") : ""}`}>
       <div className="h-[2px]" style={{ background: isPlaying ? "#7c5cfc" : accent }} />
 
       <div className="p-3 flex flex-col gap-2.5">
-        <p className={`text-[12px] font-medium leading-snug line-clamp-2 ${dark ? "text-white/80" : "text-[#2A2014]"}`}>
+        <p className={`text-[13px] font-medium leading-snug line-clamp-2 ${dark ? "text-white/80" : "text-[#2A2014]"}`}>
           {item.title}
         </p>
 
@@ -126,21 +126,21 @@ function SFXCard({ item, isPlaying, analyser, loadingAudio, onPlay, onDownload, 
           <button
             onClick={onPlay}
             disabled={loadingAudio}
-            className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 shrink-0 hover:scale-105 active:scale-95 disabled:opacity-50 ${playBg}`}
+            className={`w-8 h-8 flex items-center justify-center transition-all duration-200 shrink-0 hover:scale-105 active:scale-95 disabled:opacity-50 ${playBg}`}
           >
             {loadingAudio ? <SpinnerIcon /> : isPlaying ? <StopIcon /> : <PlayIcon />}
           </button>
 
           <div className="flex gap-1.5 flex-1 min-w-0">
             {tags.map(t => (
-              <span key={t} className={`text-[9px] px-1.5 py-0.5 rounded truncate ${dark ? "bg-white/5 text-white/25" : "bg-black/5 text-[#9A8A70]"}`}>{t}</span>
+              <span key={t} className={`text-[9px] tracking-[0.1em] uppercase font-medium truncate ${dark ? "text-white/30" : "text-[#9A8A70]"}`}>{t}</span>
             ))}
           </div>
 
           <button
             onClick={onDownload}
             disabled={loadingAudio}
-            className={`flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1.5 rounded-lg border transition-all hover:scale-105 active:scale-95 disabled:opacity-50 ${dark ? "border-white/8 text-white/35 hover:border-white/20 hover:text-white/60" : "border-black/10 text-[#5A4A36] hover:border-black/20 hover:text-[#2A2014]"}`}
+            className={`flex items-center gap-1.5 text-[10px] tracking-[0.1em] uppercase font-medium pb-1 border-b transition-[color,border-color] hover:scale-105 active:scale-95 disabled:opacity-50 ${dark ? "border-white/15 text-white/40 hover:border-white/40 hover:text-white/70" : "border-black/15 text-[#5A4A36] hover:border-black/40 hover:text-[#2A2014]"}`}
           >
             <DownloadIcon /> MP3
           </button>
@@ -174,8 +174,8 @@ export default function SFXLibrary({ dark }) {
   const analyserRef   = useRef(null);
   const srcCreated    = useRef(false);
 
-  const muted      = dark ? "text-white/30" : "text-[#5A4A36]";
-  const border     = dark ? "border-white/8" : "border-[#C8B996]";
+  const muted      = dark ? "text-white/35" : "text-[#5A4A36]";
+  const border     = dark ? "border-white/12" : "border-[#C8B996]";
   const totalPages = Math.ceil(total / PAGE_SZ);
 
   /* Set up AudioContext + AnalyserNode once on first play */
@@ -342,7 +342,7 @@ export default function SFXLibrary({ dark }) {
     <div>
       <audio ref={audioRef} preload="none" crossOrigin="anonymous" onEnded={stopAudio} />
 
-      <p className={`text-[14px] leading-relaxed mb-6 max-w-lg ${dark ? "text-white/45" : "text-[#3D2F1F]"}`}>
+      <p className={`text-[15px] leading-relaxed mb-6 max-w-md ${dark ? "text-white/55" : "text-[#3D2F1F]"}`}>
         Browse royalty-free sounds from the Internet Archive. No account needed — click ▶ to preview, ⬇ to download.
       </p>
 
@@ -358,7 +358,7 @@ export default function SFXLibrary({ dark }) {
             value={query}
             onChange={e => handleSearch(e.target.value)}
             placeholder='Search "explosion", "footstep", "laser"…'
-            className={`w-full pl-9 pr-8 py-2.5 rounded-xl border text-[13px] outline-none transition-colors duration-200 ${dark ? "bg-white/[0.03] border-white/8 text-white placeholder:text-white/20 focus:border-white/20" : "bg-[#F5EEDC] border-[#C8B996] text-[#2A2014] placeholder:text-[#9A8A70] focus:border-[#2D4A2B]/40"}`}
+            className={`w-full pl-9 pr-8 py-2.5 border text-[14px] outline-none transition-colors duration-200 ${dark ? "bg-white/[0.03] border-white/12 text-white placeholder:text-white/25 focus:border-white/30" : "bg-[#F5EEDC] border-[#C8B996] text-[#2A2014] placeholder:text-[#9A8A70] focus:border-[#2D4A2B]/40"}`}
           />
           {query && (
             <button
@@ -370,22 +370,22 @@ export default function SFXLibrary({ dark }) {
         <select
           value={sort}
           onChange={e => { setSort(e.target.value); doSearch(query, 1, e.target.value); }}
-          className={`w-full sm:w-auto px-3 py-2.5 rounded-xl border text-[12px] outline-none ${dark ? "bg-white/[0.03] border-white/8 text-white/60" : "bg-[#F5EEDC] border-[#C8B996] text-[#5A4A36]"}`}
+          className={`w-full sm:w-auto px-3 py-2.5 border text-[13px] outline-none ${dark ? "bg-white/[0.03] border-white/12 text-white/60" : "bg-[#F5EEDC] border-[#C8B996] text-[#5A4A36]"}`}
         >
           {SORT_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       </div>
 
       {/* Quick chips */}
-      <div className="flex gap-2 overflow-x-auto pb-2 mb-4 no-scrollbar">
+      <div className="flex gap-x-6 gap-y-3 overflow-x-auto pb-2 mb-5 no-scrollbar">
         {QUICK_TAGS.map(chip => (
           <button
             key={chip}
             onClick={() => handleChip(chip)}
-            className={`px-3 py-1 rounded-full text-[10px] tracking-[0.1em] uppercase transition-all duration-200 border shrink-0 ${
+            className={`pb-1 text-[10px] tracking-[0.16em] uppercase font-medium transition-[color,border-color] duration-200 border-b shrink-0 ${
               activeChip === chip
-                ? (dark ? "bg-white text-[#0E1812] border-white" : "bg-[#2A2014] text-white border-[#2A2014]")
-                : (dark ? "border-white/10 text-white/35 hover:border-white/25 hover:text-white/60" : "border-black/10 text-[#5A4A36] hover:border-black/25")
+                ? (dark ? "border-[#E8B257] text-[#E8B257]" : "border-[#2D4A2B] text-[#2D4A2B]")
+                : (dark ? "border-transparent text-white/35 hover:text-white/60" : "border-transparent text-[#5A4A36] hover:text-[#2A2014]")
             }`}
           >{chip}</button>
         ))}
@@ -393,7 +393,7 @@ export default function SFXLibrary({ dark }) {
 
       {/* Stats */}
       {total > 0 && !loading && (
-        <div className={`flex items-center justify-between mb-4 text-[11px] ${muted}`}>
+        <div className={`flex items-center justify-between mb-4 text-[11px] tracking-[0.08em] uppercase font-medium ${muted}`}>
           <span><strong className={dark ? "text-white/60" : "text-[#2A2014]"}>{total.toLocaleString()}</strong> sounds found</span>
           <span>Page <strong className={dark ? "text-white/60" : "text-[#2A2014]"}>{page}</strong> / {totalPages}</span>
         </div>
@@ -407,16 +407,16 @@ export default function SFXLibrary({ dark }) {
       ) : error ? (
         <div className={`py-16 text-center ${muted}`}>
           <p className="text-3xl mb-3">⚠️</p>
-          <p className="text-[13px] mb-4">{error}</p>
+          <p className="text-[14px] mb-4">{error}</p>
           <button
             onClick={() => doSearch(query, page, sort)}
-            className={`px-4 py-2 rounded-xl border text-[12px] transition-all ${dark ? "border-white/15 hover:border-white/30 text-white/50 hover:text-white" : "border-black/15 hover:border-black/30 text-[#5A4A36]"}`}
+            className={`pb-1 border-b text-[11px] tracking-[0.16em] uppercase font-medium transition-[color,border-color] ${dark ? "border-white/20 hover:border-white/40 text-white/50 hover:text-white" : "border-black/20 hover:border-black/40 text-[#5A4A36]"}`}
           >Try again</button>
         </div>
       ) : results.length === 0 ? (
         <div className={`py-24 text-center ${muted}`}>
           <p className="text-3xl mb-3">🎵</p>
-          <p className="text-[13px]">No sounds matched — try a different term.</p>
+          <p className="text-[14px]">No sounds matched — try a different term.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
@@ -441,24 +441,24 @@ export default function SFXLibrary({ dark }) {
           <button
             disabled={page <= 1}
             onClick={() => { doSearch(query, page - 1, sort); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-            className={`px-4 py-2 rounded-xl border text-[12px] transition-all duration-200 disabled:opacity-30 ${dark ? "border-white/8 text-white/50 hover:border-white/20 hover:text-white" : "border-[#C8B996] text-[#5A4A36] hover:border-[#2D4A2B]"}`}
+            className={`pb-1 border-b text-[11px] tracking-[0.16em] uppercase font-medium transition-[color,border-color] duration-200 disabled:opacity-30 ${dark ? "border-white/15 text-white/50 hover:border-white/40 hover:text-white" : "border-[#C8B996] text-[#5A4A36] hover:border-[#2D4A2B]"}`}
           >← Prev</button>
-          <span className={`text-[12px] ${muted}`}>Page {page} / {totalPages}</span>
+          <span className={`text-[11px] tracking-[0.08em] uppercase font-medium ${muted}`}>Page {page} / {totalPages}</span>
           <button
             disabled={page >= totalPages}
             onClick={() => { doSearch(query, page + 1, sort); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-            className={`px-4 py-2 rounded-xl border text-[12px] transition-all duration-200 disabled:opacity-30 ${dark ? "border-white/8 text-white/50 hover:border-white/20 hover:text-white" : "border-[#C8B996] text-[#5A4A36] hover:border-[#2D4A2B]"}`}
+            className={`pb-1 border-b text-[11px] tracking-[0.16em] uppercase font-medium transition-[color,border-color] duration-200 disabled:opacity-30 ${dark ? "border-white/15 text-white/50 hover:border-white/40 hover:text-white" : "border-[#C8B996] text-[#5A4A36] hover:border-[#2D4A2B]"}`}
           >Next →</button>
         </div>
       )}
 
       {/* Now playing */}
       {npName && (
-        <div className={`sticky bottom-0 -mx-6 md:-mx-16 px-6 md:px-16 py-3 border-t flex items-center gap-4 ${dark ? "bg-[#16221C]/95 border-white/8" : "bg-[#EFE6D2]/95 border-black/8"} backdrop-blur-sm`}>
+        <div className={`sticky bottom-0 -mx-6 md:-mx-12 px-6 md:px-12 py-3 border-t flex items-center gap-4 ${dark ? "bg-[#16221C]/95 border-white/12" : "bg-[#EFE6D2]/95 border-black/12"} backdrop-blur-sm`}>
           <div className="w-1.5 h-1.5 rounded-full bg-[#7c5cfc] animate-pulse shrink-0" />
-          <p className={`text-[12px] flex-1 truncate ${dark ? "text-white/70" : "text-[#3D2F1F]"}`}>{npName}</p>
+          <p className={`text-[13px] flex-1 truncate ${dark ? "text-white/70" : "text-[#3D2F1F]"}`}>{npName}</p>
           <span className={`text-[11px] tabular-nums shrink-0 ${muted}`}>{npTime}</span>
-          <button onClick={stopAudio} className={`text-[10px] tracking-[0.1em] uppercase px-3 py-1.5 rounded-lg border transition-colors duration-200 ${dark ? "border-white/10 text-white/30 hover:border-red-400/40 hover:text-red-400" : "border-black/10 text-[#9A8A70] hover:border-red-400/40 hover:text-red-400"}`}>
+          <button onClick={stopAudio} className={`text-[10px] tracking-[0.16em] uppercase font-medium pb-1 border-b transition-[color,border-color] duration-200 ${dark ? "border-white/15 text-white/35 hover:border-red-400/50 hover:text-red-400" : "border-black/15 text-[#9A8A70] hover:border-red-400/50 hover:text-red-400"}`}>
             Stop
           </button>
         </div>

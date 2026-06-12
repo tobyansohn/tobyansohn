@@ -122,7 +122,7 @@ function makeHomeIcon(dark) {
 function TravelMap({ dark }) {
   const navigate = useNavigate();
   return (
-    <div className={`rounded-2xl overflow-hidden border ${dark ? "border-white/8" : "border-[#C8B996]"}`} style={{ height: 320 }}>
+    <div className={`overflow-hidden border ${dark ? "border-white/12" : "border-[#C8B996]"}`} style={{ height: 320 }}>
       <MapContainer
         center={[25, -50]}
         zoom={2}
@@ -232,7 +232,7 @@ function ProjectCard({ project, index, dark }) {
     <>
       <motion.div
         onClick={() => setOpen(true)}
-        className={`group border-b py-10 cursor-pointer ${dark ? "border-white/8" : "border-[#C8B996]"}`}
+        className={`group border-b py-10 cursor-pointer ${dark ? "border-white/12" : "border-black/12"}`}
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
@@ -240,23 +240,21 @@ function ProjectCard({ project, index, dark }) {
         whileHover={{ x: 6, transition: { type: "spring", stiffness: 340, damping: 30 } }}
       >
         <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12">
-          <span className={`text-[11px] tracking-[0.3em] uppercase shrink-0 pt-1 md:w-16 ${dark ? "text-white/25" : "text-[#7A6B53]"}`}>{project.year}</span>
+          <span className={`text-[11px] font-medium tracking-[0.24em] uppercase shrink-0 pt-2 md:w-16 ${dark ? "text-white/35" : "text-[#7A6B53]"}`}>{project.year}</span>
           <div className="flex-1">
             <div className="flex items-start justify-between gap-4 mb-3">
-              <div className="flex items-center gap-3">
-                <h3 className={`font-display text-2xl transition-colors duration-300 ${dark ? "text-white group-hover:text-[#E8B257]" : "text-[#2A2014] group-hover:text-[#2D4A2B]"}`}>{project.title}</h3>
-                <span className={`text-[9px] tracking-[0.15em] uppercase px-2 py-0.5 rounded-full ${project.status === "Live" ? "bg-emerald-400/10 text-emerald-400" : "bg-amber-400/10 text-amber-400"}`}>{project.status}</span>
+              <div className="flex items-center gap-3 flex-wrap">
+                <h3 className={`font-light tracking-tight text-2xl md:text-3xl transition-colors duration-300 ${dark ? "text-white group-hover:text-[#E8B257]" : "text-[#2A2014] group-hover:text-[#2D4A2B]"}`}>{project.title}</h3>
+                <span className={`text-[10px] tracking-[0.18em] uppercase font-medium ${project.status === "Live" ? "text-emerald-400" : "text-amber-400"}`}>{project.status}</span>
               </div>
-              <div className={`shrink-0 w-8 h-8 rounded-full border flex items-center justify-center transition-colors duration-200 ${dark ? "border-white/15 group-hover:border-white/40 group-hover:bg-white/5" : "border-black/15 group-hover:border-black/40 group-hover:bg-black/5"}`}>
-                <svg className={`w-3 h-3 transition-[color,transform] duration-200 ease-snappy ${dark ? "text-white/50 group-hover:text-white" : "text-[#4A3D2D] group-hover:text-black"} group-hover:translate-x-px group-hover:-translate-y-px`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
-                </svg>
-              </div>
+              <svg className={`shrink-0 w-4 h-4 mt-1 opacity-0 group-hover:opacity-100 transition-[color,opacity,transform] duration-200 ease-snappy group-hover:translate-x-px group-hover:-translate-y-px ${dark ? "text-white/60" : "text-[#4A3D2D]"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+              </svg>
             </div>
-            <p className={`text-[14px] leading-relaxed mb-5 max-w-xl ${dark ? "text-white/45" : "text-[#3D2F1F]"}`}>{project.description}</p>
-            <div className="flex flex-wrap gap-2">
+            <p className={`text-[15px] leading-relaxed mb-5 max-w-xl ${dark ? "text-white/55" : "text-[#3D2F1F]"}`}>{project.description}</p>
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
               {project.tags.map(tag => (
-                <span key={tag} className={`px-3 py-1 rounded-full border text-[11px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/35" : "border-black/10 text-black/35"}`}>{tag}</span>
+                <span key={tag} className={`text-[10px] tracking-[0.16em] uppercase font-medium ${dark ? "text-white/35" : "text-[#7A6B53]"}`}>{tag}</span>
               ))}
             </div>
           </div>
@@ -277,8 +275,8 @@ function CardModal({ card, onClose, dark }) {
 
   return createPortal(
     <div className="fixed inset-0 bg-black/80 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 backdrop-blur-sm" onClick={onClose}>
-      <div className={`relative rounded-t-2xl sm:rounded-2xl border p-5 sm:p-6 flex flex-col sm:flex-row gap-5 sm:gap-6 w-full sm:max-w-md ${dark ? "bg-[#111] border-white/10" : "bg-[#E6DBC0] border-[#C8B996]"}`} onClick={e => e.stopPropagation()}>
-        <button onClick={onClose} className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${dark ? "text-white/40 hover:text-white hover:bg-white/10" : "text-black/30 hover:text-black hover:bg-black/10"}`}>
+      <div className={`relative border p-5 sm:p-6 flex flex-col sm:flex-row gap-5 sm:gap-6 w-full sm:max-w-md ${dark ? "bg-[#111] border-white/10" : "bg-[#E6DBC0] border-[#C8B996]"}`} onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className={`absolute top-4 right-4 w-8 h-8 flex items-center justify-center transition-colors ${dark ? "text-white/40 hover:text-white hover:bg-white/10" : "text-black/30 hover:text-black hover:bg-black/10"}`}>
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -287,28 +285,28 @@ function CardModal({ card, onClose, dark }) {
         <img
           src={card.imageLarge || card.image}
           alt={card.name}
-          className="w-36 h-auto object-contain rounded-xl mx-auto sm:mx-0 shrink-0"
+          className="w-36 h-auto object-contain mx-auto sm:mx-0 shrink-0"
         />
 
         <div className="flex flex-col justify-center gap-3">
           <div>
-            <p className={`font-display text-xl leading-tight ${dark ? "text-white" : "text-[#2A2014]"}`}>{card.name}</p>
-            <p className={`text-[11px] tracking-[0.1em] uppercase mt-1 ${dark ? "text-white/35" : "text-[#5A4A36]"}`}>{card.set}</p>
-            {card.rarity && <p className={`text-[10px] tracking-[0.08em] mt-0.5 ${dark ? "text-white/25" : "text-[#9A8A70]"}`}>{card.rarity}</p>}
+            <p className={`font-light tracking-tight text-xl leading-tight ${dark ? "text-white" : "text-[#2A2014]"}`}>{card.name}</p>
+            <p className={`text-[10px] tracking-[0.18em] uppercase font-medium mt-1.5 ${dark ? "text-white/35" : "text-[#5A4A36]"}`}>{card.set}</p>
+            {card.rarity && <p className={`text-[11px] mt-0.5 ${dark ? "text-white/30" : "text-[#9A8A70]"}`}>{card.rarity}</p>}
           </div>
 
-          <div className={`h-px ${dark ? "bg-white/8" : "bg-black/8"}`} />
+          <div className={`h-px ${dark ? "bg-white/12" : "bg-black/12"}`} />
 
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className={`text-[10px] tracking-[0.2em] uppercase mb-1 ${dark ? "text-white/30" : "text-[#5A4A36]"}`}>Market Price</p>
-              <p className={`font-display text-2xl ${dark ? "text-white" : "text-[#2A2014]"}`}>${card.market.toFixed(2)}</p>
+              <p className={`text-[10px] tracking-[0.2em] uppercase font-medium mb-1.5 ${dark ? "text-white/35" : "text-[#5A4A36]"}`}>Market Price</p>
+              <p className={`font-light tracking-tight text-3xl tabular-nums ${dark ? "text-white" : "text-[#2A2014]"}`}>${card.market.toFixed(2)}</p>
               {card.prevMarket && (
-                <p className={`text-[11px] ${dark ? "text-white/30" : "text-[#9A8A70]"}`}>prev. ${card.prevMarket.toFixed(2)}</p>
+                <p className={`text-[11px] tabular-nums ${dark ? "text-white/30" : "text-[#9A8A70]"}`}>prev. ${card.prevMarket.toFixed(2)}</p>
               )}
             </div>
             {card.change !== null && (
-              <div className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-[13px] font-medium ${card.change >= 0 ? "bg-emerald-400/10 text-emerald-400" : "bg-red-400/10 text-red-400"}`}>
+              <div className={`flex items-center gap-1 text-[13px] font-medium tabular-nums ${card.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                   <path d={card.change >= 0 ? "M12 4l8 16H4z" : "M12 20L4 4h16z"} />
                 </svg>
@@ -321,7 +319,7 @@ function CardModal({ card, onClose, dark }) {
             href={`https://www.tcgplayer.com/search/pokemon/product?q=${encodeURIComponent(card.name)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className={`text-[11px] tracking-[0.1em] uppercase flex items-center gap-1.5 transition-colors ${dark ? "text-white/30 hover:text-[#E8B257]" : "text-[#5A4A36] hover:text-[#2D4A2B]"}`}
+            className={`text-[10px] tracking-[0.18em] uppercase font-medium flex items-center gap-1.5 transition-colors ${dark ? "text-white/35 hover:text-[#E8B257]" : "text-[#5A4A36] hover:text-[#2D4A2B]"}`}
           >
             View on TCGPlayer
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -359,8 +357,8 @@ function parseMealSteps(text) {
 
 function MealCard({ course, meal, dark }) {
   const [open, setOpen] = useState(false);
-  const border = dark ? "border-white/8" : "border-[#C8B996]";
-  const muted  = dark ? "text-white/30" : "text-[#5A4A36]";
+  const border = dark ? "border-white/12" : "border-[#C8B996]";
+  const muted  = dark ? "text-white/35" : "text-[#5A4A36]";
 
   const badgeColor = {
     quick: "text-emerald-400 bg-emerald-400/10",
@@ -374,35 +372,35 @@ function MealCard({ course, meal, dark }) {
     <>
       <div
         onClick={() => meal && setOpen(true)}
-        className={`rounded-2xl border overflow-hidden transition-colors duration-150 ${border} ${dark ? "bg-white/[0.02] hover:bg-white/[0.05]" : "bg-[#F5EEDC] hover:bg-[#EBE0C7]"} ${meal ? "cursor-pointer hover:scale-[1.01]" : ""}`}
+        className={`border overflow-hidden transition-colors duration-150 ${border} ${dark ? "bg-white/[0.02] hover:bg-white/[0.05]" : "bg-[#F5EEDC] hover:bg-[#EBE0C7]"} ${meal ? "cursor-pointer hover:scale-[1.01]" : ""}`}
       >
         {meal ? (
           <>
             <div className="relative aspect-video overflow-hidden">
               <img src={meal.strMealThumb} alt={meal.strMeal} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <span className={`absolute top-3 left-3 text-[9px] tracking-[0.2em] uppercase px-2 py-1 rounded-md ${dark ? "bg-black/50 text-white/60" : "bg-black/40 text-white/80"} backdrop-blur-sm`}>
+              <span className={`absolute top-3 left-3 text-[9px] tracking-[0.2em] uppercase font-medium px-2 py-1 ${dark ? "bg-black/50 text-white/70" : "bg-black/40 text-white/80"} backdrop-blur-sm`}>
                 {course}
               </span>
-              <span className={`absolute bottom-3 right-3 text-[9px] tracking-[0.1em] uppercase px-2 py-1 rounded-md bg-black/50 text-white/70 backdrop-blur-sm`}>
+              <span className={`absolute bottom-3 right-3 text-[9px] tracking-[0.12em] uppercase font-medium px-2 py-1 bg-black/50 text-white/70 backdrop-blur-sm`}>
                 View Recipe →
               </span>
             </div>
             <div className="p-4">
-              <p className={`font-display text-base leading-tight mb-1 ${dark ? "text-white/90" : "text-[#2A2014]"}`}>{meal.strMeal}</p>
-              <p className={`text-[10px] tracking-[0.1em] uppercase mb-3 ${muted}`}>{meal.strArea} · {meal.strCategory}</p>
-              <div className="flex flex-wrap gap-1.5">
+              <p className={`font-light tracking-tight text-lg leading-tight mb-1.5 ${dark ? "text-white/90" : "text-[#2A2014]"}`}>{meal.strMeal}</p>
+              <p className={`text-[10px] tracking-[0.12em] uppercase font-medium mb-3 ${muted}`}>{meal.strArea} · {meal.strCategory}</p>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
                 {meal.cookTimeEstimate !== 'unknown' && (
-                  <span className={`text-[10px] px-2 py-0.5 rounded-md ${badgeColor[meal.cookTimeEstimate] || muted}`}>
+                  <span className={`text-[10px] tracking-[0.1em] uppercase font-medium ${(badgeColor[meal.cookTimeEstimate] || "").split(" ")[0] || muted}`}>
                     {meal.cookTimeEstimate}
                   </span>
                 )}
                 {meal.weightEstimate !== 'unknown' && (
-                  <span className={`text-[10px] px-2 py-0.5 rounded-md ${badgeColor[meal.weightEstimate] || muted}`}>
+                  <span className={`text-[10px] tracking-[0.1em] uppercase font-medium ${(badgeColor[meal.weightEstimate] || "").split(" ")[0] || muted}`}>
                     {meal.weightEstimate}
                   </span>
                 )}
-                <span className={`text-[10px] px-2 py-0.5 rounded-md ${dark ? "bg-white/5 text-white/30" : "bg-black/5 text-[#5A4A36]"}`}>
+                <span className={`text-[10px] tracking-[0.1em] uppercase font-medium ${muted}`}>
                   {meal.ingredients?.length} ingredients
                 </span>
               </div>
@@ -410,7 +408,7 @@ function MealCard({ course, meal, dark }) {
           </>
         ) : (
           <div className="aspect-video flex items-center justify-center">
-            <p className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>{course}</p>
+            <p className={`text-[11px] tracking-[0.2em] uppercase font-medium ${muted}`}>{course}</p>
           </div>
         )}
       </div>
@@ -422,19 +420,19 @@ function MealCard({ course, meal, dark }) {
           onClick={(e) => e.target === e.currentTarget && setOpen(false)}
         >
           <div
-            className={`relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border ${dark ? "bg-[#111] border-white/10" : "bg-[#F5EEDC] border-[#C8B996]"}`}
+            className={`relative w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto border ${dark ? "bg-[#111] border-white/10" : "bg-[#F5EEDC] border-[#C8B996]"}`}
             style={{ scrollbarWidth: 'thin' }}
           >
             {/* Header */}
-            <div className={`sticky top-0 z-10 flex items-start justify-between gap-4 px-6 py-4 border-b ${dark ? "bg-[#111] border-white/8" : "bg-[#F5EEDC] border-[#D8CCAE]"}`}>
+            <div className={`sticky top-0 z-10 flex items-start justify-between gap-4 px-6 py-4 border-b ${dark ? "bg-[#111] border-white/12" : "bg-[#F5EEDC] border-[#D8CCAE]"}`}>
               <div>
-                <p className={`text-[9px] tracking-[0.2em] uppercase mb-1 ${muted}`}>{course}</p>
-                <h2 className={`font-display text-xl leading-tight ${dark ? "text-white" : "text-[#2A2014]"}`}>{meal.strMeal}</h2>
-                <p className={`text-[10px] tracking-[0.1em] uppercase mt-1 ${muted}`}>{meal.strArea} · {meal.strCategory}</p>
+                <p className={`text-[9px] tracking-[0.2em] uppercase font-medium mb-1.5 ${muted}`}>{course}</p>
+                <h2 className={`font-light tracking-tight text-2xl leading-tight ${dark ? "text-white" : "text-[#2A2014]"}`}>{meal.strMeal}</h2>
+                <p className={`text-[10px] tracking-[0.12em] uppercase font-medium mt-1.5 ${muted}`}>{meal.strArea} · {meal.strCategory}</p>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className={`shrink-0 mt-1 text-lg leading-none px-2 py-1 rounded-lg transition-colors ${dark ? "text-white/40 hover:text-white hover:bg-white/10" : "text-black/30 hover:text-black hover:bg-black/8"}`}
+                className={`shrink-0 mt-1 text-lg leading-none px-2 py-1 transition-colors ${dark ? "text-white/40 hover:text-white hover:bg-white/10" : "text-black/30 hover:text-black hover:bg-black/8"}`}
               >✕</button>
             </div>
 
@@ -445,7 +443,7 @@ function MealCard({ course, meal, dark }) {
             <div className="p-6 grid md:grid-cols-2 gap-8">
               {/* Ingredients */}
               <div>
-                <p className={`text-[9px] tracking-[0.2em] uppercase mb-4 ${dark ? "text-[#E8B257]/60" : "text-[#2D4A2B]/70"}`}>Ingredients</p>
+                <p className={`text-[11px] tracking-[0.24em] uppercase font-medium mb-4 ${dark ? "text-[#E8B257]/70" : "text-[#2D4A2B]/80"}`}>Ingredients</p>
                 <ul className="flex flex-col gap-2">
                   {meal.ingredients?.map(({ measure, name }, i) => (
                     <li key={i} className="flex gap-3 text-sm">
@@ -458,11 +456,11 @@ function MealCard({ course, meal, dark }) {
 
               {/* Method */}
               <div>
-                <p className={`text-[9px] tracking-[0.2em] uppercase mb-4 ${dark ? "text-[#E8B257]/60" : "text-[#2D4A2B]/70"}`}>Method</p>
+                <p className={`text-[11px] tracking-[0.24em] uppercase font-medium mb-4 ${dark ? "text-[#E8B257]/70" : "text-[#2D4A2B]/80"}`}>Method</p>
                 <ol className="flex flex-col gap-4">
                   {parseMealSteps(meal.strInstructions).map((step, i) => (
                     <li key={i} className="flex gap-3 text-sm leading-relaxed">
-                      <span className={`shrink-0 w-5 h-5 mt-0.5 rounded-full flex items-center justify-center text-[10px] font-bold ${dark ? "bg-[#E8B257]/15 text-[#E8B257]" : "bg-[#2D4A2B]/10 text-[#2D4A2B]"}`}>{i + 1}</span>
+                      <span className={`shrink-0 w-5 h-5 mt-0.5 flex items-center justify-center text-[10px] font-medium tabular-nums ${dark ? "bg-[#E8B257]/15 text-[#E8B257]" : "bg-[#2D4A2B]/10 text-[#2D4A2B]"}`}>{i + 1}</span>
                       <span className={dark ? "text-white/60" : "text-[#3D2F1F]"}>{step}</span>
                     </li>
                   ))}
@@ -476,7 +474,7 @@ function MealCard({ course, meal, dark }) {
                 <a
                   href={meal.strYoutube} target="_blank" rel="noopener noreferrer"
                   onClick={e => e.stopPropagation()}
-                  className={`inline-flex items-center gap-2 text-[10px] tracking-[0.1em] uppercase px-4 py-2 rounded-lg border transition-colors ${dark ? "border-white/10 text-white/40 hover:text-[#E8B257] hover:border-[#E8B257]/30" : "border-black/10 text-[#9A8A70] hover:text-[#2D4A2B] hover:border-[#2D4A2B]/30"}`}
+                  className={`inline-flex items-center gap-2 text-[10px] tracking-[0.18em] uppercase font-medium pb-1 border-b transition-colors ${dark ? "border-white/20 text-white/45 hover:text-[#E8B257] hover:border-[#E8B257]/50" : "border-black/20 text-[#9A8A70] hover:text-[#2D4A2B] hover:border-[#2D4A2B]/50"}`}
                 >
                   <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   Watch on YouTube
@@ -498,8 +496,8 @@ function MealGeneratorWidget({ dark }) {
   const [cuisine, setCuisine]   = useState('any');
   const [weight, setWeight]     = useState('any');
   const [cookTime, setCookTime] = useState('any');
-  const muted  = dark ? "text-white/30" : "text-[#5A4A36]";
-  const border = dark ? "border-white/8" : "border-[#C8B996]";
+  const muted  = dark ? "text-white/35" : "text-[#5A4A36]";
+  const border = dark ? "border-white/12" : "border-[#C8B996]";
 
   useEffect(() => {
     if (window.MealGenerator) { setReady(true); return; }
@@ -509,9 +507,9 @@ function MealGeneratorWidget({ dark }) {
     document.head.appendChild(script);
   }, []);
 
-  const pillBase     = "px-3 py-1 rounded-full text-[10px] tracking-[0.1em] uppercase transition-colors duration-150 border";
-  const pillActive   = dark ? "bg-white text-[#0E1812] border-white" : "bg-[#2A2014] text-white border-[#2A2014]";
-  const pillInactive = dark ? "border-white/10 text-white/35 hover:border-white/25 hover:text-white/60" : "border-black/10 text-[#5A4A36] hover:border-black/25 hover:text-[#2A2014]";
+  const pillBase     = "pb-1 text-[10px] tracking-[0.16em] uppercase font-medium transition-[color,border-color] duration-150 border-b";
+  const pillActive   = dark ? "border-[#E8B257] text-[#E8B257]" : "border-[#2D4A2B] text-[#2D4A2B]";
+  const pillInactive = dark ? "border-transparent text-white/35 hover:text-white/60" : "border-transparent text-[#5A4A36] hover:text-[#2A2014]";
 
   const generate = async () => {
     if (!window.MealGenerator) return;
@@ -528,30 +526,30 @@ function MealGeneratorWidget({ dark }) {
 
   return (
     <div>
-      <p className={`max-w-lg text-[14px] leading-relaxed mb-8 ${dark ? "text-white/45" : "text-[#3D2F1F]"}`}>
+      <p className={`max-w-lg text-[15px] leading-relaxed mb-8 ${dark ? "text-white/55" : "text-[#3D2F1F]"}`}>
         Generates a randomized 3-course meal plan — starter, main, dessert — powered by TheMealDB. Pick your filters or leave them on any for a surprise.
       </p>
 
       {/* Filters */}
-      <div className="flex flex-col gap-4 mb-6">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`text-[9px] tracking-[0.25em] uppercase w-16 shrink-0 ${muted}`}>Cuisine</span>
+      <div className="flex flex-col gap-4 mb-8">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <span className={`text-[9px] tracking-[0.24em] uppercase font-medium w-16 shrink-0 ${muted}`}>Cuisine</span>
           {CUISINES.map(c => (
             <button key={c} onClick={() => setCuisine(c)} className={`${pillBase} ${cuisine === c ? pillActive : pillInactive}`}>
               {c === 'any' ? 'Any' : c}
             </button>
           ))}
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`text-[9px] tracking-[0.25em] uppercase w-16 shrink-0 ${muted}`}>Weight</span>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <span className={`text-[9px] tracking-[0.24em] uppercase font-medium w-16 shrink-0 ${muted}`}>Weight</span>
           {WEIGHTS.map(w => (
             <button key={w} onClick={() => setWeight(w)} className={`${pillBase} ${weight === w ? pillActive : pillInactive}`}>
               {w === 'any' ? 'Any' : w}
             </button>
           ))}
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`text-[9px] tracking-[0.25em] uppercase w-16 shrink-0 ${muted}`}>Cook Time</span>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <span className={`text-[9px] tracking-[0.24em] uppercase font-medium w-16 shrink-0 ${muted}`}>Cook Time</span>
           {TIMES.map(t => (
             <button key={t} onClick={() => setCookTime(t)} className={`${pillBase} ${cookTime === t ? pillActive : pillInactive}`}>
               {t === 'any' ? 'Any' : t}
@@ -563,7 +561,7 @@ function MealGeneratorWidget({ dark }) {
       <button
         onClick={generate}
         disabled={loading}
-        className={`btn-press mb-8 px-6 py-3 rounded-full text-[12px] tracking-[0.15em] uppercase font-medium disabled:opacity-50 ${dark ? "bg-white text-[#0E1812] hover:bg-[#E8B257]" : "bg-[#2A2014] text-white hover:bg-[#3D2F1F]"}`}
+        className={`btn-press group mb-8 inline-flex items-center gap-1.5 pb-1 border-b text-[11px] tracking-[0.2em] uppercase font-medium transition-[color,border-color] duration-200 disabled:opacity-50 ${dark ? "border-[#E8B257]/60 text-[#E8B257] hover:border-[#E8B257]" : "border-[#2D4A2B]/50 text-[#2D4A2B] hover:border-[#2D4A2B]"}`}
       >
         {loading ? "Generating..." : meals ? "Regenerate" : "Generate Meal Plan"}
       </button>
@@ -598,38 +596,38 @@ function PokemonTracker({ dark }) {
       .catch(() => setLoading(false));
   }, []);
 
-  const muted = dark ? "text-white/30" : "text-[#5A4A36]";
-  const border = dark ? "border-white/8" : "border-[#C8B996]";
+  const muted = dark ? "text-white/35" : "text-[#5A4A36]";
+  const border = dark ? "border-white/12" : "border-[#C8B996]";
 
   return (
     <div>
       <div className="flex items-start justify-between mb-4">
         <div>
-          <p className={`text-[11px] tracking-[0.15em] uppercase ${hasTrending ? "text-emerald-400/70" : dark ? "text-white/20" : "text-[#9A8A70]"}`}>
+          <p className={`text-[11px] tracking-[0.18em] uppercase font-medium ${hasTrending ? "text-emerald-400/80" : dark ? "text-white/30" : "text-[#9A8A70]"}`}>
             {hasTrending ? "↑ Top Movers" : "Top by Value"}
           </p>
         </div>
         {lastUpdated && (
-          <p className={`text-[10px] tracking-[0.1em] self-start mt-0.5 ${muted}`}>
+          <p className={`text-[10px] tracking-[0.1em] uppercase font-medium self-start mt-0.5 ${muted}`}>
             Updated on {new Date(lastUpdated).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
           </p>
         )}
       </div>
 
-      <p className={`max-w-lg text-[14px] leading-relaxed mb-8 ${dark ? "text-white/45" : "text-[#3D2F1F]"}`}>
+      <p className={`max-w-lg text-[15px] leading-relaxed mb-8 ${dark ? "text-white/55" : "text-[#3D2F1F]"}`}>
         Tracks Special Illustration Rare and Illustration Rare cards every 12 hours via the Pokémon TCG API, storing snapshots in Redis to surface which cards are climbing fastest in market value.
       </p>
 
       {loading ? (
-        <div className={`rounded-2xl border ${border} p-12 flex items-center justify-center`}>
+        <div className={`border ${border} p-12 flex items-center justify-center`}>
           <div className="flex flex-col items-center gap-3">
             <div className={`w-6 h-6 rounded-full border-2 border-t-transparent animate-spin ${dark ? "border-white/20" : "border-black/20"}`} />
-            <p className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>Fetching cards...</p>
+            <p className={`text-[11px] tracking-[0.2em] uppercase font-medium ${muted}`}>Fetching cards...</p>
           </div>
         </div>
       ) : cards.length === 0 ? (
-        <div className={`rounded-2xl border ${border} p-12 flex items-center justify-center`}>
-          <p className={`text-[12px] tracking-[0.2em] uppercase ${muted}`}>No data yet — check back soon.</p>
+        <div className={`border ${border} p-12 flex items-center justify-center`}>
+          <p className={`text-[12px] tracking-[0.2em] uppercase font-medium ${muted}`}>No data yet — check back soon.</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -640,7 +638,7 @@ function PokemonTracker({ dark }) {
               className="group relative cursor-pointer"
             >
               {/* Card image */}
-              <div className="relative aspect-[5/7] rounded-xl overflow-hidden mb-3 transition-[transform,box-shadow] duration-250 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.03] [@media(hover:hover)_and_(pointer:fine)]:group-hover:shadow-2xl"
+              <div className="relative aspect-[5/7] overflow-hidden mb-3 transition-[transform,box-shadow] duration-250 ease-snappy [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.03] [@media(hover:hover)_and_(pointer:fine)]:group-hover:shadow-2xl"
                 style={{ boxShadow: dark ? "0 4px 20px rgba(0,0,0,0.5)" : "0 4px 20px rgba(0,0,0,0.15)" }}
               >
                 <img
@@ -651,7 +649,7 @@ function PokemonTracker({ dark }) {
                 />
 
                 {/* Rank badge */}
-                <div className={`absolute top-2 left-2 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold backdrop-blur-sm ${
+                <div className={`absolute top-2 left-2 w-6 h-6 flex items-center justify-center text-[10px] font-semibold tabular-nums backdrop-blur-sm ${
                   i === 0 ? "bg-[#E8B257] text-[#0E1812]" :
                   i === 1 ? "bg-white/20 text-white border border-white/30" :
                   i === 2 ? "bg-white/15 text-white border border-white/20" :
@@ -662,7 +660,7 @@ function PokemonTracker({ dark }) {
 
                 {/* Change badge */}
                 {card.change !== null && (
-                  <div className={`absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-semibold tabular-nums backdrop-blur-sm ${
+                  <div className={`absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums backdrop-blur-sm ${
                     card.change >= 0 ? "bg-emerald-400/20 text-emerald-300" : "bg-red-400/20 text-red-300"
                   }`}>
                     <svg className="w-2 h-2 shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -678,12 +676,12 @@ function PokemonTracker({ dark }) {
 
               {/* Card info */}
               <div className="px-0.5">
-                <p className={`text-[12px] font-medium leading-tight truncate mb-0.5 transition-colors duration-200 ${dark ? "text-white/80 group-hover:text-white" : "text-[#2A2014]"}`}>
+                <p className={`text-[13px] font-medium leading-tight truncate mb-0.5 transition-colors duration-200 ${dark ? "text-white/80 group-hover:text-white" : "text-[#2A2014]"}`}>
                   {card.name}
                 </p>
-                <p className={`text-[10px] tracking-[0.04em] truncate mb-1.5 ${muted}`}>{card.set}</p>
+                <p className={`text-[10px] tracking-[0.06em] uppercase font-medium truncate mb-1.5 ${muted}`}>{card.set}</p>
                 <div className="flex items-center justify-between">
-                  <p className={`text-[13px] font-semibold tabular-nums ${dark ? "text-[#E8B257]" : "text-[#2D4A2B]"}`}>
+                  <p className={`text-[14px] font-medium tabular-nums ${dark ? "text-[#E8B257]" : "text-[#2D4A2B]"}`}>
                     ${card.market.toFixed(2)}
                   </p>
                   {card.prevMarket && (
@@ -714,30 +712,42 @@ export default function Developer() {
   const [activeTab, setActiveTab] = useState('projects');
   const [headerRef, headerInView] = useInView();
 
-  const muted  = dark ? "text-white/30" : "text-[#5A4A36]";
-  const border = dark ? "border-white/8" : "border-[#C8B996]";
+  const muted  = dark ? "text-white/55" : "text-[#3D2F1F]";
+  const superMuted = dark ? "text-white/35" : "text-[#5A4A36]";
+  const border = dark ? "border-white/12" : "border-[#C8B996]";
+  const accent = dark ? "text-[#E8B257]" : "text-[#2D4A2B]";
+  const headingFaded = dark ? "text-white/35" : "text-[#7A6B53]";
+  const rule = dark ? "bg-white/12" : "bg-black/12";
+  const wrap = "max-w-5xl mx-auto px-6 sm:px-8";
+  const kicker = "text-[11px] tracking-[0.24em] uppercase font-medium";
 
   return (
-    <main className="relative pt-28 pb-32 px-6 md:px-16 max-w-6xl mx-auto" style={{ zIndex: 2 }}>
+    <main className={`relative pt-32 pb-32 ${wrap}`} style={{ zIndex: 2 }}>
       <WaterCanvas dark={dark} />
+
+      {/* Section index */}
+      <div className="flex items-baseline gap-3 mb-4">
+        <span className={`${kicker} ${accent}`}>Development</span>
+        <span className={`${kicker} ${superMuted}`}>02</span>
+      </div>
+      <div className={`h-px mb-16 ${rule}`} />
 
       {/* Header */}
       <div ref={headerRef} className="mb-16">
         <div className={`transition-[opacity,transform] duration-700 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          <span className={`text-[11px] tracking-[0.35em] uppercase block mb-6 ${muted}`}>Software Development</span>
-          <h1 className={`font-display text-[clamp(3rem,7vw,6rem)] leading-[0.92] mb-8 ${dark ? "text-white" : "text-[#2A2014]"}`}>
+          <h1 className={`font-bold tracking-tight leading-[1.05] mb-8 ${dark ? "text-white" : "text-[#1F1810]"}`} style={{ fontSize: "clamp(2.5rem, 7vw, 5rem)" }}>
             Building things<br />
-            <span className={dark ? "text-white/30" : "text-[#7A6B53]"}>for fun.</span>
+            <span className={`font-display italic ${accent}`}>for fun.</span>
           </h1>
-          <p className={`max-w-lg text-[15px] leading-relaxed mb-6 ${dark ? "text-white/45" : "text-[#3D2F1F]"}`}>
-            I build things with a little help from my AI friends. Half the time I'm not sure who wrote what — and honestly, that's the fun part.
+          <p className={`max-w-md text-[16px] leading-relaxed mb-6 ${dark ? "text-white/55" : "text-[#3D2F1F]"}`}>
+            I build things with a little help from my AI friends. Half the time I&rsquo;m not sure who wrote what — and honestly, that&rsquo;s the fun part.
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-6">
             <a
               href="https://github.com/tobyansohn"
               target="_blank"
               rel="noopener noreferrer"
-              className={`group flex items-center gap-2 text-[12px] tracking-[0.1em] uppercase transition-colors duration-200 cursor-pointer ${dark ? "text-white/35 hover:text-white/70" : "text-[#5A4A36] hover:text-[#2A2014]"}`}
+              className={`group flex items-center gap-2 text-[12px] font-medium tracking-[0.12em] uppercase transition-colors duration-200 cursor-pointer ${dark ? "text-white/40 hover:text-white/75" : "text-[#5A4A36] hover:text-[#2A2014]"}`}
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>
               GitHub
@@ -746,7 +756,7 @@ export default function Developer() {
               href="https://linkedin.com/in/tobyansohn"
               target="_blank"
               rel="noopener noreferrer"
-              className={`group flex items-center gap-2 text-[12px] tracking-[0.1em] uppercase transition-colors duration-200 cursor-pointer ${dark ? "text-white/35 hover:text-white/70" : "text-[#5A4A36] hover:text-[#2A2014]"}`}
+              className={`group flex items-center gap-2 text-[12px] font-medium tracking-[0.12em] uppercase transition-colors duration-200 cursor-pointer ${dark ? "text-white/40 hover:text-white/75" : "text-[#5A4A36] hover:text-[#2A2014]"}`}
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
               LinkedIn
@@ -756,7 +766,7 @@ export default function Developer() {
           {/* Skills */}
           <div className={`mt-8 flex flex-wrap gap-2 transition-[opacity,transform] duration-700 ease-snappy ${headerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "250ms" }}>
             {skills.map(skill => (
-              <span key={skill} className={`px-3 py-1.5 rounded-full border text-[11px] tracking-[0.1em] uppercase ${dark ? "border-white/10 text-white/40" : "border-black/10 text-[#5A4A36]"}`}>
+              <span key={skill} className={`pb-1 border-b text-[11px] font-medium tracking-[0.16em] uppercase ${dark ? "border-white/15 text-white/45" : "border-black/15 text-[#5A4A36]"}`}>
                 {skill}
               </span>
             ))}
@@ -776,9 +786,9 @@ export default function Developer() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`shrink-0 px-4 py-3 text-[11px] tracking-[0.2em] uppercase whitespace-nowrap transition-colors duration-150 border-b-2 -mb-px ${
+              className={`shrink-0 px-4 py-3 text-[11px] font-medium tracking-[0.2em] uppercase whitespace-nowrap transition-colors duration-150 border-b -mb-px ${
                 activeTab === tab.id
-                  ? (dark ? "border-white text-white" : "border-[#2A2014] text-[#2A2014]")
+                  ? (dark ? "border-[#E8B257] text-white" : "border-[#2D4A2B] text-[#2A2014]")
                   : `border-transparent ${dark ? "text-white/35 hover:text-white/60" : "text-[#9A8A70] hover:text-[#3D2F1F]"}`
               }`}
             >
@@ -791,7 +801,7 @@ export default function Developer() {
       {/* Panels */}
       {activeTab === 'projects' && (
         <div>
-          <p className={`max-w-lg text-[14px] leading-relaxed mb-4 ${dark ? "text-white/45" : "text-[#3D2F1F]"}`}>
+          <p className={`max-w-md text-[15px] leading-relaxed mb-4 ${dark ? "text-white/55" : "text-[#3D2F1F]"}`}>
             A mix of things I've built — mostly for fun, partly out of necessity. Powered by a lot of coffee and AI.
           </p>
           {projects.map((project, i) => (
@@ -801,8 +811,8 @@ export default function Developer() {
       )}
       {activeTab === 'travel' && (
         <div>
-          <p className={`text-[11px] tracking-[0.35em] uppercase mb-3 ${muted}`}>Travel Tracker — 2026</p>
-          <p className={`max-w-lg text-[14px] leading-relaxed mb-8 ${dark ? "text-white/45" : "text-[#3D2F1F]"}`}>
+          <p className={`${kicker} mb-3 ${superMuted}`}>Travel Tracker — 2026</p>
+          <p className={`max-w-md text-[15px] leading-relaxed mb-8 ${dark ? "text-white/55" : "text-[#3D2F1F]"}`}>
             A personal map tracking every place I've visited. Warm pins mark travel destinations — click any to browse photos from that trip. The blue pin marks Austin, TX, my home.
           </p>
           <TravelMap dark={dark} />

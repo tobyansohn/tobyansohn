@@ -5,7 +5,7 @@ export default {
     extend: {
       fontFamily: {
         display: ["'Fraunces'", "Georgia", "serif"],
-        body: ["'Manrope'", "system-ui", "sans-serif"],
+        body: ["'Satoshi'", "system-ui", "sans-serif"],
         name: ["'Fraunces'", "Georgia", "serif"],
       },
       colors: {

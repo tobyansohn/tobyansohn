@@ -39,13 +39,13 @@ export default function GitHubContributions({ dark }) {
   }, []);
 
   const levels = dark ? LEVELS_DARK : LEVELS_LIGHT;
-  const muted = dark ? "text-white/25" : "text-[#9A8A70]";
+  const muted = dark ? "text-white/35" : "text-[#9A8A70]";
 
   if (loading) {
     return (
       <div className="flex items-center gap-2 mt-6">
         <div className={`w-4 h-4 rounded-full border-2 border-t-transparent animate-spin ${dark ? "border-white/20" : "border-black/15"}`} />
-        <span className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>Loading activity…</span>
+        <span className={`text-[11px] tracking-[0.2em] uppercase font-medium ${muted}`}>Loading activity…</span>
       </div>
     );
   }
@@ -55,14 +55,14 @@ export default function GitHubContributions({ dark }) {
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-3">
-        <span className={`text-[11px] tracking-[0.2em] uppercase ${muted}`}>
+        <span className={`text-[11px] tracking-[0.2em] uppercase font-medium ${muted}`}>
           {total !== null ? `${total} contributions this year` : "GitHub activity"}
         </span>
         <a
           href="https://github.com/tobyansohn"
           target="_blank"
           rel="noopener noreferrer"
-          className={`text-[10px] tracking-[0.15em] uppercase transition-colors duration-300 ${dark ? "text-white/25 hover:text-[#E8B257]" : "text-[#9A8A70] hover:text-[#2D4A2B]"}`}
+          className={`text-[10px] tracking-[0.16em] uppercase font-medium transition-colors duration-300 ${dark ? "text-white/35 hover:text-[#E8B257]" : "text-[#9A8A70] hover:text-[#2D4A2B]"}`}
         >
           View on GitHub →
         </a>
@@ -74,7 +74,7 @@ export default function GitHubContributions({ dark }) {
               <div
                 key={di}
                 title={`${day.date}: ${day.count} contribution${day.count !== 1 ? "s" : ""}`}
-                className={`w-[10px] h-[10px] rounded-[2px] flex-shrink-0 ${levels[day.level ?? 0]}`}
+                className={`w-[10px] h-[10px] flex-shrink-0 ${levels[day.level ?? 0]}`}
               />
             ))}
           </div>
