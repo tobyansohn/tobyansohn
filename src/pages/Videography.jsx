@@ -4,6 +4,7 @@ import { useTheme } from "../context/ThemeContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 
 const projects = [
+  { id: "izWFlvOcIAg", title: "short video for life update.",   tags: ["Vlog"],      desc: "A quick check-in on where things are at."           },
   { id: "EZSCrRH-s98", title: "The Beginning",                  tags: ["Personal"],  desc: "Where it all started."                              },
   { id: "kMMSE32bWWI", title: "CRWR 2026: REDEFINED",           tags: ["Event"],     desc: "Covering the CRWR 2026 event highlights."           },
   { id: "9TvsSfOUyfQ", title: "What did I even do this month?", tags: ["Vlog"],      desc: "A look back at a busy month."                       },
