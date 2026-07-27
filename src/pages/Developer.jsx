@@ -159,6 +159,21 @@ function TravelMap({ dark }) {
 
 const projects = [
   {
+    title: "Franchise Lab",
+    year: "2026",
+    status: "In Progress",
+    description: "A football take on the build-a-player draft game — construct the perfect baller from NFL history across 9 attribute rounds, drafting players pooled from team-eras spanning the 1960s Packers to the 2020s Chiefs.",
+    highlights: [
+      "9 rounds, one per attribute (Speed, Arm Talent, Coverage, Football IQ…), each drawing players from 3 randomly chosen team-eras",
+      "Three modes: Classic (ratings shown), Blind (pick from memory), and a daily seeded draft shared by everyone that day",
+      "Per-round Respin Teams and Respin Stat to reroll the team-eras or swap the round's attribute",
+      "~290 individually-rated players across 24 team-eras, hand-authored as static data — no backend",
+    ],
+    tags: ["React", "Vite", "Tailwind CSS", "Game Design"],
+    link: "https://github.com/tobyansohn",
+    liveUrl: null,
+  },
+  {
     title: "Agent Command Center",
     year: "2025",
     status: "Live",
